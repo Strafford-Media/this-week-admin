@@ -45,6 +45,9 @@ module.exports = {
       fontFamily: {
         sans: ['Comme', ...defaultTheme.fontFamily.sans],
       },
+      gridTemplateColumns: {
+        sub: 'subgrid',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/container-queries')],

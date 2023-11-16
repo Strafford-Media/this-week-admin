@@ -22,22 +22,22 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
 
   return (
     <div className={`${className}`} {...props}>
-      <div className="grid grid-cols-[250px,1fr] h-content max-h-content overflow-hidden transition-all duration-300">
+      <div className="grid h-content max-h-content grid-cols-[250px,1fr] overflow-hidden transition-all duration-300">
         <div
           className={clsx(
-            'transition-all overflow-y-auto duration-300 @container row-start-1 row-end-2 col-start-1 max-h-full',
-            id ? 'bg-primary-50 col-end-2' : 'bg-white col-end-3 z-10'
+            'col-start-1 row-start-1 row-end-2 max-h-full overflow-y-auto transition-all duration-300 @container',
+            id ? 'col-end-2 bg-primary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
-          <ul className="relative">
+          <ul className={clsx('relative grid grid-cols-5')}>
             <li
               className={clsx(
-                'p-2 z-10 sticky top-0 shadow-md shadow-primary-50 flex',
-                id ? 'bg-primary-50/80' : 'bg-white/80'
+                'sticky top-0 z-10 col-span-5 flex p-2 shadow-md shadow-primary-50',
+                id ? 'bg-primary-50/80' : 'bg-white/80',
               )}
             >
               <Button
-                className="@xs:mx-auto mx-0"
+                className="mx-0 @xs:mx-auto"
                 PreIcon={PlusIcon}
                 variant="primary"
                 onClick={() => setOpenNewForm(true)}
@@ -46,52 +46,76 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
               </Button>
             </li>
             {data?.listing.map((listing, i, wholeList) => (
-              <li key={listing.id} className={clsx(i !== 0 ? 'border-t border-primary-200' : '')}>
-                <button
-                  className="p-2 truncate w-full text-left @xs:w-auto hover:"
-                  role="navigation"
-                  onClick={(e) => {
-                    if (id === listing.id) return
+              <li
+                key={listing.id}
+                className={clsx(
+                  'col-span-5 grid cursor-pointer grid-cols-sub p-2 text-left hover:opacity-70',
+                  i !== 0 ? 'border-t border-primary-200' : '',
+                )}
+                role="navigation"
+                onClick={(e) => {
+                  if (id === listing.id) return
 
-                    if (e.metaKey) {
-                      window.open(`${location.origin}/listings/${listing.id}`, '_blank', 'noreferrer noopener')
-                    } else if (!('startViewTransition' in document)) {
-                      goTo(`${listing.id}`)
-                    } else if (!id || isNaN(id)) {
-                      // set the animation direction
-                      document.documentElement.style.setProperty('--listing-exit-animation', 'exit-to-right')
-                      document.documentElement.style.setProperty('--listing-enter-animation', 'enter-from-right')
-                      ;(document as any).startViewTransition(() => goTo(`${listing.id}`))
-                    } else {
-                      const currentIndex = wholeList.findIndex((l) => l.id === id)
-                      const isLower = i > currentIndex
+                  if (e.metaKey) {
+                    window.open(`${location.origin}/listings/${listing.id}`, '_blank', 'noreferrer noopener')
+                  } else if (!('startViewTransition' in document)) {
+                    goTo(`${listing.id}`)
+                  } else if (!id || isNaN(id)) {
+                    // set the animation direction
+                    document.documentElement.style.setProperty('--listing-exit-animation', 'exit-to-right')
+                    document.documentElement.style.setProperty('--listing-enter-animation', 'enter-from-right')
+                    ;(document as any).startViewTransition(() => goTo(`${listing.id}`))
+                  } else {
+                    const currentIndex = wholeList.findIndex((l) => l.id === id)
+                    const isLower = i > currentIndex
 
-                      // set the animation direction
-                      document.documentElement.style.setProperty(
-                        '--listing-exit-animation',
-                        isLower ? 'exit-to-top' : 'exit-to-bottom'
-                      )
-                      document.documentElement.style.setProperty(
-                        '--listing-enter-animation',
-                        isLower ? 'enter-from-bottom' : 'enter-from-top'
-                      )
-                      ;(document as any).startViewTransition(() => goTo(`${listing.id}`))
-                    }
-                  }}
+                    // set the animation direction
+                    document.documentElement.style.setProperty(
+                      '--listing-exit-animation',
+                      isLower ? 'exit-to-top' : 'exit-to-bottom',
+                    )
+                    document.documentElement.style.setProperty(
+                      '--listing-enter-animation',
+                      isLower ? 'enter-from-bottom' : 'enter-from-top',
+                    )
+                    ;(document as any).startViewTransition(() => goTo(`${listing.id}`))
+                  }
+                }}
+              >
+                <span className="col-span-5 w-full truncate @xs:col-span-1 @xs:w-auto">{listing.business_name}</span>
+                <span
+                  className={clsx('hidden capitalize @xs:inline', {
+                    'text-rose-600': listing.island === 'hawaii',
+                    'text-pink-600': listing.island === 'maui',
+                    'text-fuchsia-600': listing.island === 'kauai',
+                    'text-yellow-500': listing.island === 'oahu',
+                  })}
                 >
-                  <span>{listing.business_name}</span>
-                  <span className="@xs:inline hidden ml-4 text-primary-600">
-                    {listing.tier}/{capitalize(listing.island)}
-                  </span>
-                </button>
+                  {listing.island}
+                </span>
+                <span
+                  className={clsx('hidden capitalize @xs:inline', {
+                    'text-sky-400': listing.tier === 'basic',
+                    'text-lime-600': listing.tier === 'standard',
+                    'text-yellow-500': listing.tier === 'premium',
+                  })}
+                >
+                  {listing.tier}
+                </span>
+                <span className="hidden text-gray-500 @xs:inline">
+                  <span className="text-xs text-gray-400">Created:</span> {displayDate(listing.created_at)}
+                </span>
+                <span className="hidden text-gray-500 @xs:inline">
+                  <span className="text-xs text-gray-400">Last Updated:</span> {displayDate(listing.updated_at)}
+                </span>
               </li>
             ))}
           </ul>
         </div>
         <div
           className={clsx(
-            'transition-all duration-300 row-start-1 row-end-2 col-start-2 col-end-3',
-            '[view-transition-name:listing-view]'
+            'col-start-2 col-end-3 row-start-1 row-end-2 transition-all duration-300',
+            '[view-transition-name:listing-view]',
           )}
         >
           <Outlet />
@@ -100,4 +124,36 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
       {openNewForm && <NewListingModal onClose={() => setOpenNewForm(false)} />}
     </div>
   )
+}
+
+const today = new Date()
+const thisYear = today.getFullYear()
+const thisMonth = today.getMonth()
+const thisDay = today.getDate()
+const thisWeekDay = today.getDay()
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+function displayDate(date: string) {
+  const d = new Date(date)
+
+  const year = d.getFullYear()
+  const isThisYear = thisYear === year
+
+  const month = d.getMonth()
+  const isThisMonth = isThisYear && thisMonth === month
+
+  const day = d.getDate()
+  const isToday = isThisMonth && thisDay === day
+
+  const isYesterday = !isToday && (d.getDay() + 1) % 7 === thisWeekDay
+
+  if (isToday) {
+    return `Today at ${d.toLocaleTimeString()}`
+  }
+
+  if (isYesterday) {
+    return `Yesterday at ${d.toLocaleTimeString()}`
+  }
+
+  return `${months[month]} ${day}${isThisYear ? '' : `, ${year}`}`
 }
