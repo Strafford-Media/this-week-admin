@@ -1,0 +1,163 @@
+@tailwind base;
+
+:root {
+  --listing-exit-animation: exit-to-top;
+  --listing-enter-animation: enter-from-bottom;
+}
+
+h1 {
+  @apply text-4xl font-bold;
+}
+
+h2 {
+  @apply text-2xl font-semibold;
+}
+
+h3 {
+  @apply text-xl font-bold;
+}
+
+h4 {
+  @apply text-lg font-bold;
+}
+
+h5 {
+  @apply text-base font-semibold;
+}
+
+h6 {
+  @apply text-sm font-semibold;
+}
+
+p {
+  @apply text-base font-normal;
+}
+
+em {
+  @apply italic;
+}
+
+input::-webkit-datetime-edit {
+  line-height: 1;
+  padding: 0;
+  margin-bottom: -2px;
+}
+
+@tailwind components;
+
+.website-manager-grid {
+  display: grid;
+  grid-template:
+    'title  ' max-content
+    'preview' minmax(300px, 200px)
+    'access ' auto
+    / 1fr;
+}
+
+.website-manager-title {
+  grid-area: title;
+}
+
+.website-manager-preview {
+  grid-area: preview;
+}
+
+.website-manager-access {
+  grid-area: access;
+}
+
+@keyframes enter-from-bottom {
+  0% {
+    transform: translateY(100%);
+  }
+  95% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes exit-to-top {
+  0% {
+    transform: translateY(0);
+  }
+  95% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(-120%);
+  }
+}
+
+@keyframes exit-to-bottom {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes enter-from-top {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes exit-to-right {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes enter-from-right {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+::view-transition-old(listing-view) {
+  z-index: -100;
+  animation: 0.3s ease-out both var(--listing-exit-animation);
+}
+
+::view-transition-new(listing-view) {
+  z-index: -100;
+  animation: 0.3s ease-out both var(--listing-enter-animation);
+}
+
+@screen lg {
+  .website-manager-grid {
+    grid-template:
+      'title   title ' max-content
+      'preview access' auto
+      / 1fr minmax(400px, 60%);
+  }
+}
+
+@tailwind utilities;
+
+@layer utilities {
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}

@@ -1,0 +1,7 @@
+.parcel-cache
+.cache
+node_modules
+dist
+apollo.config.js
+.env
+.DS_Store
