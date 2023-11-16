@@ -20,7 +20,7 @@ const documents = {
     "\n  mutation CreateListingShell($businessName: String!) {\n    insert_listing_one(object: { business_name: $businessName }) {\n      id\n    }\n  }\n": types.CreateListingShellDocument,
     "\n  mutation DeleteListing($id: Int!) {\n    delete_listing_by_pk(id: $id) {\n      id\n    }\n  }\n": types.DeleteListingDocument,
     "\n  mutation UpdateListing($id: Int!, $set: listing_set_input!) {\n    update_listing_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n": types.UpdateListingDocument,
-    "\n  subscription AllListings {\n    listing {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n": types.AllListingsDocument,
+    "\n  subscription AllListings {\n    listing(order_by: { created_at: desc }) {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n": types.AllListingsDocument,
     "\n  query ListingByIDSub($id: Int!) {\n    listing_by_pk(id: $id) {\n      id\n      business_name\n      slogan\n      description\n      island\n      created_at\n      updated_at\n      tier\n      live\n      primary_address\n      primary_phone\n      primary_email\n      primary_web_url\n      this_week_recommended\n      booking_links\n      images\n      videos\n      layout_data\n      listing_category_tags {\n        id\n        category_tag {\n          id\n          label\n        }\n      }\n    }\n  }\n": types.ListingByIdSubDocument,
 };
 
@@ -69,7 +69,7 @@ export function graphql(source: "\n  mutation UpdateListing($id: Int!, $set: lis
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  subscription AllListings {\n    listing {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n"): (typeof documents)["\n  subscription AllListings {\n    listing {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n"];
+export function graphql(source: "\n  subscription AllListings {\n    listing(order_by: { created_at: desc }) {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n"): (typeof documents)["\n  subscription AllListings {\n    listing(order_by: { created_at: desc }) {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

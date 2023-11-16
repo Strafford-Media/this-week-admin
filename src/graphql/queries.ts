@@ -2,7 +2,7 @@ import { graphql } from '../gql'
 
 export const ALL_LISTINGS_SUB = graphql(`
   subscription AllListings {
-    listing {
+    listing(order_by: { created_at: desc }) {
       business_name
       island
       created_at
