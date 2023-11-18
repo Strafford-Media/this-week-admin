@@ -29,7 +29,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
             id ? 'col-end-2 bg-primary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
-          <ul className={clsx('relative grid grid-cols-5')}>
+          <ul className={clsx('grid-cols-auto-5 relative grid gap-2')}>
             <li
               className={clsx(
                 'sticky top-0 z-10 col-span-5 flex p-2 shadow-md shadow-primary-50',
@@ -37,7 +37,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
               )}
             >
               <Button
-                className="mx-0 @xs:mx-auto"
+                className="mx-0 @md:mx-auto"
                 PreIcon={PlusIcon}
                 variant="primary"
                 onClick={() => setOpenNewForm(true)}
@@ -49,7 +49,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
               <li
                 key={listing.id}
                 className={clsx(
-                  'col-span-5 grid cursor-pointer grid-cols-sub p-2 text-left hover:opacity-70',
+                  'col-span-5 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
                   i !== 0 ? 'border-t border-primary-200' : '',
                 )}
                 role="navigation"
@@ -82,9 +82,9 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                   }
                 }}
               >
-                <span className="col-span-5 w-full truncate @xs:col-span-1 @xs:w-auto">{listing.business_name}</span>
+                <span className="col-span-5 w-full truncate @md:col-span-1 @md:w-auto">{listing.business_name}</span>
                 <span
-                  className={clsx('hidden capitalize @xs:inline', {
+                  className={clsx('hidden capitalize @sm:inline', {
                     'text-rose-600': listing.island === 'hawaii',
                     'text-pink-600': listing.island === 'maui',
                     'text-fuchsia-600': listing.island === 'kauai',
@@ -94,7 +94,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                   {listing.island}
                 </span>
                 <span
-                  className={clsx('hidden capitalize @xs:inline', {
+                  className={clsx('hidden capitalize @sm:inline', {
                     'text-sky-400': listing.tier === 'basic',
                     'text-lime-600': listing.tier === 'standard',
                     'text-yellow-500': listing.tier === 'premium',
@@ -102,10 +102,10 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 >
                   {listing.tier}
                 </span>
-                <span className="hidden text-gray-500 @xs:inline">
+                <span className="hidden text-gray-500 @md:inline">
                   <span className="text-xs text-gray-400">Created:</span> {displayDate(listing.created_at)}
                 </span>
-                <span className="hidden text-gray-500 @xs:inline">
+                <span className="hidden text-gray-500 @md:inline">
                   <span className="text-xs text-gray-400">Last Updated:</span> {displayDate(listing.updated_at)}
                 </span>
               </li>

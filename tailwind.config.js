@@ -47,6 +47,9 @@ module.exports = {
       },
       gridTemplateColumns: {
         sub: 'subgrid',
+        ...Array(12)
+          .fill(1)
+          .reduce((gc, o, i) => ({ ...gc, [`auto-${o + i}`]: `repeat(${o + i}, minmax(0, auto))` }), {}),
       },
     },
   },
