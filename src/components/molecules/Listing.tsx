@@ -86,7 +86,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     if (data?.listing_by_pk?.[key] === value) return
 
     const res = await updateListing({ variables: { id, set: { [key]: value } } }).catch((err) =>
-      err instanceof Error ? err : new Error(JSON.stringify(err))
+      err instanceof Error ? err : new Error(JSON.stringify(err)),
     )
 
     if (res instanceof Error) {
@@ -113,7 +113,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             }
           }
         `),
-        { id, layoutData: { [key]: value } }
+        { id, layoutData: { [key]: value } },
       )
       .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
@@ -156,12 +156,12 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   console.log(listing)
 
   return (
-    <div className={`${className} shadow-inner px-4 pb-8 h-full max-h-content overflow-y-auto edit-view`} {...props}>
+    <div className={`${className} edit-view h-full max-h-content overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
       {!listing ? (
-        <LoadingScreen className="!min-h-0 !h-full" />
+        <LoadingScreen className="!h-full !min-h-0" />
       ) : (
         <>
-          <div className="sticky z-10 top-0 flex min-h-8 p-4 -mx-4 backdrop-blur-sm">
+          <div className="sticky top-0 z-10 -mx-4 flex min-h-8 p-4 backdrop-blur-sm">
             <button
               className="mr-auto"
               role="navigation"
@@ -214,15 +214,15 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               rightLabel="This Week Recommended"
               rightDescription="Publicly recommend this listing"
             />
-            <div className="relative min-w-64 min-h-32">
+            <div className="relative min-h-32 min-w-64">
               {listing.layout_data.logo && (
                 <img src={listing.layout_data.logo} alt="Company Logo" className="absolute inset-0 h-full" />
               )}
               <ListingImageUploader
                 type="logo"
-                className={clsx('absolute inset-0 w-64 h-32', {
+                className={clsx('absolute inset-0 h-32 w-64', {
                   'opacity-100': !listing.layout_data.logo,
-                  'opacity-0 hover:opacity-95 focus-within:opacity-95': listing.layout_data.logo,
+                  'opacity-0 focus-within:opacity-95 hover:opacity-95': listing.layout_data.logo,
                 })}
                 listingId={id}
                 onSuccess={() => {
@@ -267,9 +267,9 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             <div ref={setContainer} className="h-40"></div>
             <div>
               <h3>Images</h3>
-              <ul className="flex flex-wrap gap-2 max-h-80 p-2 overflow-y-auto shadow-inner">
+              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 <ListingImageUploader
-                  className="w-64 h-32"
+                  className="h-32 w-64"
                   listingId={id}
                   onSuccess={() => {
                     refetch().then(({ data }) => {
@@ -281,7 +281,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 />
                 {listing.images.map((image) => (
                   <li
-                    className={clsx('relative group h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
+                    className={clsx('group relative h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
                     key={image.original_url}
                   >
                     <img
@@ -299,13 +299,13 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                         }
                       }}
                     />
-                    <div className="absolute top-0 right-0 flex-center gap-2">
-                      {listing.layout_data.main_image === image.url && <StarIcon className="text-yellow-400 h-6 w-6" />}
+                    <div className="flex-center absolute right-0 top-0 gap-2">
+                      {listing.layout_data.main_image === image.url && <StarIcon className="h-6 w-6 text-yellow-400" />}
                       {listing.layout_data.action_shot1 === image.url && (
-                        <CameraIcon className="text-indigo-400 h-6 w-6" />
+                        <CameraIcon className="h-6 w-6 text-indigo-400" />
                       )}
                     </div>
-                    <div className="absolute inset-0 group-hover:visible invisible bg-primary-50/25 flex-center flex-wrap gap-1">
+                    <div className="flex-center invisible absolute inset-0 flex-wrap gap-1 bg-primary-50/25 group-hover:visible">
                       {!fixable[image.url] && listing.layout_data.main_image !== image.url && (
                         <Button
                           className="text-xs [&>svg]:h-4 [&>svg]:w-4"
@@ -347,7 +347,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                 {
                                   listingId: id,
                                   src: image.original_url,
-                                }
+                                },
                               )
                               .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
@@ -367,8 +367,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                               updateImmediately(
                                 'images',
                                 listing.images.map((i) =>
-                                  i.url === image.url ? { ...i, url: res.data.uploadImageToListing.fixed_url } : i
-                                )
+                                  i.url === image.url ? { ...i, url: res.data.uploadImageToListing.fixed_url } : i,
+                                ),
                               ).then(() => {
                                 setErroredImg((e) => ({ ...e, [image.url]: false }))
                                 setFixable((f) => ({ ...f, [image.url]: false }))
@@ -387,7 +387,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                           if (confirm('Deleting here does not remove from the Duda media manager.')) {
                             updateImmediately(
                               'images',
-                              listing.images.filter((i) => i.url !== image.url)
+                              listing.images.filter((i) => i.url !== image.url),
                             )
 
                             if (listing.layout_data.main_image === image.url) {
@@ -409,7 +409,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             </div>
             <div>
               <h3>Videos</h3>
-              <ul className="flex flex-wrap gap-2 max-h-80 p-2 overflow-y-auto shadow-inner">
+              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 {listing.videos.map((video) => (
                   <iframe
                     key={video.url}

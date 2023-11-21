@@ -66,11 +66,9 @@ export const ListingImageUploader = ({
 
     const src = nhost.storage.getPublicUrl({ fileId: fileMetadata.id })
 
-    console.log(src)
-
     await uploadURL(src.replace('https://local.storage.nhost.run', 'https://thisweekstorage.loca.it'))
 
-    // nhost.storage.delete({ fileId: fileMetadata.id })
+    nhost.storage.delete({ fileId: fileMetadata.id })
   }
 
   return (
