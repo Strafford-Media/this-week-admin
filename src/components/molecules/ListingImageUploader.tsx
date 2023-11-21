@@ -39,7 +39,7 @@ export const ListingImageUploader = ({
           listingId,
           src,
           destination: type,
-        }
+        },
       )
       .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
@@ -66,6 +66,8 @@ export const ListingImageUploader = ({
 
     const src = nhost.storage.getPublicUrl({ fileId: fileMetadata.id })
 
+    console.log(src)
+
     await uploadURL(src.replace('https://local.storage.nhost.run', 'https://thisweekstorage.loca.it'))
 
     // nhost.storage.delete({ fileId: fileMetadata.id })
@@ -73,7 +75,7 @@ export const ListingImageUploader = ({
 
   return (
     <div
-      className={`${className} flex-center bg-primary-100 p-2 rounded shadow`}
+      className={`${className} flex-center rounded bg-primary-100 p-2 shadow`}
       {...props}
       role="button"
       onDragOver={(e) => {
@@ -109,12 +111,12 @@ export const ListingImageUploader = ({
         e.currentTarget.classList.remove('bg-primary-200', 'border', 'border-primary-500', 'border-dashed')
       }}
     >
-      <label className="h-full w-full flex-center flex-col cursor-pointer text-primary-800">
+      <label className="flex-center h-full w-full cursor-pointer flex-col text-primary-800">
         <span>
           {imageUploading ? (
-            <ArrowPathIcon className="inline align-text-bottom h-5 w-5 animate-spin" />
+            <ArrowPathIcon className="inline h-5 w-5 animate-spin align-text-bottom" />
           ) : (
-            <PlusIcon className="inline align-text-bottom h-5 w-5" />
+            <PlusIcon className="inline h-5 w-5 align-text-bottom" />
           )}{' '}
           Drag or Click to Add {type === 'logo' ? 'Company Logo' : 'Images'}
         </span>
