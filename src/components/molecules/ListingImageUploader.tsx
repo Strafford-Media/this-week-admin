@@ -64,9 +64,12 @@ export const ListingImageUploader = ({
       return toast.error({ message: 'Unable to upload image', description: error.message })
     }
 
-    const src = nhost.storage.getPublicUrl({ fileId: fileMetadata.id })
+    const src =
+      fileMetadata.mimeType === 'image/png'
+        ? `${nhost.functions.url}/file.png?id=${fileMetadata.id}`
+        : nhost.storage.getPublicUrl({ fileId: fileMetadata.id })
 
-    await uploadURL(src.replace('https://local.storage.nhost.run', 'https://thisweekstorage.loca.it'))
+    await uploadURL(src)
 
     nhost.storage.delete({ fileId: fileMetadata.id })
   }
