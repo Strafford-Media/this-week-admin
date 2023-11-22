@@ -64,10 +64,14 @@ export const ListingImageUploader = ({
       return toast.error({ message: 'Unable to upload image', description: error.message })
     }
 
+    console.log(fileMetadata)
+
     const src =
       fileMetadata.mimeType === 'image/png'
         ? `${nhost.functions.url}/file.png?id=${fileMetadata.id}`
-        : nhost.storage.getPublicUrl({ fileId: fileMetadata.id })
+        : fileMetadata.mimeType === 'image/gif'
+          ? `${nhost.functions.url}/file.gif?id=${fileMetadata.id}`
+          : nhost.storage.getPublicUrl({ fileId: fileMetadata.id })
 
     await uploadURL(src)
 
