@@ -117,18 +117,18 @@ export const ListingImageUploader = ({
       }}
     >
       <label className="flex-center h-full w-full cursor-pointer flex-col text-primary-800">
-        <span>
+        <span className="flex-center text-xs">
           {imageUploading ? (
-            <ArrowPathIcon className="inline h-5 w-5 animate-spin align-text-bottom" />
+            <ArrowPathIcon className="inline h-4 w-4 animate-spin align-text-bottom" />
           ) : (
-            <PlusIcon className="inline h-5 w-5 align-text-bottom" />
+            <PlusIcon className="inline h-4 w-4 align-text-bottom" />
           )}{' '}
           Drag or Click to Add {type === 'logo' ? 'Company Logo' : 'Images'}
         </span>
         <input
           type="file"
           accept=".png,.jpg,.jpeg,.gif"
-          className="hidden"
+          className="hidden text-sm placeholder:text-center"
           onChange={async (e) => {
             const file = e.target.files?.[0]
 
@@ -142,7 +142,7 @@ export const ListingImageUploader = ({
           }}
           multiple
         />
-        <span>or</span>
+        <span className="mb-2 text-xs">or</span>
         <form
           className="w-full self-stretch"
           onSubmit={(e) => {
