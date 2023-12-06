@@ -12,6 +12,7 @@ import { Profile } from './components/molecules/Profile'
 import { ChangePassword } from './components/molecules/ChangePassword'
 import { Ads } from './components/molecules/Ads'
 import mapbox from 'mapbox-gl'
+import { AdDesigner } from './components/molecules/AdDesigner'
 
 mapbox.accessToken = 'pk.eyJ1IjoidGVocHNhbG1pc3QiLCJhIjoiY2tjOG1qYWI1MGU0eDJ0bXA4eW9oMWJheiJ9.mbn1UUudizfymnvIOvdCmg'
 
@@ -43,6 +44,13 @@ const router = createBrowserRouter([
       {
         path: 'ads',
         element: <Ads />,
+        children: [
+          {
+            path: 'create',
+            element: <AdDesigner key="creating" />,
+          },
+          { path: 'edit/:id', element: <AdDesigner key="editing" /> },
+        ],
       },
     ],
   },
@@ -56,5 +64,5 @@ root.render(
       <RouterProvider router={router} />
       <Toaster position="top-right" />
     </NhostApolloProvider>
-  </NhostProvider>
+  </NhostProvider>,
 )

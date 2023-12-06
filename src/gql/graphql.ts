@@ -87,6 +87,273 @@ export type UploadImagePayload = {
   success: Scalars['Boolean'];
 };
 
+/** advertising stuff */
+export type Ad = {
+  __typename?: 'ad';
+  created_at: Scalars['timestamptz'];
+  id: Scalars['Int'];
+  image: Scalars['String'];
+  link: Scalars['String'];
+  live: Scalars['Boolean'];
+  name: Scalars['String'];
+  size: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "ad" */
+export type Ad_Aggregate = {
+  __typename?: 'ad_aggregate';
+  aggregate?: Maybe<Ad_Aggregate_Fields>;
+  nodes: Array<Ad>;
+};
+
+/** aggregate fields of "ad" */
+export type Ad_Aggregate_Fields = {
+  __typename?: 'ad_aggregate_fields';
+  avg?: Maybe<Ad_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Ad_Max_Fields>;
+  min?: Maybe<Ad_Min_Fields>;
+  stddev?: Maybe<Ad_Stddev_Fields>;
+  stddev_pop?: Maybe<Ad_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Ad_Stddev_Samp_Fields>;
+  sum?: Maybe<Ad_Sum_Fields>;
+  var_pop?: Maybe<Ad_Var_Pop_Fields>;
+  var_samp?: Maybe<Ad_Var_Samp_Fields>;
+  variance?: Maybe<Ad_Variance_Fields>;
+};
+
+
+/** aggregate fields of "ad" */
+export type Ad_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Ad_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Ad_Avg_Fields = {
+  __typename?: 'ad_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "ad". All fields are combined with a logical 'AND'. */
+export type Ad_Bool_Exp = {
+  _and?: InputMaybe<Array<Ad_Bool_Exp>>;
+  _not?: InputMaybe<Ad_Bool_Exp>;
+  _or?: InputMaybe<Array<Ad_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  image?: InputMaybe<String_Comparison_Exp>;
+  link?: InputMaybe<String_Comparison_Exp>;
+  live?: InputMaybe<Boolean_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  size?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "ad" */
+export enum Ad_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  AdPkey = 'ad_pkey'
+}
+
+/** input type for incrementing numeric columns in table "ad" */
+export type Ad_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "ad" */
+export type Ad_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  image?: InputMaybe<Scalars['String']>;
+  link?: InputMaybe<Scalars['String']>;
+  live?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Ad_Max_Fields = {
+  __typename?: 'ad_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  image?: Maybe<Scalars['String']>;
+  link?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Ad_Min_Fields = {
+  __typename?: 'ad_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  image?: Maybe<Scalars['String']>;
+  link?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "ad" */
+export type Ad_Mutation_Response = {
+  __typename?: 'ad_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Ad>;
+};
+
+/** on_conflict condition type for table "ad" */
+export type Ad_On_Conflict = {
+  constraint: Ad_Constraint;
+  update_columns?: Array<Ad_Update_Column>;
+  where?: InputMaybe<Ad_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "ad". */
+export type Ad_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  image?: InputMaybe<Order_By>;
+  link?: InputMaybe<Order_By>;
+  live?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  size?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: ad */
+export type Ad_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "ad" */
+export enum Ad_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Image = 'image',
+  /** column name */
+  Link = 'link',
+  /** column name */
+  Live = 'live',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Size = 'size',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "ad" */
+export type Ad_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  image?: InputMaybe<Scalars['String']>;
+  link?: InputMaybe<Scalars['String']>;
+  live?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Ad_Stddev_Fields = {
+  __typename?: 'ad_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Ad_Stddev_Pop_Fields = {
+  __typename?: 'ad_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Ad_Stddev_Samp_Fields = {
+  __typename?: 'ad_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "ad" */
+export type Ad_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Ad_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Ad_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  image?: InputMaybe<Scalars['String']>;
+  link?: InputMaybe<Scalars['String']>;
+  live?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate sum on columns */
+export type Ad_Sum_Fields = {
+  __typename?: 'ad_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "ad" */
+export enum Ad_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Image = 'image',
+  /** column name */
+  Link = 'link',
+  /** column name */
+  Live = 'live',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Size = 'size',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Ad_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Ad_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Ad_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Ad_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Ad_Var_Pop_Fields = {
+  __typename?: 'ad_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Ad_Var_Samp_Fields = {
+  __typename?: 'ad_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Ad_Variance_Fields = {
+  __typename?: 'ad_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
 /** Oauth requests, inserted before redirecting to the provider's site. Don't modify its structure as Hasura Auth relies on it to function properly. */
 export type AuthProviderRequests = {
   __typename?: 'authProviderRequests';
@@ -4054,6 +4321,10 @@ export type Mutation_Root = {
   deleteVirus?: Maybe<Virus>;
   /** delete data from the table: "storage.virus" */
   deleteViruses?: Maybe<Virus_Mutation_Response>;
+  /** delete data from the table: "ad" */
+  delete_ad?: Maybe<Ad_Mutation_Response>;
+  /** delete single row from the table: "ad" */
+  delete_ad_by_pk?: Maybe<Ad>;
   /** delete data from the table: "category_tag" */
   delete_category_tag?: Maybe<Category_Tag_Mutation_Response>;
   /** delete single row from the table: "category_tag" */
@@ -4114,6 +4385,10 @@ export type Mutation_Root = {
   insertVirus?: Maybe<Virus>;
   /** insert data into the table: "storage.virus" */
   insertViruses?: Maybe<Virus_Mutation_Response>;
+  /** insert data into the table: "ad" */
+  insert_ad?: Maybe<Ad_Mutation_Response>;
+  /** insert a single row into the table: "ad" */
+  insert_ad_one?: Maybe<Ad>;
   /** insert data into the table: "category_tag" */
   insert_category_tag?: Maybe<Category_Tag_Mutation_Response>;
   /** insert a single row into the table: "category_tag" */
@@ -4174,6 +4449,12 @@ export type Mutation_Root = {
   updateVirus?: Maybe<Virus>;
   /** update data of the table: "storage.virus" */
   updateViruses?: Maybe<Virus_Mutation_Response>;
+  /** update data of the table: "ad" */
+  update_ad?: Maybe<Ad_Mutation_Response>;
+  /** update single row of the table: "ad" */
+  update_ad_by_pk?: Maybe<Ad>;
+  /** update multiples rows of table: "ad" */
+  update_ad_many?: Maybe<Array<Maybe<Ad_Mutation_Response>>>;
   /** update multiples rows of table: "auth.provider_requests" */
   update_authProviderRequests_many?: Maybe<Array<Maybe<AuthProviderRequests_Mutation_Response>>>;
   /** update multiples rows of table: "auth.providers" */
@@ -4362,6 +4643,18 @@ export type Mutation_RootDeleteVirusArgs = {
 /** mutation root */
 export type Mutation_RootDeleteVirusesArgs = {
   where: Virus_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_AdArgs = {
+  where: Ad_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Ad_By_PkArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -4566,6 +4859,20 @@ export type Mutation_RootInsertVirusArgs = {
 export type Mutation_RootInsertVirusesArgs = {
   objects: Array<Virus_Insert_Input>;
   on_conflict?: InputMaybe<Virus_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_AdArgs = {
+  objects: Array<Ad_Insert_Input>;
+  on_conflict?: InputMaybe<Ad_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Ad_OneArgs = {
+  object: Ad_Insert_Input;
+  on_conflict?: InputMaybe<Ad_On_Conflict>;
 };
 
 
@@ -4836,6 +5143,28 @@ export type Mutation_RootUpdateVirusesArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_AdArgs = {
+  _inc?: InputMaybe<Ad_Inc_Input>;
+  _set?: InputMaybe<Ad_Set_Input>;
+  where: Ad_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Ad_By_PkArgs = {
+  _inc?: InputMaybe<Ad_Inc_Input>;
+  _set?: InputMaybe<Ad_Set_Input>;
+  pk_columns: Ad_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Ad_ManyArgs = {
+  updates: Array<Ad_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_AuthProviderRequests_ManyArgs = {
   updates: Array<AuthProviderRequests_Updates>;
 };
@@ -5009,6 +5338,12 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root';
+  /** fetch data from the table: "ad" */
+  ad: Array<Ad>;
+  /** fetch aggregated fields from the table: "ad" */
+  ad_aggregate: Ad_Aggregate;
+  /** fetch data from the table: "ad" using primary key columns */
+  ad_by_pk?: Maybe<Ad>;
   /** fetch data from the table: "auth.providers" using primary key columns */
   authProvider?: Maybe<AuthProviders>;
   /** fetch data from the table: "auth.provider_requests" using primary key columns */
@@ -5104,6 +5439,29 @@ export type Query_Root = {
   viruses: Array<Virus>;
   /** fetch aggregated fields from the table: "storage.virus" */
   virusesAggregate: Virus_Aggregate;
+};
+
+
+export type Query_RootAdArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Order_By>>;
+  where?: InputMaybe<Ad_Bool_Exp>;
+};
+
+
+export type Query_RootAd_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Order_By>>;
+  where?: InputMaybe<Ad_Bool_Exp>;
+};
+
+
+export type Query_RootAd_By_PkArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -5487,6 +5845,14 @@ export type Search_Listings_Args = {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
+  /** fetch data from the table: "ad" */
+  ad: Array<Ad>;
+  /** fetch aggregated fields from the table: "ad" */
+  ad_aggregate: Ad_Aggregate;
+  /** fetch data from the table: "ad" using primary key columns */
+  ad_by_pk?: Maybe<Ad>;
+  /** fetch data from the table in a streaming manner: "ad" */
+  ad_stream: Array<Ad>;
   /** fetch data from the table: "auth.providers" using primary key columns */
   authProvider?: Maybe<AuthProviders>;
   /** fetch data from the table: "auth.provider_requests" using primary key columns */
@@ -5612,6 +5978,36 @@ export type Subscription_Root = {
   viruses: Array<Virus>;
   /** fetch aggregated fields from the table: "storage.virus" */
   virusesAggregate: Virus_Aggregate;
+};
+
+
+export type Subscription_RootAdArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Order_By>>;
+  where?: InputMaybe<Ad_Bool_Exp>;
+};
+
+
+export type Subscription_RootAd_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Order_By>>;
+  where?: InputMaybe<Ad_Bool_Exp>;
+};
+
+
+export type Subscription_RootAd_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootAd_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Ad_Stream_Cursor_Input>>;
+  where?: InputMaybe<Ad_Bool_Exp>;
 };
 
 
@@ -7109,6 +7505,20 @@ export type UpdateListingMutationVariables = Exact<{
 
 export type UpdateListingMutation = { __typename?: 'mutation_root', update_listing_by_pk?: { __typename?: 'listing', id: number } | null };
 
+export type CreateAdMutationVariables = Exact<{
+  object: Ad_Insert_Input;
+}>;
+
+
+export type CreateAdMutation = { __typename?: 'mutation_root', insert_ad_one?: { __typename?: 'ad', id: number } | null };
+
+export type DeleteAdMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteAdMutation = { __typename?: 'mutation_root', delete_ad_by_pk?: { __typename?: 'ad', id: number } | null };
+
 export type AllListingsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -7121,6 +7531,18 @@ export type ListingByIdSubQueryVariables = Exact<{
 
 export type ListingByIdSubQuery = { __typename?: 'query_root', listing_by_pk?: { __typename?: 'listing', id: number, business_name: string, slogan?: string | null, description?: string | null, island?: string | null, created_at: any, updated_at: any, tier: string, live: boolean, primary_address?: string | null, primary_phone?: string | null, primary_email?: string | null, primary_web_url?: string | null, this_week_recommended: boolean, booking_links: any, images: any, videos: any, layout_data: any, listing_category_tags: Array<{ __typename?: 'listing_category_tag', id: number, category_tag: { __typename?: 'category_tag', id: number, label: string } }> } | null };
 
+export type GetAdByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetAdByIdQuery = { __typename?: 'query_root', ad_by_pk?: { __typename?: 'ad', id: number, created_at: any, name: string, link: string, image: string, size: string, live: boolean } | null };
+
+export type AllAdsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllAdsQuery = { __typename?: 'query_root', ad: Array<{ __typename?: 'ad', id: number, created_at: any, name: string, link: string, image: string, size: string, live: boolean }> };
+
 
 export const UpdateLayoutDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateLayoutData"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layoutData"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"jsonb"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_append"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"layout_data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layoutData"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateLayoutDataMutation, UpdateLayoutDataMutationVariables>;
 export const FixImageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"fixImage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"listingId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"src"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadImageToListing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"listingId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"listingId"}}},{"kind":"Argument","name":{"kind":"Name","value":"src"},"value":{"kind":"Variable","name":{"kind":"Name","value":"src"}}},{"kind":"Argument","name":{"kind":"Name","value":"fix"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"fixed_url"}}]}}]}}]} as unknown as DocumentNode<FixImageMutation, FixImageMutationVariables>;
@@ -7129,5 +7551,9 @@ export const UpdateUserProfileDocument = {"kind":"Document","definitions":[{"kin
 export const CreateListingShellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateListingShell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"businessName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_listing_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"business_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"businessName"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateListingShellMutation, CreateListingShellMutationVariables>;
 export const DeleteListingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteListing"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteListingMutation, DeleteListingMutationVariables>;
 export const UpdateListingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateListing"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"listing_set_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateListingMutation, UpdateListingMutationVariables>;
+export const CreateAdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAd"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"object"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_ad_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"object"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateAdMutation, CreateAdMutationVariables>;
+export const DeleteAdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAd"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteAdMutation, DeleteAdMutationVariables>;
 export const AllListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"AllListings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"business_name"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}}]}}]}}]} as unknown as DocumentNode<AllListingsSubscription, AllListingsSubscriptionVariables>;
 export const ListingByIdSubDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingByIDSub"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"slogan"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"primary_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_phone"}},{"kind":"Field","name":{"kind":"Name","value":"primary_email"}},{"kind":"Field","name":{"kind":"Name","value":"primary_web_url"}},{"kind":"Field","name":{"kind":"Name","value":"this_week_recommended"}},{"kind":"Field","name":{"kind":"Name","value":"booking_links"}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"videos"}},{"kind":"Field","name":{"kind":"Name","value":"layout_data"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"label"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ListingByIdSubQuery, ListingByIdSubQueryVariables>;
+export const GetAdByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAdById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"live"}}]}}]}}]} as unknown as DocumentNode<GetAdByIdQuery, GetAdByIdQueryVariables>;
+export const AllAdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"live"}}]}}]}}]} as unknown as DocumentNode<AllAdsQuery, AllAdsQueryVariables>;

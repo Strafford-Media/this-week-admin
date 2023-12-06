@@ -1,0 +1,161 @@
+import { Button, Select, TextInput, Toggle, toast } from '@8thday/react'
+import React, { ComponentProps, useState } from 'react'
+import { AdPreview } from '../atoms/AdPreview'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useAuthQuery } from '@nhost/react-apollo'
+import { AD_BY_ID, CREATE_AD, DELETE_AD } from '../../graphql'
+import { useNhostClient } from '@nhost/react'
+import { TrashIcon } from '@heroicons/react/24/solid'
+
+const adSizes = [
+  { label: '300w x 250h', value: '300x250' },
+  { label: '300w x 600h', value: '300x600' },
+  { label: '160w x 600h', value: '160x600' },
+  { label: '728w x 90h', value: '728x90' },
+  { label: '300w x 50h', value: '300x50' },
+  { label: '320w x 50h', value: '320x50' },
+]
+
+export interface AdDesignerProps extends ComponentProps<'div'> {}
+
+export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
+  const nhost = useNhostClient()
+  const { id: rawId = '' } = useParams()
+  const id = Number(rawId)
+
+  const goTo = useNavigate()
+
+  const [name, setName] = useState('')
+  const [ctaLink, setCtaLink] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
+  const [size, setSize] = useState(adSizes[0].value)
+  const [live, setLive] = useState(false)
+
+  const [imageValid, setImageValid] = useState(false)
+
+  const [width, height] = size.split('x').map(Number)
+
+  const { data } = useAuthQuery(AD_BY_ID, {
+    variables: { id },
+    skip: !id,
+    onCompleted(data) {
+      const ad = data.ad_by_pk
+      if (ad) {
+        setName(ad.name)
+        setCtaLink(ad.link)
+        setImageUrl(ad.image)
+        setSize(ad.size)
+        setLive(ad.live)
+      }
+    },
+  })
+
+  const disabled =
+    !name ||
+    !ctaLink ||
+    !imageUrl ||
+    !imageValid ||
+    (name === data?.ad_by_pk?.name &&
+      ctaLink === data?.ad_by_pk?.link &&
+      imageUrl === data?.ad_by_pk?.image &&
+      live === data?.ad_by_pk?.live &&
+      size === data?.ad_by_pk?.size)
+
+  return (
+    <div className="p-2 sm:p-4">
+      <h2 className="my-4 text-center text-primary-900">Ad Designer</h2>
+      <div className={`${className} flex flex-col md:flex-row`} {...props}>
+        <form
+          className="mx-auto flex w-full max-w-screen-sm flex-col items-stretch"
+          onSubmit={async (e) => {
+            e.preventDefault()
+
+            if (disabled) return
+
+            const res = await nhost.graphql
+              .request(CREATE_AD, {
+                object: {
+                  link: ctaLink,
+                  image: imageUrl,
+                  size,
+                  name,
+                  live,
+                },
+              })
+              .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+            if (res instanceof Error) {
+              return toast.error({ message: 'Could not create ad', description: res.message })
+            }
+
+            const createdId = res.data?.insert_ad_one?.id
+            if (!createdId) {
+              return toast.error({
+                message: 'Could not create ad',
+                description: 'Please check the form inputs and try again.',
+              })
+            }
+
+            toast.success({ message: 'Ad Created!' })
+
+            setName('')
+            setCtaLink('')
+            setImageUrl('')
+            setSize('')
+            setLive(false)
+
+            goTo(`/ads/edit/${createdId}`)
+          }}
+        >
+          <TextInput label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <TextInput label="CTA Link" value={ctaLink} onChange={(e) => setCtaLink(e.target.value)} required />
+          <TextInput
+            label="Image URL"
+            value={imageUrl}
+            errorMessage={imageUrl && !imageValid ? 'Invalid URL' : ''}
+            onChange={(e) => setImageUrl(e.target.value)}
+            required
+          />
+          <Select label="Size" items={adSizes} value={size} onValueChange={setSize} />
+          <Toggle rightLabel="Live" checked={live} setChecked={setLive} />
+          <div className="mt-4 flex items-center gap-4">
+            {id && (
+              <Button
+                type="button"
+                variant="dismissive"
+                className="text-red-500"
+                PreIcon={TrashIcon}
+                onClick={async () => {
+                  if (!confirm('Deleting an Ad is irrevocable. Continue?')) return
+                  const res = await nhost.graphql
+                    .request(DELETE_AD, { id })
+                    .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                  if (res instanceof Error) {
+                    return toast.error({ message: 'Unable to delete ad' })
+                  }
+
+                  goTo('/ads')
+                }}
+              >
+                Delete Ad
+              </Button>
+            )}
+            <Button
+              type="submit"
+              disabled={disabled}
+              variant={disabled ? 'dismissive' : 'primary'}
+              className="transition-all duration-300"
+            >
+              Save Changes
+            </Button>
+          </div>
+        </form>
+        <div className="flex-center max-h-content grow flex-col">
+          <h3 className="mb-4 text-primary-900">Preview</h3>
+          <AdPreview height={height} width={width} imageUrl={imageUrl} onValidate={setImageValid} />
+        </div>
+      </div>
+    </div>
+  )
+}

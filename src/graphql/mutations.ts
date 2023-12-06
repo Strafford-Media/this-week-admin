@@ -31,3 +31,19 @@ export const UPDATE_LISTING = graphql(`
     }
   }
 `)
+
+export const CREATE_AD = graphql(`
+  mutation CreateAd($object: ad_insert_input!) {
+    insert_ad_one(object: $object) {
+      id
+    }
+  }
+`)
+
+export const DELETE_AD = graphql(`
+  mutation DeleteAd($id: Int!) {
+    delete_ad_by_pk(id: $id) {
+      id
+    }
+  }
+`)

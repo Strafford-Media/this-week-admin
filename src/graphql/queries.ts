@@ -45,3 +45,31 @@ export const LISTING_BY_ID = graphql(`
     }
   }
 `)
+
+export const AD_BY_ID = graphql(`
+  query getAdById($id: Int!) {
+    ad_by_pk(id: $id) {
+      id
+      created_at
+      name
+      link
+      image
+      size
+      live
+    }
+  }
+`)
+
+export const ALL_ADS = graphql(`
+  query AllAds {
+    ad {
+      id
+      created_at
+      name
+      link
+      image
+      size
+      live
+    }
+  }
+`)

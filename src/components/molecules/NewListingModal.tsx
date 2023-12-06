@@ -24,9 +24,9 @@ export const NewListingModal = ({ className = '', onClose, ...props }: NewListin
   }, [])
 
   return (
-    <div className={clsx(className, 'p-4 fixed inset-0 z-50 bg-white/80 flex-center')} {...props}>
+    <div className={clsx(className, 'flex-center fixed inset-0 z-50 bg-white/80 p-4')} {...props}>
       <form
-        className="max-w-full min-w-md p-4 space-y-4 shadow-xl rounded-md"
+        className="min-w-md max-w-full space-y-4 rounded-md bg-white p-4 shadow-xl"
         onSubmit={async (e) => {
           e.preventDefault()
           e.stopPropagation()
