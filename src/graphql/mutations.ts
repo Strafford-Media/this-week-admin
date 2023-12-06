@@ -40,6 +40,14 @@ export const CREATE_AD = graphql(`
   }
 `)
 
+export const UPDATE_AD = graphql(`
+  mutation UpdateAd($id: Int!, $set: ad_set_input) {
+    update_ad_by_pk(pk_columns: { id: $id }, _set: $set) {
+      id
+    }
+  }
+`)
+
 export const DELETE_AD = graphql(`
   mutation DeleteAd($id: Int!) {
     delete_ad_by_pk(id: $id) {

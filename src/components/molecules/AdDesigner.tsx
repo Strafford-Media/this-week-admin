@@ -3,7 +3,7 @@ import React, { ComponentProps, useState } from 'react'
 import { AdPreview } from '../atoms/AdPreview'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
-import { AD_BY_ID, CREATE_AD, DELETE_AD } from '../../graphql'
+import { AD_BY_ID, CREATE_AD, DELETE_AD, UPDATE_AD } from '../../graphql'
 import { useNhostClient } from '@nhost/react'
 import { TrashIcon } from '@heroicons/react/24/solid'
 
@@ -35,7 +35,7 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
 
   const [width, height] = size.split('x').map(Number)
 
-  const { data } = useAuthQuery(AD_BY_ID, {
+  const { data, refetch } = useAuthQuery(AD_BY_ID, {
     variables: { id },
     skip: !id,
     onCompleted(data) {
@@ -72,39 +72,61 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
 
             if (disabled) return
 
-            const res = await nhost.graphql
-              .request(CREATE_AD, {
-                object: {
-                  link: ctaLink,
-                  image: imageUrl,
-                  size,
-                  name,
-                  live,
-                },
-              })
-              .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+            if (!id) {
+              const res = await nhost.graphql
+                .request(CREATE_AD, {
+                  object: {
+                    link: ctaLink,
+                    image: imageUrl,
+                    size,
+                    name,
+                    live,
+                  },
+                })
+                .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
-            if (res instanceof Error) {
-              return toast.error({ message: 'Could not create ad', description: res.message })
+              if (res instanceof Error) {
+                return toast.error({ message: 'Could not create ad', description: res.message })
+              }
+
+              const createdId = res.data?.insert_ad_one?.id
+              if (!createdId) {
+                return toast.error({
+                  message: 'Could not create ad',
+                  description: 'Please check the form inputs and try again.',
+                })
+              }
+
+              toast.success({ message: 'Ad Created!' })
+
+              setName('')
+              setCtaLink('')
+              setImageUrl('')
+              setSize('')
+              setLive(false)
+
+              goTo(`/ads/edit/${createdId}`)
+            } else {
+              const res = await nhost.graphql
+                .request(UPDATE_AD, {
+                  id,
+                  set: {
+                    link: ctaLink,
+                    image: imageUrl,
+                    name,
+                    size,
+                    live,
+                  },
+                })
+                .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+              if (res instanceof Error) {
+                return toast.error({ message: 'Unable to update Ad' })
+              }
+
+              toast.success({ message: 'Ad updated!' })
+              refetch()
             }
-
-            const createdId = res.data?.insert_ad_one?.id
-            if (!createdId) {
-              return toast.error({
-                message: 'Could not create ad',
-                description: 'Please check the form inputs and try again.',
-              })
-            }
-
-            toast.success({ message: 'Ad Created!' })
-
-            setName('')
-            setCtaLink('')
-            setImageUrl('')
-            setSize('')
-            setLive(false)
-
-            goTo(`/ads/edit/${createdId}`)
           }}
         >
           <TextInput label="Name" value={name} onChange={(e) => setName(e.target.value)} required />

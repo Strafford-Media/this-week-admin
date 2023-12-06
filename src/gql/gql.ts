@@ -21,6 +21,7 @@ const documents = {
     "\n  mutation DeleteListing($id: Int!) {\n    delete_listing_by_pk(id: $id) {\n      id\n    }\n  }\n": types.DeleteListingDocument,
     "\n  mutation UpdateListing($id: Int!, $set: listing_set_input!) {\n    update_listing_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n": types.UpdateListingDocument,
     "\n  mutation CreateAd($object: ad_insert_input!) {\n    insert_ad_one(object: $object) {\n      id\n    }\n  }\n": types.CreateAdDocument,
+    "\n  mutation UpdateAd($id: Int!, $set: ad_set_input) {\n    update_ad_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n": types.UpdateAdDocument,
     "\n  mutation DeleteAd($id: Int!) {\n    delete_ad_by_pk(id: $id) {\n      id\n    }\n  }\n": types.DeleteAdDocument,
     "\n  subscription AllListings {\n    listing(order_by: { business_name: asc }) {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n": types.AllListingsDocument,
     "\n  query ListingByIDSub($id: Int!) {\n    listing_by_pk(id: $id) {\n      id\n      business_name\n      slogan\n      description\n      island\n      created_at\n      updated_at\n      tier\n      live\n      primary_address\n      primary_phone\n      primary_email\n      primary_web_url\n      this_week_recommended\n      booking_links\n      images\n      videos\n      layout_data\n      listing_category_tags {\n        id\n        category_tag {\n          id\n          label\n        }\n      }\n    }\n  }\n": types.ListingByIdSubDocument,
@@ -74,6 +75,10 @@ export function graphql(source: "\n  mutation UpdateListing($id: Int!, $set: lis
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateAd($object: ad_insert_input!) {\n    insert_ad_one(object: $object) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateAd($object: ad_insert_input!) {\n    insert_ad_one(object: $object) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateAd($id: Int!, $set: ad_set_input) {\n    update_ad_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateAd($id: Int!, $set: ad_set_input) {\n    update_ad_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
