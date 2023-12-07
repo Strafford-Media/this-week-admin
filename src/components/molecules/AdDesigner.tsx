@@ -6,15 +6,7 @@ import { useAuthQuery } from '@nhost/react-apollo'
 import { AD_BY_ID, CREATE_AD, DELETE_AD, UPDATE_AD } from '../../graphql'
 import { useNhostClient } from '@nhost/react'
 import { TrashIcon } from '@heroicons/react/24/solid'
-
-const adSizes = [
-  { label: '300w x 250h', value: '300x250' },
-  { label: '300w x 600h', value: '300x600' },
-  { label: '160w x 600h', value: '160x600' },
-  { label: '728w x 90h', value: '728x90' },
-  { label: '300w x 50h', value: '300x50' },
-  { label: '320w x 50h', value: '320x50' },
-]
+import { adSizes } from '../../utils/constants'
 
 export interface AdDesignerProps extends ComponentProps<'div'> {}
 
@@ -141,7 +133,7 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
           <Select label="Size" items={adSizes} value={size} onValueChange={setSize} />
           <Toggle rightLabel="Live" checked={live} setChecked={setLive} />
           <div className="mt-4 flex items-center gap-4">
-            {id && (
+            {!!id && (
               <Button
                 type="button"
                 variant="dismissive"
@@ -173,7 +165,7 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
             </Button>
           </div>
         </form>
-        <div className="flex-center max-h-content grow flex-col">
+        <div className="flex-center max-h-content grow flex-col md:ml-4">
           <h3 className="mb-4 text-primary-900">Preview</h3>
           <AdPreview height={height} width={width} imageUrl={imageUrl} onValidate={setImageValid} />
         </div>

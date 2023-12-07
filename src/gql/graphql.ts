@@ -93,6 +93,7 @@ export type Ad = {
   created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
   image: Scalars['String'];
+  last_viewed: Scalars['timestamptz'];
   link: Scalars['String'];
   live: Scalars['Boolean'];
   name: Scalars['String'];
@@ -144,6 +145,7 @@ export type Ad_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   image?: InputMaybe<String_Comparison_Exp>;
+  last_viewed?: InputMaybe<Timestamptz_Comparison_Exp>;
   link?: InputMaybe<String_Comparison_Exp>;
   live?: InputMaybe<Boolean_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
@@ -167,6 +169,7 @@ export type Ad_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
   image?: InputMaybe<Scalars['String']>;
+  last_viewed?: InputMaybe<Scalars['timestamptz']>;
   link?: InputMaybe<Scalars['String']>;
   live?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
@@ -180,6 +183,7 @@ export type Ad_Max_Fields = {
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   image?: Maybe<Scalars['String']>;
+  last_viewed?: Maybe<Scalars['timestamptz']>;
   link?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   size?: Maybe<Scalars['String']>;
@@ -192,6 +196,7 @@ export type Ad_Min_Fields = {
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   image?: Maybe<Scalars['String']>;
+  last_viewed?: Maybe<Scalars['timestamptz']>;
   link?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   size?: Maybe<Scalars['String']>;
@@ -219,6 +224,7 @@ export type Ad_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   image?: InputMaybe<Order_By>;
+  last_viewed?: InputMaybe<Order_By>;
   link?: InputMaybe<Order_By>;
   live?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
@@ -240,6 +246,8 @@ export enum Ad_Select_Column {
   /** column name */
   Image = 'image',
   /** column name */
+  LastViewed = 'last_viewed',
+  /** column name */
   Link = 'link',
   /** column name */
   Live = 'live',
@@ -256,6 +264,7 @@ export type Ad_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
   image?: InputMaybe<Scalars['String']>;
+  last_viewed?: InputMaybe<Scalars['timestamptz']>;
   link?: InputMaybe<Scalars['String']>;
   live?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
@@ -294,6 +303,7 @@ export type Ad_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
   image?: InputMaybe<Scalars['String']>;
+  last_viewed?: InputMaybe<Scalars['timestamptz']>;
   link?: InputMaybe<Scalars['String']>;
   live?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
@@ -315,6 +325,8 @@ export enum Ad_Update_Column {
   Id = 'id',
   /** column name */
   Image = 'image',
+  /** column name */
+  LastViewed = 'last_viewed',
   /** column name */
   Link = 'link',
   /** column name */
