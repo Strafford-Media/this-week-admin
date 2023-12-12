@@ -11,7 +11,7 @@ import { DELETE_LISTING, UPDATE_LISTING } from '../../graphql/mutations'
 import { ListingByIdSubQuery } from '../../gql/graphql'
 import { useMapbox } from '../../hooks'
 import { useMutation } from '@apollo/client'
-import { ListingImageUploader } from './ListingImageUploader'
+import { ImageUploader } from './ImageUploader'
 import { graphql } from '../../gql'
 import clsx from 'clsx'
 
@@ -153,8 +153,6 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
   const { setContainer, mapboxRef } = useMapbox()
 
-  console.log(listing)
-
   return (
     <div className={`${className} edit-view h-full max-h-content overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
       {!listing ? (
@@ -218,13 +216,14 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               {listing.layout_data.logo && (
                 <img src={listing.layout_data.logo} alt="Company Logo" className="absolute inset-0 h-full" />
               )}
-              <ListingImageUploader
+              <ImageUploader
+                contentLabel="Logo"
                 type="logo"
                 className={clsx('absolute inset-0 h-32 w-64', {
                   'opacity-100': !listing.layout_data.logo,
                   'opacity-0 focus-within:opacity-95 hover:opacity-95': listing.layout_data.logo,
                 })}
-                listingId={id}
+                entityId={id}
                 onSuccess={() => {
                   refetch().then(({ data }) => {
                     if (data.listing_by_pk) {
@@ -268,9 +267,10 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             <div>
               <h3>Images</h3>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                <ListingImageUploader
+                <ImageUploader
+                  contentLabel="Images"
                   className="h-32 w-64"
-                  listingId={id}
+                  entityId={id}
                   onSuccess={() => {
                     refetch().then(({ data }) => {
                       if (data.listing_by_pk) {
@@ -336,8 +336,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                             const res = await nhost.graphql
                               .request(
                                 graphql(`
-                                  mutation fixImage($listingId: Int!, $src: String!) {
-                                    uploadImageToListing(listingId: $listingId, src: $src, fix: true) {
+                                  mutation fixImage($entityId: Int!, $src: String!) {
+                                    uploadImage(entityId: $entityId, src: $src, fix: true) {
                                       success
                                       error
                                       fixed_url
@@ -345,21 +345,21 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                   }
                                 `),
                                 {
-                                  listingId: id,
+                                  entityId: id,
                                   src: image.original_url,
                                 },
                               )
                               .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
-                            if (res instanceof Error || res.data?.uploadImageToListing.error) {
+                            if (res instanceof Error || res.data?.uploadImage.error) {
                               toast.error({
                                 message: 'Fixing Image Failed',
-                                description: res instanceof Error ? res.message : res.data?.uploadImageToListing.error,
+                                description: res instanceof Error ? res.message : res.data?.uploadImage.error,
                               })
                               return console.error(res)
                             }
 
-                            if (res.data?.uploadImageToListing.fixed_url) {
+                            if (res.data?.uploadImage.fixed_url) {
                               toast.success({
                                 message: 'Image Restored!',
                               })
@@ -367,7 +367,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                               updateImmediately(
                                 'images',
                                 listing.images.map((i) =>
-                                  i.url === image.url ? { ...i, url: res.data.uploadImageToListing.fixed_url } : i,
+                                  i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
                                 ),
                               ).then(() => {
                                 setErroredImg((e) => ({ ...e, [image.url]: false }))

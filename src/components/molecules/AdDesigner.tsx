@@ -7,6 +7,8 @@ import { AD_BY_ID, CREATE_AD, DELETE_AD, UPDATE_AD } from '../../graphql'
 import { useNhostClient } from '@nhost/react'
 import { TrashIcon } from '@heroicons/react/24/solid'
 import { adSizes } from '../../utils/constants'
+import { ImageUploader } from './ImageUploader'
+import { GetAdByIdQuery } from '../../gql/graphql'
 
 export interface AdDesignerProps extends ComponentProps<'div'> {}
 
@@ -27,18 +29,22 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
 
   const [width, height] = size.split('x').map(Number)
 
+  const updateAdData = (ad?: GetAdByIdQuery['ad_by_pk']) => {
+    if (ad) {
+      setName(ad.name)
+      setCtaLink(ad.link)
+      setImageUrl(ad.image)
+      setSize(ad.size)
+      setLive(ad.live)
+    }
+  }
+
   const { data, refetch } = useAuthQuery(AD_BY_ID, {
     variables: { id },
     skip: !id,
     onCompleted(data) {
       const ad = data.ad_by_pk
-      if (ad) {
-        setName(ad.name)
-        setCtaLink(ad.link)
-        setImageUrl(ad.image)
-        setSize(ad.size)
-        setLive(ad.live)
-      }
+      updateAdData(ad)
     },
   })
 
@@ -123,12 +129,15 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
         >
           <TextInput label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
           <TextInput label="CTA Link" value={ctaLink} onChange={(e) => setCtaLink(e.target.value)} required />
-          <TextInput
-            label="Image URL"
-            value={imageUrl}
-            errorMessage={imageUrl && !imageValid ? 'Invalid URL' : ''}
-            onChange={(e) => setImageUrl(e.target.value)}
-            required
+          <ImageUploader
+            type={id ? 'ad' : 'library'}
+            contentLabel="Creative Content"
+            entityId={id}
+            onSuccess={(newUrl) => {
+              if (!id && newUrl) {
+                setImageUrl(newUrl)
+              }
+            }}
           />
           <Select label="Size" items={adSizes} value={size} onValueChange={setSize} />
           <Toggle rightLabel="Live" checked={live} setChecked={setLive} />
@@ -155,14 +164,22 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
                 Delete Ad
               </Button>
             )}
-            <Button
-              type="submit"
-              disabled={disabled}
-              variant={disabled ? 'dismissive' : 'primary'}
-              className="transition-all duration-300"
-            >
-              Save Changes
-            </Button>
+            {!disabled && (
+              <>
+                <Button
+                  type="button"
+                  variant="dismissive"
+                  onClick={() => {
+                    refetch().then(({ data }) => updateAdData(data.ad_by_pk))
+                  }}
+                >
+                  Discard Changes
+                </Button>
+                <Button type="submit" variant="primary">
+                  Save Changes
+                </Button>
+              </>
+            )}
           </div>
         </form>
         <div className="flex-center max-h-content grow flex-col md:ml-4">

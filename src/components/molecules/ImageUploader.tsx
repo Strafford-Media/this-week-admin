@@ -4,19 +4,21 @@ import { graphql } from '../../gql'
 import { ArrowPathIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { TextInput, toast } from '@8thday/react'
 
-export interface ListingImageUploaderProps extends ComponentProps<'div'> {
-  listingId: number
-  type?: 'logo' | 'gallery'
-  onSuccess?(): void
+export interface ImageUploaderProps extends ComponentProps<'div'> {
+  contentLabel?: string
+  entityId: number
+  type?: 'logo' | 'gallery' | 'ad' | 'library'
+  onSuccess?(newUrl?: string | null): void
 }
 
-export const ListingImageUploader = ({
+export const ImageUploader = ({
   type = 'gallery',
+  contentLabel = 'Images',
   className = '',
   onSuccess,
-  listingId,
+  entityId,
   ...props
-}: ListingImageUploaderProps) => {
+}: ImageUploaderProps) => {
   const nhost = useNhostClient()
 
   const [url, setUrl] = useState('')
@@ -28,15 +30,16 @@ export const ListingImageUploader = ({
     const res = await nhost.graphql
       .request(
         graphql(`
-          mutation uploadImage($listingId: Int!, $src: String!, $destination: String) {
-            uploadImageToListing(listingId: $listingId, src: $src, destination: $destination) {
+          mutation uploadImage($entityId: Int!, $src: String!, $destination: String) {
+            uploadImage(entityId: $entityId, src: $src, destination: $destination) {
               success
               error
+              new_url
             }
           }
         `),
         {
-          listingId,
+          entityId,
           src,
           destination: type,
         },
@@ -48,10 +51,10 @@ export const ListingImageUploader = ({
       return console.error(res)
     }
 
-    if (res.data?.uploadImageToListing.success) {
-      onSuccess?.()
+    if (res.data?.uploadImage.success) {
+      onSuccess?.(res.data.uploadImage.new_url)
     } else {
-      toast.error({ message: 'Unable to upload image', description: res.data?.uploadImageToListing.error })
+      toast.error({ message: 'Unable to upload image', description: res.data?.uploadImage.error })
     }
 
     setImageUploading(false)
@@ -63,8 +66,6 @@ export const ListingImageUploader = ({
     if (error) {
       return toast.error({ message: 'Unable to upload image', description: error.message })
     }
-
-    console.log(fileMetadata)
 
     const src =
       fileMetadata.mimeType === 'image/png'
@@ -123,7 +124,7 @@ export const ListingImageUploader = ({
           ) : (
             <PlusIcon className="inline h-4 w-4 align-text-bottom" />
           )}{' '}
-          Drag or Click to Add {type === 'logo' ? 'Company Logo' : 'Images'}
+          Drag or Click to Add {contentLabel}
         </span>
         <input
           type="file"
@@ -143,24 +144,21 @@ export const ListingImageUploader = ({
           multiple
         />
         <span className="mb-2 text-xs">or</span>
-        <form
-          className="w-full self-stretch"
-          onSubmit={(e) => {
+        <TextInput
+          className="self-stretch"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          collapseDescriptionArea
+          placeholder='paste url and hit "enter"'
+          onKeyDown={(e) => {
+            if (e.key !== 'Enter' || !url) return
+
             e.preventDefault()
             e.stopPropagation()
 
-            if (!url) return
-
             uploadURL(url)
           }}
-        >
-          <TextInput
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            collapseDescriptionArea
-            placeholder='paste url and hit "enter"'
-          />
-        </form>
+        />
       </label>
     </div>
   )

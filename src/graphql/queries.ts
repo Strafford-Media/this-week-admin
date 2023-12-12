@@ -61,10 +61,11 @@ export const AD_BY_ID = graphql(`
 `)
 
 export const ALL_ADS = graphql(`
-  query AllAds {
-    ad {
+  query AllAds($whereClause: ad_bool_exp) {
+    ad(where: $whereClause, order_by: { updated_at: desc }) {
       id
       created_at
+      updated_at
       name
       link
       image

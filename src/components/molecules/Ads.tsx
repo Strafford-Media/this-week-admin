@@ -10,7 +10,6 @@ export interface AdsProps extends ComponentProps<'div'> {}
 
 export const Ads = ({ className = '', ...props }: AdsProps) => {
   const m = useMatches()
-  console.log(m)
   const atAdRoot = m.length === 2
 
   const goTo = useNavigate()
