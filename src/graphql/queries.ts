@@ -105,3 +105,32 @@ export const CYCLE_STATS_BY_ID = graphql(`
     }
   }
 `)
+
+export const CYCLE_ANALYTICS = graphql(`
+  query cycleAnalytics($id: Int!) {
+    ad_cycle_by_pk(id: $id) {
+      id
+      loads
+      clicks: ad_events_aggregate(where: { event_type: { _eq: "click" } }) {
+        aggregate {
+          count
+        }
+      }
+      unique_clicks: ad_events_aggregate(where: { unique: { _eq: true }, event_type: { _eq: "click" } }) {
+        aggregate {
+          count
+        }
+      }
+      views: ad_events_aggregate(where: { event_type: { _eq: "view" } }) {
+        aggregate {
+          count
+        }
+      }
+      unique_views: ad_events_aggregate(where: { unique: { _eq: true }, event_type: { _eq: "view" } }) {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+`)

@@ -4,7 +4,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import React, { ComponentProps, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuthQuery } from '@nhost/react-apollo'
-import { ALL_AD_CYCLES, CREATE_AD_CYCLE, DELETE_AD_CYCLE, UPDATE_AD_CYCLE } from '../../graphql'
+import { ALL_AD_CYCLES, CREATE_AD_CYCLE, CYCLE_ANALYTICS, DELETE_AD_CYCLE, UPDATE_AD_CYCLE } from '../../graphql'
 import { EventInput, formatDate } from '@fullcalendar/core'
 import { useParams } from 'react-router-dom'
 import { Button, Select, TextInput, toast, useClickLink, useEventListener } from '@8thday/react'
@@ -12,8 +12,9 @@ import { AdPreview } from '../atoms/AdPreview'
 import { GetAdCyclesQuery } from '../../gql/graphql'
 import { adSizeDisplayMap } from '../../utils/constants'
 import { NavLink } from 'react-router-dom'
-import { CheckIcon, PencilSquareIcon, RocketLaunchIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { ArrowPathIcon, CheckIcon, PencilSquareIcon, RocketLaunchIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
+import { IconButton } from '../atoms/IconButton'
 
 const getDimensions = () => {
   const width = window.innerWidth - 392
@@ -127,8 +128,6 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
     }
   }, [ad])
 
-  // const { data: cycleStatsData } = useAuthQuery()
-
   const [adWidth, adHeight] = ad?.size.split('x').map(Number) ?? []
 
   const onSave = async (start: string, end: string, id?: string, revert?: () => void) => {
@@ -181,6 +180,17 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
       goTo(`/ads/scheduler/${adId}/${(res as any).data.insert_ad_cycle_one.id}`)
     }
   }
+
+  const {
+    data: cycleStatsData,
+    refetch: refreshStats,
+    loading: statsLoading,
+  } = useAuthQuery(CYCLE_ANALYTICS, {
+    skip: !cycle || cycle.starts_at > new Date().toISOString(),
+    variables: { id: Number(cycleId) },
+  })
+
+  const stats = cycleStatsData?.ad_cycle_by_pk
 
   return (
     <div className={`${className} grid h-[calc(100vh-122px)] md:grid-cols-[24rem_auto]`} {...props}>
@@ -287,18 +297,45 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
             </>
           )}
         </div>
-        {cycle && cycle.starts_at < new Date().toISOString() && (
+        {stats && (
           <>
-            <hr className="mx-4 my-8 border-gray-300" />
-            <div className="flex-center flex-col">
-              <h4>Stats</h4>
-              <p>Impressions: {cycle.loads}</p>
+            <hr className="my-8 border-gray-300" />
+            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+              <h4 className="col-span-full flex items-center justify-between">
+                Stats For This Cycle
+                <IconButton
+                  spin={statsLoading}
+                  icon={ArrowPathIcon}
+                  srLabel="refresh ad cycle stats"
+                  onClick={() => refreshStats()}
+                />
+              </h4>
+              {/* <p className="col-span-full grid grid-cols-sub">
+                <span className="italic text-gray-600">Loaded on Site:</span>{' '}
+                <span className="font-bold">{stats.loads}</span>
+              </p> */}
+              <p className="col-span-full grid grid-cols-sub">
+                <span className="italic text-gray-600">Views:</span>{' '}
+                <span className="font-bold">{stats.views.aggregate?.count ?? 0}</span>
+              </p>
+              <p className="col-span-full grid grid-cols-sub">
+                <span className="italic text-gray-600">Unique Views:</span>{' '}
+                <span className="font-bold">{stats.unique_views.aggregate?.count ?? 0}</span>
+              </p>
+              <p className="col-span-full grid grid-cols-sub">
+                <span className="italic text-gray-600">Clicks:</span>{' '}
+                <span className="font-bold">{stats.clicks.aggregate?.count ?? 0}</span>
+              </p>
+              <p className="col-span-full grid grid-cols-sub">
+                <span className="italic text-gray-600">Unique Clicks:</span>{' '}
+                <span className="font-bold">{stats.unique_clicks.aggregate?.count ?? 0}</span>
+              </p>
             </div>
           </>
         )}
         {ad && (
           <>
-            <hr className="mx-4 my-8 border-gray-300" />
+            <hr className="my-8 border-gray-300" />
             <div className="flex-center flex-col gap-2">
               <p>
                 Links to:{' '}
