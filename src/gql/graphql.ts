@@ -91,15 +91,62 @@ export type UploadImagePayload = {
 /** advertising stuff */
 export type Ad = {
   __typename?: 'ad';
+  /** An array relationship */
+  ad_cycles: Array<Ad_Cycle>;
+  /** An aggregate relationship */
+  ad_cycles_aggregate: Ad_Cycle_Aggregate;
+  /** An array relationship */
+  ad_events: Array<Ad_Event>;
+  /** An aggregate relationship */
+  ad_events_aggregate: Ad_Event_Aggregate;
   created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
   image: Scalars['String'];
   last_viewed: Scalars['timestamptz'];
   link: Scalars['String'];
-  live: Scalars['Boolean'];
   name: Scalars['String'];
   size: Scalars['String'];
   updated_at: Scalars['timestamptz'];
+};
+
+
+/** advertising stuff */
+export type AdAd_CyclesArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Cycle_Order_By>>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+
+/** advertising stuff */
+export type AdAd_Cycles_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Cycle_Order_By>>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+
+/** advertising stuff */
+export type AdAd_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+
+/** advertising stuff */
+export type AdAd_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
 };
 
 /** aggregated selection of "ad" */
@@ -143,12 +190,15 @@ export type Ad_Bool_Exp = {
   _and?: InputMaybe<Array<Ad_Bool_Exp>>;
   _not?: InputMaybe<Ad_Bool_Exp>;
   _or?: InputMaybe<Array<Ad_Bool_Exp>>;
+  ad_cycles?: InputMaybe<Ad_Cycle_Bool_Exp>;
+  ad_cycles_aggregate?: InputMaybe<Ad_Cycle_Aggregate_Bool_Exp>;
+  ad_events?: InputMaybe<Ad_Event_Bool_Exp>;
+  ad_events_aggregate?: InputMaybe<Ad_Event_Aggregate_Bool_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   image?: InputMaybe<String_Comparison_Exp>;
   last_viewed?: InputMaybe<Timestamptz_Comparison_Exp>;
   link?: InputMaybe<String_Comparison_Exp>;
-  live?: InputMaybe<Boolean_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   size?: InputMaybe<String_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -160,6 +210,810 @@ export enum Ad_Constraint {
   AdPkey = 'ad_pkey'
 }
 
+/** Specific run of an ad */
+export type Ad_Cycle = {
+  __typename?: 'ad_cycle';
+  /** An object relationship */
+  ad: Ad;
+  /** An array relationship */
+  ad_events: Array<Ad_Event>;
+  /** An aggregate relationship */
+  ad_events_aggregate: Ad_Event_Aggregate;
+  ad_id: Scalars['Int'];
+  ends_at: Scalars['timestamptz'];
+  id: Scalars['Int'];
+  loads: Scalars['Int'];
+  paused: Scalars['Boolean'];
+  starts_at: Scalars['timestamptz'];
+};
+
+
+/** Specific run of an ad */
+export type Ad_CycleAd_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+
+/** Specific run of an ad */
+export type Ad_CycleAd_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+/** aggregated selection of "ad_cycle" */
+export type Ad_Cycle_Aggregate = {
+  __typename?: 'ad_cycle_aggregate';
+  aggregate?: Maybe<Ad_Cycle_Aggregate_Fields>;
+  nodes: Array<Ad_Cycle>;
+};
+
+export type Ad_Cycle_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Ad_Cycle_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Ad_Cycle_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Ad_Cycle_Aggregate_Bool_Exp_Count>;
+};
+
+export type Ad_Cycle_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Ad_Cycle_Select_Column_Ad_Cycle_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Ad_Cycle_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Ad_Cycle_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Ad_Cycle_Select_Column_Ad_Cycle_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Ad_Cycle_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Ad_Cycle_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Ad_Cycle_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "ad_cycle" */
+export type Ad_Cycle_Aggregate_Fields = {
+  __typename?: 'ad_cycle_aggregate_fields';
+  avg?: Maybe<Ad_Cycle_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Ad_Cycle_Max_Fields>;
+  min?: Maybe<Ad_Cycle_Min_Fields>;
+  stddev?: Maybe<Ad_Cycle_Stddev_Fields>;
+  stddev_pop?: Maybe<Ad_Cycle_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Ad_Cycle_Stddev_Samp_Fields>;
+  sum?: Maybe<Ad_Cycle_Sum_Fields>;
+  var_pop?: Maybe<Ad_Cycle_Var_Pop_Fields>;
+  var_samp?: Maybe<Ad_Cycle_Var_Samp_Fields>;
+  variance?: Maybe<Ad_Cycle_Variance_Fields>;
+};
+
+
+/** aggregate fields of "ad_cycle" */
+export type Ad_Cycle_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "ad_cycle" */
+export type Ad_Cycle_Aggregate_Order_By = {
+  avg?: InputMaybe<Ad_Cycle_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Ad_Cycle_Max_Order_By>;
+  min?: InputMaybe<Ad_Cycle_Min_Order_By>;
+  stddev?: InputMaybe<Ad_Cycle_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Ad_Cycle_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Ad_Cycle_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Ad_Cycle_Sum_Order_By>;
+  var_pop?: InputMaybe<Ad_Cycle_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Ad_Cycle_Var_Samp_Order_By>;
+  variance?: InputMaybe<Ad_Cycle_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "ad_cycle" */
+export type Ad_Cycle_Arr_Rel_Insert_Input = {
+  data: Array<Ad_Cycle_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Ad_Cycle_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Ad_Cycle_Avg_Fields = {
+  __typename?: 'ad_cycle_avg_fields';
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  loads?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "ad_cycle" */
+export type Ad_Cycle_Avg_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "ad_cycle". All fields are combined with a logical 'AND'. */
+export type Ad_Cycle_Bool_Exp = {
+  _and?: InputMaybe<Array<Ad_Cycle_Bool_Exp>>;
+  _not?: InputMaybe<Ad_Cycle_Bool_Exp>;
+  _or?: InputMaybe<Array<Ad_Cycle_Bool_Exp>>;
+  ad?: InputMaybe<Ad_Bool_Exp>;
+  ad_events?: InputMaybe<Ad_Event_Bool_Exp>;
+  ad_events_aggregate?: InputMaybe<Ad_Event_Aggregate_Bool_Exp>;
+  ad_id?: InputMaybe<Int_Comparison_Exp>;
+  ends_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  loads?: InputMaybe<Int_Comparison_Exp>;
+  paused?: InputMaybe<Boolean_Comparison_Exp>;
+  starts_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "ad_cycle" */
+export enum Ad_Cycle_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  AdCyclePkey = 'ad_cycle_pkey'
+}
+
+/** input type for incrementing numeric columns in table "ad_cycle" */
+export type Ad_Cycle_Inc_Input = {
+  ad_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  loads?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "ad_cycle" */
+export type Ad_Cycle_Insert_Input = {
+  ad?: InputMaybe<Ad_Obj_Rel_Insert_Input>;
+  ad_events?: InputMaybe<Ad_Event_Arr_Rel_Insert_Input>;
+  ad_id?: InputMaybe<Scalars['Int']>;
+  ends_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  loads?: InputMaybe<Scalars['Int']>;
+  paused?: InputMaybe<Scalars['Boolean']>;
+  starts_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Ad_Cycle_Max_Fields = {
+  __typename?: 'ad_cycle_max_fields';
+  ad_id?: Maybe<Scalars['Int']>;
+  ends_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  loads?: Maybe<Scalars['Int']>;
+  starts_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "ad_cycle" */
+export type Ad_Cycle_Max_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  ends_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+  starts_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Ad_Cycle_Min_Fields = {
+  __typename?: 'ad_cycle_min_fields';
+  ad_id?: Maybe<Scalars['Int']>;
+  ends_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  loads?: Maybe<Scalars['Int']>;
+  starts_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "ad_cycle" */
+export type Ad_Cycle_Min_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  ends_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+  starts_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "ad_cycle" */
+export type Ad_Cycle_Mutation_Response = {
+  __typename?: 'ad_cycle_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Ad_Cycle>;
+};
+
+/** input type for inserting object relation for remote table "ad_cycle" */
+export type Ad_Cycle_Obj_Rel_Insert_Input = {
+  data: Ad_Cycle_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Ad_Cycle_On_Conflict>;
+};
+
+/** on_conflict condition type for table "ad_cycle" */
+export type Ad_Cycle_On_Conflict = {
+  constraint: Ad_Cycle_Constraint;
+  update_columns?: Array<Ad_Cycle_Update_Column>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "ad_cycle". */
+export type Ad_Cycle_Order_By = {
+  ad?: InputMaybe<Ad_Order_By>;
+  ad_events_aggregate?: InputMaybe<Ad_Event_Aggregate_Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  ends_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+  paused?: InputMaybe<Order_By>;
+  starts_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: ad_cycle */
+export type Ad_Cycle_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "ad_cycle" */
+export enum Ad_Cycle_Select_Column {
+  /** column name */
+  AdId = 'ad_id',
+  /** column name */
+  EndsAt = 'ends_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Loads = 'loads',
+  /** column name */
+  Paused = 'paused',
+  /** column name */
+  StartsAt = 'starts_at'
+}
+
+/** select "ad_cycle_aggregate_bool_exp_bool_and_arguments_columns" columns of table "ad_cycle" */
+export enum Ad_Cycle_Select_Column_Ad_Cycle_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Paused = 'paused'
+}
+
+/** select "ad_cycle_aggregate_bool_exp_bool_or_arguments_columns" columns of table "ad_cycle" */
+export enum Ad_Cycle_Select_Column_Ad_Cycle_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Paused = 'paused'
+}
+
+/** input type for updating data in table "ad_cycle" */
+export type Ad_Cycle_Set_Input = {
+  ad_id?: InputMaybe<Scalars['Int']>;
+  ends_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  loads?: InputMaybe<Scalars['Int']>;
+  paused?: InputMaybe<Scalars['Boolean']>;
+  starts_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Ad_Cycle_Stddev_Fields = {
+  __typename?: 'ad_cycle_stddev_fields';
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  loads?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "ad_cycle" */
+export type Ad_Cycle_Stddev_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Ad_Cycle_Stddev_Pop_Fields = {
+  __typename?: 'ad_cycle_stddev_pop_fields';
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  loads?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "ad_cycle" */
+export type Ad_Cycle_Stddev_Pop_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Ad_Cycle_Stddev_Samp_Fields = {
+  __typename?: 'ad_cycle_stddev_samp_fields';
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  loads?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "ad_cycle" */
+export type Ad_Cycle_Stddev_Samp_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "ad_cycle" */
+export type Ad_Cycle_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Ad_Cycle_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Ad_Cycle_Stream_Cursor_Value_Input = {
+  ad_id?: InputMaybe<Scalars['Int']>;
+  ends_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  loads?: InputMaybe<Scalars['Int']>;
+  paused?: InputMaybe<Scalars['Boolean']>;
+  starts_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate sum on columns */
+export type Ad_Cycle_Sum_Fields = {
+  __typename?: 'ad_cycle_sum_fields';
+  ad_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  loads?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "ad_cycle" */
+export type Ad_Cycle_Sum_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "ad_cycle" */
+export enum Ad_Cycle_Update_Column {
+  /** column name */
+  AdId = 'ad_id',
+  /** column name */
+  EndsAt = 'ends_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Loads = 'loads',
+  /** column name */
+  Paused = 'paused',
+  /** column name */
+  StartsAt = 'starts_at'
+}
+
+export type Ad_Cycle_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Ad_Cycle_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Ad_Cycle_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Ad_Cycle_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Ad_Cycle_Var_Pop_Fields = {
+  __typename?: 'ad_cycle_var_pop_fields';
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  loads?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "ad_cycle" */
+export type Ad_Cycle_Var_Pop_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Ad_Cycle_Var_Samp_Fields = {
+  __typename?: 'ad_cycle_var_samp_fields';
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  loads?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "ad_cycle" */
+export type Ad_Cycle_Var_Samp_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Ad_Cycle_Variance_Fields = {
+  __typename?: 'ad_cycle_variance_fields';
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  loads?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "ad_cycle" */
+export type Ad_Cycle_Variance_Order_By = {
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  loads?: InputMaybe<Order_By>;
+};
+
+/** tracking significant events: impressions and clicks */
+export type Ad_Event = {
+  __typename?: 'ad_event';
+  /** An object relationship */
+  ad: Ad;
+  /** An object relationship */
+  ad_cycle: Ad_Cycle;
+  ad_cycle_id: Scalars['Int'];
+  ad_id: Scalars['Int'];
+  event_type: Scalars['String'];
+  id: Scalars['Int'];
+  timestamp: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "ad_event" */
+export type Ad_Event_Aggregate = {
+  __typename?: 'ad_event_aggregate';
+  aggregate?: Maybe<Ad_Event_Aggregate_Fields>;
+  nodes: Array<Ad_Event>;
+};
+
+export type Ad_Event_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Ad_Event_Aggregate_Bool_Exp_Count>;
+};
+
+export type Ad_Event_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Ad_Event_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "ad_event" */
+export type Ad_Event_Aggregate_Fields = {
+  __typename?: 'ad_event_aggregate_fields';
+  avg?: Maybe<Ad_Event_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Ad_Event_Max_Fields>;
+  min?: Maybe<Ad_Event_Min_Fields>;
+  stddev?: Maybe<Ad_Event_Stddev_Fields>;
+  stddev_pop?: Maybe<Ad_Event_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Ad_Event_Stddev_Samp_Fields>;
+  sum?: Maybe<Ad_Event_Sum_Fields>;
+  var_pop?: Maybe<Ad_Event_Var_Pop_Fields>;
+  var_samp?: Maybe<Ad_Event_Var_Samp_Fields>;
+  variance?: Maybe<Ad_Event_Variance_Fields>;
+};
+
+
+/** aggregate fields of "ad_event" */
+export type Ad_Event_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "ad_event" */
+export type Ad_Event_Aggregate_Order_By = {
+  avg?: InputMaybe<Ad_Event_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Ad_Event_Max_Order_By>;
+  min?: InputMaybe<Ad_Event_Min_Order_By>;
+  stddev?: InputMaybe<Ad_Event_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Ad_Event_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Ad_Event_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Ad_Event_Sum_Order_By>;
+  var_pop?: InputMaybe<Ad_Event_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Ad_Event_Var_Samp_Order_By>;
+  variance?: InputMaybe<Ad_Event_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "ad_event" */
+export type Ad_Event_Arr_Rel_Insert_Input = {
+  data: Array<Ad_Event_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Ad_Event_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Ad_Event_Avg_Fields = {
+  __typename?: 'ad_event_avg_fields';
+  ad_cycle_id?: Maybe<Scalars['Float']>;
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "ad_event" */
+export type Ad_Event_Avg_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "ad_event". All fields are combined with a logical 'AND'. */
+export type Ad_Event_Bool_Exp = {
+  _and?: InputMaybe<Array<Ad_Event_Bool_Exp>>;
+  _not?: InputMaybe<Ad_Event_Bool_Exp>;
+  _or?: InputMaybe<Array<Ad_Event_Bool_Exp>>;
+  ad?: InputMaybe<Ad_Bool_Exp>;
+  ad_cycle?: InputMaybe<Ad_Cycle_Bool_Exp>;
+  ad_cycle_id?: InputMaybe<Int_Comparison_Exp>;
+  ad_id?: InputMaybe<Int_Comparison_Exp>;
+  event_type?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  timestamp?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "ad_event" */
+export enum Ad_Event_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  AdEventPkey = 'ad_event_pkey'
+}
+
+/** input type for incrementing numeric columns in table "ad_event" */
+export type Ad_Event_Inc_Input = {
+  ad_cycle_id?: InputMaybe<Scalars['Int']>;
+  ad_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "ad_event" */
+export type Ad_Event_Insert_Input = {
+  ad?: InputMaybe<Ad_Obj_Rel_Insert_Input>;
+  ad_cycle?: InputMaybe<Ad_Cycle_Obj_Rel_Insert_Input>;
+  ad_cycle_id?: InputMaybe<Scalars['Int']>;
+  ad_id?: InputMaybe<Scalars['Int']>;
+  event_type?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  timestamp?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Ad_Event_Max_Fields = {
+  __typename?: 'ad_event_max_fields';
+  ad_cycle_id?: Maybe<Scalars['Int']>;
+  ad_id?: Maybe<Scalars['Int']>;
+  event_type?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "ad_event" */
+export type Ad_Event_Max_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  event_type?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Ad_Event_Min_Fields = {
+  __typename?: 'ad_event_min_fields';
+  ad_cycle_id?: Maybe<Scalars['Int']>;
+  ad_id?: Maybe<Scalars['Int']>;
+  event_type?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "ad_event" */
+export type Ad_Event_Min_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  event_type?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "ad_event" */
+export type Ad_Event_Mutation_Response = {
+  __typename?: 'ad_event_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Ad_Event>;
+};
+
+/** on_conflict condition type for table "ad_event" */
+export type Ad_Event_On_Conflict = {
+  constraint: Ad_Event_Constraint;
+  update_columns?: Array<Ad_Event_Update_Column>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "ad_event". */
+export type Ad_Event_Order_By = {
+  ad?: InputMaybe<Ad_Order_By>;
+  ad_cycle?: InputMaybe<Ad_Cycle_Order_By>;
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  event_type?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: ad_event */
+export type Ad_Event_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "ad_event" */
+export enum Ad_Event_Select_Column {
+  /** column name */
+  AdCycleId = 'ad_cycle_id',
+  /** column name */
+  AdId = 'ad_id',
+  /** column name */
+  EventType = 'event_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Timestamp = 'timestamp'
+}
+
+/** input type for updating data in table "ad_event" */
+export type Ad_Event_Set_Input = {
+  ad_cycle_id?: InputMaybe<Scalars['Int']>;
+  ad_id?: InputMaybe<Scalars['Int']>;
+  event_type?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  timestamp?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Ad_Event_Stddev_Fields = {
+  __typename?: 'ad_event_stddev_fields';
+  ad_cycle_id?: Maybe<Scalars['Float']>;
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "ad_event" */
+export type Ad_Event_Stddev_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Ad_Event_Stddev_Pop_Fields = {
+  __typename?: 'ad_event_stddev_pop_fields';
+  ad_cycle_id?: Maybe<Scalars['Float']>;
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "ad_event" */
+export type Ad_Event_Stddev_Pop_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Ad_Event_Stddev_Samp_Fields = {
+  __typename?: 'ad_event_stddev_samp_fields';
+  ad_cycle_id?: Maybe<Scalars['Float']>;
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "ad_event" */
+export type Ad_Event_Stddev_Samp_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "ad_event" */
+export type Ad_Event_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Ad_Event_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Ad_Event_Stream_Cursor_Value_Input = {
+  ad_cycle_id?: InputMaybe<Scalars['Int']>;
+  ad_id?: InputMaybe<Scalars['Int']>;
+  event_type?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  timestamp?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate sum on columns */
+export type Ad_Event_Sum_Fields = {
+  __typename?: 'ad_event_sum_fields';
+  ad_cycle_id?: Maybe<Scalars['Int']>;
+  ad_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "ad_event" */
+export type Ad_Event_Sum_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "ad_event" */
+export enum Ad_Event_Update_Column {
+  /** column name */
+  AdCycleId = 'ad_cycle_id',
+  /** column name */
+  AdId = 'ad_id',
+  /** column name */
+  EventType = 'event_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Timestamp = 'timestamp'
+}
+
+export type Ad_Event_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Ad_Event_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Ad_Event_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Ad_Event_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Ad_Event_Var_Pop_Fields = {
+  __typename?: 'ad_event_var_pop_fields';
+  ad_cycle_id?: Maybe<Scalars['Float']>;
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "ad_event" */
+export type Ad_Event_Var_Pop_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Ad_Event_Var_Samp_Fields = {
+  __typename?: 'ad_event_var_samp_fields';
+  ad_cycle_id?: Maybe<Scalars['Float']>;
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "ad_event" */
+export type Ad_Event_Var_Samp_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Ad_Event_Variance_Fields = {
+  __typename?: 'ad_event_variance_fields';
+  ad_cycle_id?: Maybe<Scalars['Float']>;
+  ad_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "ad_event" */
+export type Ad_Event_Variance_Order_By = {
+  ad_cycle_id?: InputMaybe<Order_By>;
+  ad_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
 /** input type for incrementing numeric columns in table "ad" */
 export type Ad_Inc_Input = {
   id?: InputMaybe<Scalars['Int']>;
@@ -167,12 +1021,13 @@ export type Ad_Inc_Input = {
 
 /** input type for inserting data into table "ad" */
 export type Ad_Insert_Input = {
+  ad_cycles?: InputMaybe<Ad_Cycle_Arr_Rel_Insert_Input>;
+  ad_events?: InputMaybe<Ad_Event_Arr_Rel_Insert_Input>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
   image?: InputMaybe<Scalars['String']>;
   last_viewed?: InputMaybe<Scalars['timestamptz']>;
   link?: InputMaybe<Scalars['String']>;
-  live?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   size?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
@@ -213,6 +1068,13 @@ export type Ad_Mutation_Response = {
   returning: Array<Ad>;
 };
 
+/** input type for inserting object relation for remote table "ad" */
+export type Ad_Obj_Rel_Insert_Input = {
+  data: Ad_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Ad_On_Conflict>;
+};
+
 /** on_conflict condition type for table "ad" */
 export type Ad_On_Conflict = {
   constraint: Ad_Constraint;
@@ -222,12 +1084,13 @@ export type Ad_On_Conflict = {
 
 /** Ordering options when selecting data from "ad". */
 export type Ad_Order_By = {
+  ad_cycles_aggregate?: InputMaybe<Ad_Cycle_Aggregate_Order_By>;
+  ad_events_aggregate?: InputMaybe<Ad_Event_Aggregate_Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   image?: InputMaybe<Order_By>;
   last_viewed?: InputMaybe<Order_By>;
   link?: InputMaybe<Order_By>;
-  live?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
   size?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
@@ -251,8 +1114,6 @@ export enum Ad_Select_Column {
   /** column name */
   Link = 'link',
   /** column name */
-  Live = 'live',
-  /** column name */
   Name = 'name',
   /** column name */
   Size = 'size',
@@ -267,7 +1128,6 @@ export type Ad_Set_Input = {
   image?: InputMaybe<Scalars['String']>;
   last_viewed?: InputMaybe<Scalars['timestamptz']>;
   link?: InputMaybe<Scalars['String']>;
-  live?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   size?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
@@ -306,7 +1166,6 @@ export type Ad_Stream_Cursor_Value_Input = {
   image?: InputMaybe<Scalars['String']>;
   last_viewed?: InputMaybe<Scalars['timestamptz']>;
   link?: InputMaybe<Scalars['String']>;
-  live?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   size?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
@@ -330,8 +1189,6 @@ export enum Ad_Update_Column {
   LastViewed = 'last_viewed',
   /** column name */
   Link = 'link',
-  /** column name */
-  Live = 'live',
   /** column name */
   Name = 'name',
   /** column name */
@@ -4338,6 +5195,14 @@ export type Mutation_Root = {
   delete_ad?: Maybe<Ad_Mutation_Response>;
   /** delete single row from the table: "ad" */
   delete_ad_by_pk?: Maybe<Ad>;
+  /** delete data from the table: "ad_cycle" */
+  delete_ad_cycle?: Maybe<Ad_Cycle_Mutation_Response>;
+  /** delete single row from the table: "ad_cycle" */
+  delete_ad_cycle_by_pk?: Maybe<Ad_Cycle>;
+  /** delete data from the table: "ad_event" */
+  delete_ad_event?: Maybe<Ad_Event_Mutation_Response>;
+  /** delete single row from the table: "ad_event" */
+  delete_ad_event_by_pk?: Maybe<Ad_Event>;
   /** delete data from the table: "category_tag" */
   delete_category_tag?: Maybe<Category_Tag_Mutation_Response>;
   /** delete single row from the table: "category_tag" */
@@ -4400,6 +5265,14 @@ export type Mutation_Root = {
   insertViruses?: Maybe<Virus_Mutation_Response>;
   /** insert data into the table: "ad" */
   insert_ad?: Maybe<Ad_Mutation_Response>;
+  /** insert data into the table: "ad_cycle" */
+  insert_ad_cycle?: Maybe<Ad_Cycle_Mutation_Response>;
+  /** insert a single row into the table: "ad_cycle" */
+  insert_ad_cycle_one?: Maybe<Ad_Cycle>;
+  /** insert data into the table: "ad_event" */
+  insert_ad_event?: Maybe<Ad_Event_Mutation_Response>;
+  /** insert a single row into the table: "ad_event" */
+  insert_ad_event_one?: Maybe<Ad_Event>;
   /** insert a single row into the table: "ad" */
   insert_ad_one?: Maybe<Ad>;
   /** insert data into the table: "category_tag" */
@@ -4466,6 +5339,18 @@ export type Mutation_Root = {
   update_ad?: Maybe<Ad_Mutation_Response>;
   /** update single row of the table: "ad" */
   update_ad_by_pk?: Maybe<Ad>;
+  /** update data of the table: "ad_cycle" */
+  update_ad_cycle?: Maybe<Ad_Cycle_Mutation_Response>;
+  /** update single row of the table: "ad_cycle" */
+  update_ad_cycle_by_pk?: Maybe<Ad_Cycle>;
+  /** update multiples rows of table: "ad_cycle" */
+  update_ad_cycle_many?: Maybe<Array<Maybe<Ad_Cycle_Mutation_Response>>>;
+  /** update data of the table: "ad_event" */
+  update_ad_event?: Maybe<Ad_Event_Mutation_Response>;
+  /** update single row of the table: "ad_event" */
+  update_ad_event_by_pk?: Maybe<Ad_Event>;
+  /** update multiples rows of table: "ad_event" */
+  update_ad_event_many?: Maybe<Array<Maybe<Ad_Event_Mutation_Response>>>;
   /** update multiples rows of table: "ad" */
   update_ad_many?: Maybe<Array<Maybe<Ad_Mutation_Response>>>;
   /** update multiples rows of table: "auth.provider_requests" */
@@ -4667,6 +5552,30 @@ export type Mutation_RootDelete_AdArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Ad_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Ad_CycleArgs = {
+  where: Ad_Cycle_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Ad_Cycle_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Ad_EventArgs = {
+  where: Ad_Event_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Ad_Event_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -4879,6 +5788,34 @@ export type Mutation_RootInsertVirusesArgs = {
 export type Mutation_RootInsert_AdArgs = {
   objects: Array<Ad_Insert_Input>;
   on_conflict?: InputMaybe<Ad_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Ad_CycleArgs = {
+  objects: Array<Ad_Cycle_Insert_Input>;
+  on_conflict?: InputMaybe<Ad_Cycle_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Ad_Cycle_OneArgs = {
+  object: Ad_Cycle_Insert_Input;
+  on_conflict?: InputMaybe<Ad_Cycle_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Ad_EventArgs = {
+  objects: Array<Ad_Event_Insert_Input>;
+  on_conflict?: InputMaybe<Ad_Event_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Ad_Event_OneArgs = {
+  object: Ad_Event_Insert_Input;
+  on_conflict?: InputMaybe<Ad_Event_On_Conflict>;
 };
 
 
@@ -5172,6 +6109,50 @@ export type Mutation_RootUpdate_Ad_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Ad_CycleArgs = {
+  _inc?: InputMaybe<Ad_Cycle_Inc_Input>;
+  _set?: InputMaybe<Ad_Cycle_Set_Input>;
+  where: Ad_Cycle_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Ad_Cycle_By_PkArgs = {
+  _inc?: InputMaybe<Ad_Cycle_Inc_Input>;
+  _set?: InputMaybe<Ad_Cycle_Set_Input>;
+  pk_columns: Ad_Cycle_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Ad_Cycle_ManyArgs = {
+  updates: Array<Ad_Cycle_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Ad_EventArgs = {
+  _inc?: InputMaybe<Ad_Event_Inc_Input>;
+  _set?: InputMaybe<Ad_Event_Set_Input>;
+  where: Ad_Event_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Ad_Event_By_PkArgs = {
+  _inc?: InputMaybe<Ad_Event_Inc_Input>;
+  _set?: InputMaybe<Ad_Event_Set_Input>;
+  pk_columns: Ad_Event_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Ad_Event_ManyArgs = {
+  updates: Array<Ad_Event_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Ad_ManyArgs = {
   updates: Array<Ad_Updates>;
 };
@@ -5357,6 +6338,18 @@ export type Query_Root = {
   ad_aggregate: Ad_Aggregate;
   /** fetch data from the table: "ad" using primary key columns */
   ad_by_pk?: Maybe<Ad>;
+  /** fetch data from the table: "ad_cycle" */
+  ad_cycle: Array<Ad_Cycle>;
+  /** fetch aggregated fields from the table: "ad_cycle" */
+  ad_cycle_aggregate: Ad_Cycle_Aggregate;
+  /** fetch data from the table: "ad_cycle" using primary key columns */
+  ad_cycle_by_pk?: Maybe<Ad_Cycle>;
+  /** fetch data from the table: "ad_event" */
+  ad_event: Array<Ad_Event>;
+  /** fetch aggregated fields from the table: "ad_event" */
+  ad_event_aggregate: Ad_Event_Aggregate;
+  /** fetch data from the table: "ad_event" using primary key columns */
+  ad_event_by_pk?: Maybe<Ad_Event>;
   /** fetch data from the table: "auth.providers" using primary key columns */
   authProvider?: Maybe<AuthProviders>;
   /** fetch data from the table: "auth.provider_requests" using primary key columns */
@@ -5474,6 +6467,52 @@ export type Query_RootAd_AggregateArgs = {
 
 
 export type Query_RootAd_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Query_RootAd_CycleArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Cycle_Order_By>>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+
+export type Query_RootAd_Cycle_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Cycle_Order_By>>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+
+export type Query_RootAd_Cycle_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Query_RootAd_EventArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+
+export type Query_RootAd_Event_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+
+export type Query_RootAd_Event_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -5864,6 +6903,22 @@ export type Subscription_Root = {
   ad_aggregate: Ad_Aggregate;
   /** fetch data from the table: "ad" using primary key columns */
   ad_by_pk?: Maybe<Ad>;
+  /** fetch data from the table: "ad_cycle" */
+  ad_cycle: Array<Ad_Cycle>;
+  /** fetch aggregated fields from the table: "ad_cycle" */
+  ad_cycle_aggregate: Ad_Cycle_Aggregate;
+  /** fetch data from the table: "ad_cycle" using primary key columns */
+  ad_cycle_by_pk?: Maybe<Ad_Cycle>;
+  /** fetch data from the table in a streaming manner: "ad_cycle" */
+  ad_cycle_stream: Array<Ad_Cycle>;
+  /** fetch data from the table: "ad_event" */
+  ad_event: Array<Ad_Event>;
+  /** fetch aggregated fields from the table: "ad_event" */
+  ad_event_aggregate: Ad_Event_Aggregate;
+  /** fetch data from the table: "ad_event" using primary key columns */
+  ad_event_by_pk?: Maybe<Ad_Event>;
+  /** fetch data from the table in a streaming manner: "ad_event" */
+  ad_event_stream: Array<Ad_Event>;
   /** fetch data from the table in a streaming manner: "ad" */
   ad_stream: Array<Ad>;
   /** fetch data from the table: "auth.providers" using primary key columns */
@@ -6014,6 +7069,66 @@ export type Subscription_RootAd_AggregateArgs = {
 
 export type Subscription_RootAd_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootAd_CycleArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Cycle_Order_By>>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+
+export type Subscription_RootAd_Cycle_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Cycle_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Cycle_Order_By>>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+
+export type Subscription_RootAd_Cycle_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootAd_Cycle_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Ad_Cycle_Stream_Cursor_Input>>;
+  where?: InputMaybe<Ad_Cycle_Bool_Exp>;
+};
+
+
+export type Subscription_RootAd_EventArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+
+export type Subscription_RootAd_Event_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Ad_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Ad_Event_Order_By>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
+};
+
+
+export type Subscription_RootAd_Event_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootAd_Event_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Ad_Event_Stream_Cursor_Input>>;
+  where?: InputMaybe<Ad_Event_Bool_Exp>;
 };
 
 
@@ -7533,6 +8648,28 @@ export type UpdateAdMutationVariables = Exact<{
 
 export type UpdateAdMutation = { __typename?: 'mutation_root', update_ad_by_pk?: { __typename?: 'ad', id: number } | null };
 
+export type CreateAdCycleMutationVariables = Exact<{
+  object: Ad_Cycle_Insert_Input;
+}>;
+
+
+export type CreateAdCycleMutation = { __typename?: 'mutation_root', insert_ad_cycle_one?: { __typename?: 'ad_cycle', id: number } | null };
+
+export type UpdateAdCycleByIdMutationVariables = Exact<{
+  id: Scalars['Int'];
+  set?: InputMaybe<Ad_Cycle_Set_Input>;
+}>;
+
+
+export type UpdateAdCycleByIdMutation = { __typename?: 'mutation_root', update_ad_cycle_by_pk?: { __typename?: 'ad_cycle', id: number } | null };
+
+export type DeleteAdCycleByIdMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteAdCycleByIdMutation = { __typename?: 'mutation_root', delete_ad_cycle_by_pk?: { __typename?: 'ad_cycle', id: number } | null };
+
 export type DeleteAdMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -7557,14 +8694,26 @@ export type GetAdByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetAdByIdQuery = { __typename?: 'query_root', ad_by_pk?: { __typename?: 'ad', id: number, created_at: any, name: string, link: string, image: string, size: string, live: boolean } | null };
+export type GetAdByIdQuery = { __typename?: 'query_root', ad_by_pk?: { __typename?: 'ad', id: number, created_at: any, name: string, link: string, image: string, size: string } | null };
 
 export type AllAdsQueryVariables = Exact<{
   whereClause?: InputMaybe<Ad_Bool_Exp>;
 }>;
 
 
-export type AllAdsQuery = { __typename?: 'query_root', ad: Array<{ __typename?: 'ad', id: number, created_at: any, updated_at: any, name: string, link: string, image: string, size: string, live: boolean }> };
+export type AllAdsQuery = { __typename?: 'query_root', ad: Array<{ __typename?: 'ad', id: number, created_at: any, updated_at: any, name: string, link: string, image: string, size: string }> };
+
+export type GetAdCyclesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdCyclesQuery = { __typename?: 'query_root', ad: Array<{ __typename?: 'ad', id: number, name: string, image: string, link: string, size: string, ad_cycles: Array<{ __typename?: 'ad_cycle', id: number, starts_at: any, ends_at: any, loads: number }> }> };
+
+export type AdCycleStatsByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type AdCycleStatsByIdQuery = { __typename?: 'query_root', ad_cycle_by_pk?: { __typename?: 'ad_cycle', ad_events_aggregate: { __typename?: 'ad_event_aggregate', aggregate?: { __typename?: 'ad_event_aggregate_fields', variance?: { __typename?: 'ad_event_variance_fields', id?: number | null, ad_cycle_id?: number | null } | null } | null } } | null };
 
 
 export const UploadImageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"uploadImage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"src"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"destination"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadImage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"entityId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}}},{"kind":"Argument","name":{"kind":"Name","value":"src"},"value":{"kind":"Variable","name":{"kind":"Name","value":"src"}}},{"kind":"Argument","name":{"kind":"Name","value":"destination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"destination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"new_url"}}]}}]}}]} as unknown as DocumentNode<UploadImageMutation, UploadImageMutationVariables>;
@@ -7576,8 +8725,13 @@ export const DeleteListingDocument = {"kind":"Document","definitions":[{"kind":"
 export const UpdateListingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateListing"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"listing_set_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateListingMutation, UpdateListingMutationVariables>;
 export const CreateAdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAd"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"object"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_ad_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"object"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateAdMutation, CreateAdMutationVariables>;
 export const UpdateAdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAd"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_set_input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateAdMutation, UpdateAdMutationVariables>;
+export const CreateAdCycleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAdCycle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"object"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_cycle_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_ad_cycle_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"object"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateAdCycleMutation, CreateAdCycleMutationVariables>;
+export const UpdateAdCycleByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAdCycleById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_cycle_set_input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_ad_cycle_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateAdCycleByIdMutation, UpdateAdCycleByIdMutationVariables>;
+export const DeleteAdCycleByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAdCycleById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ad_cycle_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteAdCycleByIdMutation, DeleteAdCycleByIdMutationVariables>;
 export const DeleteAdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAd"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteAdMutation, DeleteAdMutationVariables>;
 export const AllListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"AllListings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"business_name"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}}]}}]}}]} as unknown as DocumentNode<AllListingsSubscription, AllListingsSubscriptionVariables>;
 export const ListingByIdSubDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingByIDSub"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"slogan"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"primary_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_phone"}},{"kind":"Field","name":{"kind":"Name","value":"primary_email"}},{"kind":"Field","name":{"kind":"Name","value":"primary_web_url"}},{"kind":"Field","name":{"kind":"Name","value":"this_week_recommended"}},{"kind":"Field","name":{"kind":"Name","value":"booking_links"}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"videos"}},{"kind":"Field","name":{"kind":"Name","value":"layout_data"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"label"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ListingByIdSubQuery, ListingByIdSubQueryVariables>;
-export const GetAdByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAdById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"live"}}]}}]}}]} as unknown as DocumentNode<GetAdByIdQuery, GetAdByIdQueryVariables>;
-export const AllAdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_bool_exp"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"updated_at"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"live"}}]}}]}}]} as unknown as DocumentNode<AllAdsQuery, AllAdsQueryVariables>;
+export const GetAdByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAdById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]}}]} as unknown as DocumentNode<GetAdByIdQuery, GetAdByIdQueryVariables>;
+export const AllAdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_bool_exp"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"updated_at"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]}}]} as unknown as DocumentNode<AllAdsQuery, AllAdsQueryVariables>;
+export const GetAdCyclesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAdCycles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"ad_cycles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"starts_at"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"loads"}}]}}]}}]}}]} as unknown as DocumentNode<GetAdCyclesQuery, GetAdCyclesQueryVariables>;
+export const AdCycleStatsByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AdCycleStatsById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_cycle_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_events_aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"variance"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ad_cycle_id"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<AdCycleStatsByIdQuery, AdCycleStatsByIdQueryVariables>;

@@ -22,11 +22,16 @@ const documents = {
     "\n  mutation UpdateListing($id: Int!, $set: listing_set_input!) {\n    update_listing_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n": types.UpdateListingDocument,
     "\n  mutation CreateAd($object: ad_insert_input!) {\n    insert_ad_one(object: $object) {\n      id\n    }\n  }\n": types.CreateAdDocument,
     "\n  mutation UpdateAd($id: Int!, $set: ad_set_input) {\n    update_ad_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n": types.UpdateAdDocument,
+    "\n  mutation CreateAdCycle($object: ad_cycle_insert_input!) {\n    insert_ad_cycle_one(object: $object) {\n      id\n    }\n  }\n": types.CreateAdCycleDocument,
+    "\n  mutation UpdateAdCycleById($id: Int!, $set: ad_cycle_set_input) {\n    update_ad_cycle_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n": types.UpdateAdCycleByIdDocument,
+    "\n  mutation DeleteAdCycleById($id: Int!) {\n    delete_ad_cycle_by_pk(id: $id) {\n      id\n    }\n  }\n": types.DeleteAdCycleByIdDocument,
     "\n  mutation DeleteAd($id: Int!) {\n    delete_ad_by_pk(id: $id) {\n      id\n    }\n  }\n": types.DeleteAdDocument,
     "\n  subscription AllListings {\n    listing(order_by: { business_name: asc }) {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n": types.AllListingsDocument,
     "\n  query ListingByIDSub($id: Int!) {\n    listing_by_pk(id: $id) {\n      id\n      business_name\n      slogan\n      description\n      island\n      created_at\n      updated_at\n      tier\n      live\n      primary_address\n      primary_phone\n      primary_email\n      primary_web_url\n      this_week_recommended\n      booking_links\n      images\n      videos\n      layout_data\n      listing_category_tags {\n        id\n        category_tag {\n          id\n          label\n        }\n      }\n    }\n  }\n": types.ListingByIdSubDocument,
-    "\n  query getAdById($id: Int!) {\n    ad_by_pk(id: $id) {\n      id\n      created_at\n      name\n      link\n      image\n      size\n      live\n    }\n  }\n": types.GetAdByIdDocument,
-    "\n  query AllAds($whereClause: ad_bool_exp) {\n    ad(where: $whereClause, order_by: { updated_at: desc }) {\n      id\n      created_at\n      updated_at\n      name\n      link\n      image\n      size\n      live\n    }\n  }\n": types.AllAdsDocument,
+    "\n  query getAdById($id: Int!) {\n    ad_by_pk(id: $id) {\n      id\n      created_at\n      name\n      link\n      image\n      size\n    }\n  }\n": types.GetAdByIdDocument,
+    "\n  query AllAds($whereClause: ad_bool_exp) {\n    ad(where: $whereClause, order_by: { updated_at: desc }) {\n      id\n      created_at\n      updated_at\n      name\n      link\n      image\n      size\n    }\n  }\n": types.AllAdsDocument,
+    "\n  query getAdCycles {\n    ad {\n      id\n      name\n      image\n      link\n      size\n      ad_cycles(order_by: { starts_at: asc }) {\n        id\n        starts_at\n        ends_at\n        loads\n      }\n    }\n  }\n": types.GetAdCyclesDocument,
+    "\n  query AdCycleStatsById($id: Int!) {\n    ad_cycle_by_pk(id: $id) {\n      ad_events_aggregate {\n        aggregate {\n          variance {\n            id\n            ad_cycle_id\n          }\n        }\n      }\n    }\n  }\n": types.AdCycleStatsByIdDocument,
 };
 
 /**
@@ -82,6 +87,18 @@ export function graphql(source: "\n  mutation UpdateAd($id: Int!, $set: ad_set_i
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation CreateAdCycle($object: ad_cycle_insert_input!) {\n    insert_ad_cycle_one(object: $object) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateAdCycle($object: ad_cycle_insert_input!) {\n    insert_ad_cycle_one(object: $object) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateAdCycleById($id: Int!, $set: ad_cycle_set_input) {\n    update_ad_cycle_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateAdCycleById($id: Int!, $set: ad_cycle_set_input) {\n    update_ad_cycle_by_pk(pk_columns: { id: $id }, _set: $set) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteAdCycleById($id: Int!) {\n    delete_ad_cycle_by_pk(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteAdCycleById($id: Int!) {\n    delete_ad_cycle_by_pk(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  mutation DeleteAd($id: Int!) {\n    delete_ad_by_pk(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteAd($id: Int!) {\n    delete_ad_by_pk(id: $id) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -94,11 +111,19 @@ export function graphql(source: "\n  query ListingByIDSub($id: Int!) {\n    list
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query getAdById($id: Int!) {\n    ad_by_pk(id: $id) {\n      id\n      created_at\n      name\n      link\n      image\n      size\n      live\n    }\n  }\n"): (typeof documents)["\n  query getAdById($id: Int!) {\n    ad_by_pk(id: $id) {\n      id\n      created_at\n      name\n      link\n      image\n      size\n      live\n    }\n  }\n"];
+export function graphql(source: "\n  query getAdById($id: Int!) {\n    ad_by_pk(id: $id) {\n      id\n      created_at\n      name\n      link\n      image\n      size\n    }\n  }\n"): (typeof documents)["\n  query getAdById($id: Int!) {\n    ad_by_pk(id: $id) {\n      id\n      created_at\n      name\n      link\n      image\n      size\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query AllAds($whereClause: ad_bool_exp) {\n    ad(where: $whereClause, order_by: { updated_at: desc }) {\n      id\n      created_at\n      updated_at\n      name\n      link\n      image\n      size\n      live\n    }\n  }\n"): (typeof documents)["\n  query AllAds($whereClause: ad_bool_exp) {\n    ad(where: $whereClause, order_by: { updated_at: desc }) {\n      id\n      created_at\n      updated_at\n      name\n      link\n      image\n      size\n      live\n    }\n  }\n"];
+export function graphql(source: "\n  query AllAds($whereClause: ad_bool_exp) {\n    ad(where: $whereClause, order_by: { updated_at: desc }) {\n      id\n      created_at\n      updated_at\n      name\n      link\n      image\n      size\n    }\n  }\n"): (typeof documents)["\n  query AllAds($whereClause: ad_bool_exp) {\n    ad(where: $whereClause, order_by: { updated_at: desc }) {\n      id\n      created_at\n      updated_at\n      name\n      link\n      image\n      size\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query getAdCycles {\n    ad {\n      id\n      name\n      image\n      link\n      size\n      ad_cycles(order_by: { starts_at: asc }) {\n        id\n        starts_at\n        ends_at\n        loads\n      }\n    }\n  }\n"): (typeof documents)["\n  query getAdCycles {\n    ad {\n      id\n      name\n      image\n      link\n      size\n      ad_cycles(order_by: { starts_at: asc }) {\n        id\n        starts_at\n        ends_at\n        loads\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query AdCycleStatsById($id: Int!) {\n    ad_cycle_by_pk(id: $id) {\n      ad_events_aggregate {\n        aggregate {\n          variance {\n            id\n            ad_cycle_id\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query AdCycleStatsById($id: Int!) {\n    ad_cycle_by_pk(id: $id) {\n      ad_events_aggregate {\n        aggregate {\n          variance {\n            id\n            ad_cycle_id\n          }\n        }\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

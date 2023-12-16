@@ -13,6 +13,8 @@ import { ChangePassword } from './components/molecules/ChangePassword'
 import { Ads } from './components/molecules/Ads'
 import mapbox from 'mapbox-gl'
 import { AdDesigner } from './components/molecules/AdDesigner'
+import { Redirect } from '@8thday/react'
+import { AdScheduler } from './components/molecules/AdScheduler'
 
 mapbox.accessToken = 'pk.eyJ1IjoidGVocHNhbG1pc3QiLCJhIjoiY2tjOG1qYWI1MGU0eDJ0bXA4eW9oMWJheiJ9.mbn1UUudizfymnvIOvdCmg'
 
@@ -34,24 +36,43 @@ const router = createBrowserRouter([
       {
         path: 'listings',
         element: <Listings />,
-        children: [{ path: ':id', element: <Listing /> }],
+        children: [
+          { path: ':id', element: <Listing /> },
+          { path: '*', element: <Redirect to="" /> },
+        ],
       },
       {
         path: 'profile',
         element: <Profile />,
-        children: [{ path: 'change-password', element: <ChangePassword /> }],
+        children: [
+          { path: 'change-password', element: <ChangePassword /> },
+          { path: '*', element: <Redirect to="" /> },
+        ],
       },
       {
         path: 'ads',
         element: <Ads />,
         children: [
           {
+            path: 'scheduler',
+            element: <AdScheduler />,
+            children: [
+              {
+                path: ':adId',
+                element: <AdScheduler />,
+                children: [{ path: ':cycleId', element: <AdScheduler /> }],
+              },
+            ],
+          },
+          {
             path: 'create',
             element: <AdDesigner key="creating" />,
           },
-          { path: 'edit/:id', element: <AdDesigner key="editing" /> },
+          { path: 'manage/:id', element: <AdDesigner key="managing" /> },
+          { path: '*', element: <Redirect to="" /> },
         ],
       },
+      { path: '*', element: <Redirect to="" /> },
     ],
   },
 ])

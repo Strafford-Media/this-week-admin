@@ -55,7 +55,6 @@ export const AD_BY_ID = graphql(`
       link
       image
       size
-      live
     }
   }
 `)
@@ -70,7 +69,39 @@ export const ALL_ADS = graphql(`
       link
       image
       size
-      live
+    }
+  }
+`)
+
+export const ALL_AD_CYCLES = graphql(`
+  query getAdCycles {
+    ad {
+      id
+      name
+      image
+      link
+      size
+      ad_cycles(order_by: { starts_at: asc }) {
+        id
+        starts_at
+        ends_at
+        loads
+      }
+    }
+  }
+`)
+
+export const CYCLE_STATS_BY_ID = graphql(`
+  query AdCycleStatsById($id: Int!) {
+    ad_cycle_by_pk(id: $id) {
+      ad_events_aggregate {
+        aggregate {
+          variance {
+            id
+            ad_cycle_id
+          }
+        }
+      }
     }
   }
 `)

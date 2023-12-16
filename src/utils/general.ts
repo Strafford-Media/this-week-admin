@@ -1,10 +1,8 @@
-export const capitalize = (str?: string | null) => str?.at(0)?.toUpperCase().concat(str?.slice(1)) ?? ''
-
-export const openNewTab = (url?: string) => {
-  if (url) {
-    window.open(url, '_blank', 'noreferrer,noopener')
-  }
-}
+export const capitalize = (str?: string | null) =>
+  str
+    ?.at(0)
+    ?.toUpperCase()
+    .concat(str?.slice(1)) ?? ''
 
 export const arePrimitiveArraysEqual = (arr1 = [], arr2 = []) => {
   if (arr1.length !== arr2.length) {

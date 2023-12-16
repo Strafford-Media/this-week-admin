@@ -23,7 +23,6 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
   const [ctaLink, setCtaLink] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [size, setSize] = useState(adSizes[0].value)
-  const [live, setLive] = useState(false)
 
   const [imageValid, setImageValid] = useState(false)
 
@@ -35,7 +34,6 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
       setCtaLink(ad.link)
       setImageUrl(ad.image)
       setSize(ad.size)
-      setLive(ad.live)
     }
   }
 
@@ -56,7 +54,6 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
     (name === data?.ad_by_pk?.name &&
       ctaLink === data?.ad_by_pk?.link &&
       imageUrl === data?.ad_by_pk?.image &&
-      live === data?.ad_by_pk?.live &&
       size === data?.ad_by_pk?.size)
 
   return (
@@ -78,7 +75,6 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
                     image: imageUrl,
                     size,
                     name,
-                    live,
                   },
                 })
                 .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
@@ -101,9 +97,8 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
               setCtaLink('')
               setImageUrl('')
               setSize('')
-              setLive(false)
 
-              goTo(`/ads/edit/${createdId}`)
+              goTo(`/ads/manage/${createdId}`)
             } else {
               const res = await nhost.graphql
                 .request(UPDATE_AD, {
@@ -113,7 +108,6 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
                     image: imageUrl,
                     name,
                     size,
-                    live,
                   },
                 })
                 .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
@@ -140,7 +134,6 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
             }}
           />
           <Select label="Size" items={adSizes} value={size} onValueChange={setSize} />
-          <Toggle rightLabel="Live" checked={live} setChecked={setLive} />
           <div className="mt-4 flex items-center gap-4">
             {!!id && (
               <Button
