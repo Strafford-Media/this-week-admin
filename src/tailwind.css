@@ -92,6 +92,10 @@ input::-webkit-datetime-edit {
   grid-area: ad;
 }
 
+.fc-scroller-liquid-absolute {
+  scroll-behavior: smooth;
+}
+
 @keyframes enter-from-bottom {
   0% {
     transform: translateY(100%);

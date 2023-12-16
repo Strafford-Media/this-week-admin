@@ -77,7 +77,7 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
     const allCycles: EventInput[] = newCycle.concat(
       data?.ad.flatMap((ad) =>
         ad.ad_cycles.map<EventInput>((ac) => ({
-          title: ad.name,
+          title: `${ad.name} (${adSizeDisplayMap[ad.size]})`,
           ...eventStyles(ad, ac, adId, cycleId),
           start: cycleId === `${ac.id}` ? startDate : ac.starts_at,
           end: cycleId === `${ac.id}` ? endDate : ac.ends_at,
@@ -87,7 +87,8 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
       ) ?? [],
     )
 
-    const adSelectList = data?.ad.map((a) => ({ value: `${a.id}`, label: a.name })) ?? []
+    const adSelectList =
+      data?.ad.map((a) => ({ value: `${a.id}`, label: `${a.name} (${adSizeDisplayMap[a.size]})` })) ?? []
     const cycleSelectList = createNewCycle.concat(
       ad?.ad_cycles.map((a) => ({
         value: `${a.id}`,

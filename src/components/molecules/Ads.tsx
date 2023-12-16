@@ -12,6 +12,9 @@ export const Ads = ({ className = '', ...props }: AdsProps) => {
   const m = useMatches()
   const atAdRoot = m.length === 2
 
+  const inScheduler = m.some((m) => m.pathname.includes('scheduler'))
+  const inCreate = m.some((m) => m.pathname.includes('ads/create'))
+
   const goTo = useClickLink()
   return (
     <div className={`${className}`} {...props}>
@@ -21,12 +24,16 @@ export const Ads = ({ className = '', ...props }: AdsProps) => {
             <ArrowLeft className="h-5 w-5" /> All Ads
           </NavLink>
         )}
-        <Button variant="primary" PreIcon={CalendarDaysIcon} onClick={(e) => goTo('/ads/scheduler', e)}>
-          Scheduler
-        </Button>
-        <Button PreIcon={PlusIcon} onClick={(e) => goTo('/ads/create', e)}>
-          New Ad
-        </Button>
+        {!inScheduler && (
+          <Button variant="primary" PreIcon={CalendarDaysIcon} onClick={(e) => goTo('/ads/scheduler', e)}>
+            Scheduler
+          </Button>
+        )}
+        {!inCreate && (
+          <Button PreIcon={PlusIcon} onClick={(e) => goTo('/ads/create', e)}>
+            New Ad
+          </Button>
+        )}
       </div>
       {atAdRoot ? <AdList /> : <Outlet />}
     </div>

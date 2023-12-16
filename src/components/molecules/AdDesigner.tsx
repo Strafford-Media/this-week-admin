@@ -124,11 +124,12 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
           <TextInput label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
           <TextInput label="CTA Link" value={ctaLink} onChange={(e) => setCtaLink(e.target.value)} required />
           <ImageUploader
+            className="mb-4"
             type={id ? 'ad' : 'library'}
             contentLabel="Creative Content"
             entityId={id}
             onSuccess={(newUrl) => {
-              if (!id && newUrl) {
+              if (newUrl) {
                 setImageUrl(newUrl)
               }
             }}

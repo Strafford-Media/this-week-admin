@@ -118,13 +118,14 @@ export const ImageUploader = ({
       }}
     >
       <label className="flex-center h-full w-full cursor-pointer flex-col text-primary-800">
-        <span className="flex-center text-xs">
+        <span className="flex-center gap-1 text-xs">
           {imageUploading ? (
             <ArrowPathIcon className="inline h-4 w-4 animate-spin align-text-bottom" />
           ) : (
             <PlusIcon className="inline h-4 w-4 align-text-bottom" />
           )}{' '}
-          Drag or Click to Add {contentLabel}
+          <span>Drag or Click to Add</span>
+          <span className="font-bold">{contentLabel}</span>
         </span>
         <input
           type="file"

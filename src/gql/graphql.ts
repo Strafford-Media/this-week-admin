@@ -657,7 +657,10 @@ export type Ad_Event = {
   ad_id: Scalars['Int'];
   event_type: Scalars['String'];
   id: Scalars['Int'];
+  placement_identifier?: Maybe<Scalars['String']>;
   timestamp: Scalars['timestamptz'];
+  unique: Scalars['Boolean'];
+  url?: Maybe<Scalars['String']>;
 };
 
 /** aggregated selection of "ad_event" */
@@ -668,7 +671,23 @@ export type Ad_Event_Aggregate = {
 };
 
 export type Ad_Event_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Ad_Event_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Ad_Event_Aggregate_Bool_Exp_Bool_Or>;
   count?: InputMaybe<Ad_Event_Aggregate_Bool_Exp_Count>;
+};
+
+export type Ad_Event_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Ad_Event_Select_Column_Ad_Event_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Ad_Event_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Ad_Event_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Ad_Event_Select_Column_Ad_Event_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Ad_Event_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
 };
 
 export type Ad_Event_Aggregate_Bool_Exp_Count = {
@@ -749,7 +768,10 @@ export type Ad_Event_Bool_Exp = {
   ad_id?: InputMaybe<Int_Comparison_Exp>;
   event_type?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  placement_identifier?: InputMaybe<String_Comparison_Exp>;
   timestamp?: InputMaybe<Timestamptz_Comparison_Exp>;
+  unique?: InputMaybe<Boolean_Comparison_Exp>;
+  url?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "ad_event" */
@@ -773,7 +795,10 @@ export type Ad_Event_Insert_Input = {
   ad_id?: InputMaybe<Scalars['Int']>;
   event_type?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  placement_identifier?: InputMaybe<Scalars['String']>;
   timestamp?: InputMaybe<Scalars['timestamptz']>;
+  unique?: InputMaybe<Scalars['Boolean']>;
+  url?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -783,7 +808,9 @@ export type Ad_Event_Max_Fields = {
   ad_id?: Maybe<Scalars['Int']>;
   event_type?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  placement_identifier?: Maybe<Scalars['String']>;
   timestamp?: Maybe<Scalars['timestamptz']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "ad_event" */
@@ -792,7 +819,9 @@ export type Ad_Event_Max_Order_By = {
   ad_id?: InputMaybe<Order_By>;
   event_type?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  placement_identifier?: InputMaybe<Order_By>;
   timestamp?: InputMaybe<Order_By>;
+  url?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -802,7 +831,9 @@ export type Ad_Event_Min_Fields = {
   ad_id?: Maybe<Scalars['Int']>;
   event_type?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  placement_identifier?: Maybe<Scalars['String']>;
   timestamp?: Maybe<Scalars['timestamptz']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "ad_event" */
@@ -811,7 +842,9 @@ export type Ad_Event_Min_Order_By = {
   ad_id?: InputMaybe<Order_By>;
   event_type?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  placement_identifier?: InputMaybe<Order_By>;
   timestamp?: InputMaybe<Order_By>;
+  url?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "ad_event" */
@@ -838,7 +871,10 @@ export type Ad_Event_Order_By = {
   ad_id?: InputMaybe<Order_By>;
   event_type?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  placement_identifier?: InputMaybe<Order_By>;
   timestamp?: InputMaybe<Order_By>;
+  unique?: InputMaybe<Order_By>;
+  url?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: ad_event */
@@ -857,7 +893,25 @@ export enum Ad_Event_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Timestamp = 'timestamp'
+  PlacementIdentifier = 'placement_identifier',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  Unique = 'unique',
+  /** column name */
+  Url = 'url'
+}
+
+/** select "ad_event_aggregate_bool_exp_bool_and_arguments_columns" columns of table "ad_event" */
+export enum Ad_Event_Select_Column_Ad_Event_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Unique = 'unique'
+}
+
+/** select "ad_event_aggregate_bool_exp_bool_or_arguments_columns" columns of table "ad_event" */
+export enum Ad_Event_Select_Column_Ad_Event_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Unique = 'unique'
 }
 
 /** input type for updating data in table "ad_event" */
@@ -866,7 +920,10 @@ export type Ad_Event_Set_Input = {
   ad_id?: InputMaybe<Scalars['Int']>;
   event_type?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  placement_identifier?: InputMaybe<Scalars['String']>;
   timestamp?: InputMaybe<Scalars['timestamptz']>;
+  unique?: InputMaybe<Scalars['Boolean']>;
+  url?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -928,7 +985,10 @@ export type Ad_Event_Stream_Cursor_Value_Input = {
   ad_id?: InputMaybe<Scalars['Int']>;
   event_type?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  placement_identifier?: InputMaybe<Scalars['String']>;
   timestamp?: InputMaybe<Scalars['timestamptz']>;
+  unique?: InputMaybe<Scalars['Boolean']>;
+  url?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate sum on columns */
@@ -957,7 +1017,13 @@ export enum Ad_Event_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Timestamp = 'timestamp'
+  PlacementIdentifier = 'placement_identifier',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  Unique = 'unique',
+  /** column name */
+  Url = 'url'
 }
 
 export type Ad_Event_Updates = {
