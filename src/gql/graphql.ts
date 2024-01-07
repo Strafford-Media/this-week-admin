@@ -4251,6 +4251,7 @@ export type Fuzzy_Category_Tag = {
   id: Scalars['Int'];
   is_primary: Scalars['Boolean'];
   label: Scalars['String'];
+  listings_count: Scalars['bigint'];
   sim: Scalars['Float'];
 };
 
@@ -4262,6 +4263,7 @@ export type Fuzzy_Category_Tag_Bool_Exp_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   is_primary?: InputMaybe<Boolean_Comparison_Exp>;
   label?: InputMaybe<String_Comparison_Exp>;
+  listings_count?: InputMaybe<Bigint_Comparison_Exp>;
   sim?: InputMaybe<Float_Comparison_Exp>;
 };
 
@@ -4273,6 +4275,8 @@ export enum Fuzzy_Category_Tag_Enum_Name {
   /** column name */
   Label = 'label',
   /** column name */
+  ListingsCount = 'listings_count',
+  /** column name */
   Sim = 'sim'
 }
 
@@ -4281,6 +4285,7 @@ export type Fuzzy_Category_Tag_Order_By = {
   id?: InputMaybe<Order_By>;
   is_primary?: InputMaybe<Order_By>;
   label?: InputMaybe<Order_By>;
+  listings_count?: InputMaybe<Order_By>;
   sim?: InputMaybe<Order_By>;
 };
 

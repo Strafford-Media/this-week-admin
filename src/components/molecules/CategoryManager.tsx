@@ -50,7 +50,7 @@ export const CategoryManager = ({ className = '', ...props }: CategoryManagerPro
             })
           }}
         />
-        <ul className="grow space-y-0.5">
+        <ul className="max-w-lg grow space-y-0.5">
           {tags.map((tag) => (
             <TagListItem
               key={tag.id}
