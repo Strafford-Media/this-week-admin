@@ -1,12 +1,11 @@
 import { useAuthSubscription } from '@nhost/react-apollo'
 import React, { ComponentProps, useState } from 'react'
 import { ALL_LISTINGS_SUB } from '../../graphql/queries'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
-import { capitalize } from '../../utils/general'
+import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '@8thday/react'
-import { PlusIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { NewListingModal } from './NewListingModal'
+import { DocumentPlusIcon, TagIcon } from '@heroicons/react/24/outline'
 
 export interface ListingsProps extends ComponentProps<'div'> {}
 
@@ -14,7 +13,8 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
   const { id: rawParamsId } = useParams()
   const id = Number(rawParamsId)
 
-  const [openNewForm, setOpenNewForm] = useState(false)
+  const [openNewListingForm, setOpenNewListingForm] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const { data } = useAuthSubscription(ALL_LISTINGS_SUB)
 
@@ -29,20 +29,30 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
             id ? 'col-end-2 bg-primary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
-          <ul className={clsx('grid-cols-auto-5 relative grid gap-2')}>
+          <ul className={clsx('relative grid grid-cols-auto-5 gap-2')}>
             <li
               className={clsx(
-                'sticky top-0 z-10 col-span-5 flex p-2 shadow-md shadow-primary-50',
+                'sticky top-0 z-10 col-span-5 flex flex-wrap p-2 shadow-md shadow-primary-50',
                 id ? 'bg-primary-50/80' : 'bg-white/80',
               )}
             >
               <Button
-                className="mx-0 @md:mx-auto"
-                PreIcon={PlusIcon}
+                className="mb-2 mr-2 @xs:mb-0 @md:ml-auto"
+                PreIcon={DocumentPlusIcon}
                 variant="primary"
-                onClick={() => setOpenNewForm(true)}
+                onClick={() => setOpenNewListingForm(true)}
               >
                 New Listing
+              </Button>
+              <Button
+                className="mr-0 @md:mr-auto"
+                PreIcon={TagIcon}
+                variant="primary"
+                onClick={() => {
+                  setSearchParams((s) => (s.set('manage-categories', '1'), s))
+                }}
+              >
+                Manage Categories
               </Button>
             </li>
             {data?.listing.map((listing, i, wholeList) => (
@@ -121,7 +131,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
           <Outlet />
         </div>
       </div>
-      {openNewForm && <NewListingModal onClose={() => setOpenNewForm(false)} />}
+      {openNewListingForm && <NewListingModal onClose={() => setOpenNewListingForm(false)} />}
     </div>
   )
 }

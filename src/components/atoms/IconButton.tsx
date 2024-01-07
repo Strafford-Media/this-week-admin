@@ -28,7 +28,7 @@ export const IconButton = ({
   icon: Icon,
   size = 5,
   iconClass = '',
-  colorClass = 'text-gray-400 hover:text-primary-500 focus:text-gray-600',
+  colorClass = 'text-gray-400 enabled:hover:text-primary-500 focus:text-gray-600',
   ...props
 }: IconButtonProps) => {
   const sizeClass = sizes[size]
@@ -39,7 +39,7 @@ export const IconButton = ({
         className,
         sizeClass.button,
         colorClass,
-        `inline-flex rounded items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2`
+        `inline-flex items-center justify-center rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2`,
       )}
       {...props}
     >

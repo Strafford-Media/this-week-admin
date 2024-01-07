@@ -1,7 +1,7 @@
 import { ArrowPathIcon, CheckIcon, FaceFrownIcon, RocketLaunchIcon } from '@heroicons/react/24/outline'
 import { useResetPassword, useSignInEmailPassword } from '@nhost/react'
 import React, { useRef, useState } from 'react'
-import { Button } from '@8thday/react'
+import { Button, toast } from '@8thday/react'
 
 export const LoginScreen = () => {
   const emailRef = useRef<HTMLInputElement>(null)
@@ -16,12 +16,12 @@ export const LoginScreen = () => {
 
   return (
     <main className="h-screen bg-gray-50">
-      <div className="flex min-h-full flex-col justify-center py-6 sm:py-12 sm:px-6 lg:px-8">
+      <div className="flex min-h-full flex-col justify-center py-6 sm:px-6 sm:py-12 lg:px-8">
         <div className="mx-1 sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-primary-800">
             Sign in to your account
           </h2>
-          <div className="py-8 px-4">
+          <div className="px-4 py-8">
             <form
               className="space-y-6"
               onSubmit={(e) => {
@@ -87,6 +87,20 @@ export const LoginScreen = () => {
                       } else {
                         setMissingEmail(false)
                         resetPassword(email, { redirectTo: '/profile/change-password' })
+                          .then((d) => {
+                            if (d.isError) {
+                              toast.error({ message: 'Unable to fulfill request', description: d.error?.message })
+                            } else {
+                              toast.success({
+                                message: 'Reset Requested',
+                                description: 'A reset link has been sent to your email.',
+                              })
+                            }
+                          })
+                          .catch((err) => {
+                            console.error(err)
+                            toast.error({ message: 'An unexpected error occurred', description: err.message })
+                          })
                       }
                     }}
                     className="font-medium text-primary-600 hover:text-primary-500"
@@ -108,19 +122,19 @@ export const LoginScreen = () => {
                 Sign in
               </Button>
               {isError && (
-                <p className="text-red-600 mt-4">
+                <p className="mt-4 text-red-600">
                   {error?.message ||
                     'There was a problem logging you in. Please try again or use the "forgot password" option.'}
                 </p>
               )}
               {resetError && (
-                <p className="text-red-600 mt-4">
+                <p className="mt-4 text-red-600">
                   {resetError.message ||
                     'There was a problem sending the reset password link. Please email 8thdaydev@gmail.com for support.'}
                 </p>
               )}
-              {isSuccess && <p className="text-emerald-500 mt-4">You're in!</p>}
-              {missingEmail && <p className="text-gray-600 mt-4">Please enter your email and try again.</p>}
+              {isSuccess && <p className="mt-4 text-emerald-500">You're in!</p>}
+              {missingEmail && <p className="mt-4 text-gray-600">Please enter your email and try again.</p>}
             </form>
           </div>
         </div>

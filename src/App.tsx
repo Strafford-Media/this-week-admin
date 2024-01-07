@@ -1,14 +1,18 @@
 import React, { ReactNode } from 'react'
 import { BuildingStorefrontIcon, MegaphoneIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useSearchParams } from 'react-router-dom'
 import { useAuthenticationStatus } from '@nhost/react'
 import { LoginScreen } from './components/molecules/LoginScreen'
 import { LoadingScreen } from './components/molecules/LoadingScreen'
-import { IconType } from '@8thday/react'
+import { IconType, Modal } from '@8thday/react'
+import { CategoryManager } from './components/molecules/CategoryManager'
 
 export const App = () => {
   const { isAuthenticated, isLoading } = useAuthenticationStatus()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const manageCategories = !!searchParams.get('manage-categories')
 
   if (isLoading) {
     return <LoadingScreen />
@@ -22,6 +26,11 @@ export const App = () => {
     <>
       <main className={`max-w-screen flex h-content flex-col pb-16 sm:pb-0 sm:pt-16`}>
         <Outlet />
+        {manageCategories && (
+          <Modal onClose={() => setSearchParams((s) => (s.delete('manage-categories'), s))}>
+            <CategoryManager />
+          </Modal>
+        )}
       </main>
       <nav className="max-w-screen fixed bottom-0 z-40 flex h-16 w-full items-stretch justify-evenly bg-primary-50 transition-all duration-300 [view-transition-name:header-nav] sm:top-0 sm:justify-end">
         <h1 className="mr-auto hidden items-center p-2 text-center text-lg font-bold leading-4 text-primary-500 sm:flex md:p-4 md:text-xl">

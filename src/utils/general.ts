@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react'
+
 export const capitalize = (str?: string | null) =>
   str
     ?.at(0)
@@ -52,4 +54,11 @@ export const formatDateTime = (date: string | Date) => {
   }
 
   return dateObj.toLocaleString()
+}
+
+export const prevDefAndNoProp = (callback?: (e: MouseEvent) => any) => (e: MouseEvent) => {
+  e.preventDefault()
+  e.stopPropagation()
+
+  callback?.(e)
 }

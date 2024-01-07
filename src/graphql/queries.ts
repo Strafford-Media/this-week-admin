@@ -14,6 +14,20 @@ export const ALL_LISTINGS_SUB = graphql(`
   }
 `)
 
+export const ALL_LISTINGS_WITH_CATEGORIES = graphql(`
+  query AllListingsWithCategories {
+    listing(order_by: { business_name: asc }) {
+      id
+      business_name
+      live
+      listing_category_tags {
+        id
+        category_tag_id
+      }
+    }
+  }
+`)
+
 export const LISTING_BY_ID = graphql(`
   query ListingByIDSub($id: Int!) {
     listing_by_pk(id: $id) {
@@ -41,6 +55,18 @@ export const LISTING_BY_ID = graphql(`
           id
           label
         }
+      }
+    }
+  }
+`)
+
+export const LISTINGS_BY_CATEGORY = graphql(`
+  query ListingsByCategory($categoryId: Int!) {
+    listing(where: { listing_category_tags: { category_tag_id: { _eq: $categoryId } } }) {
+      id
+      business_name
+      listing_category_tags(where: { category_tag_id: { _eq: $categoryId } }) {
+        id
       }
     }
   }
@@ -127,6 +153,21 @@ export const CYCLE_ANALYTICS = graphql(`
         }
       }
       unique_views: ad_events_aggregate(where: { unique: { _eq: true }, event_type: { _eq: "view" } }) {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+`)
+
+export const GET_CATEGORY_TAGS = graphql(`
+  query GetCategoryTags {
+    category_tag(order_by: [{ is_primary: desc }, { label: asc }]) {
+      id
+      label
+      is_primary
+      listing_category_tags_aggregate {
         aggregate {
           count
         }

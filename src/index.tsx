@@ -15,6 +15,7 @@ import mapbox from 'mapbox-gl'
 import { AdDesigner } from './components/molecules/AdDesigner'
 import { Redirect } from '@8thday/react'
 import { AdScheduler } from './components/molecules/AdScheduler'
+import { CategoryTagProvider } from './hooks/useCategoryTags'
 
 mapbox.accessToken = 'pk.eyJ1IjoidGVocHNhbG1pc3QiLCJhIjoiY2tjOG1qYWI1MGU0eDJ0bXA4eW9oMWJheiJ9.mbn1UUudizfymnvIOvdCmg'
 
@@ -82,8 +83,10 @@ const root = createRoot(document.getElementById('app')!)
 root.render(
   <NhostProvider nhost={nhost}>
     <NhostApolloProvider nhost={nhost}>
-      <RouterProvider router={router} />
-      <Toaster position="top-right" />
+      <CategoryTagProvider>
+        <RouterProvider router={router} />
+        <Toaster position="top-right" />
+      </CategoryTagProvider>
     </NhostApolloProvider>
   </NhostProvider>,
 )
