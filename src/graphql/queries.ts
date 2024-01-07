@@ -51,10 +51,7 @@ export const LISTING_BY_ID = graphql(`
       layout_data
       listing_category_tags {
         id
-        category_tag {
-          id
-          label
-        }
+        category_tag_id
       }
     }
   }

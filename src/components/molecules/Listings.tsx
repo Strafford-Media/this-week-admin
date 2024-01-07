@@ -14,7 +14,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
   const id = Number(rawParamsId)
 
   const [openNewListingForm, setOpenNewListingForm] = useState(false)
-  const [searchParams, setSearchParams] = useSearchParams()
+  const setSearchParams = useSearchParams()[1]
 
   const { data } = useAuthSubscription(ALL_LISTINGS_SUB)
 
@@ -60,7 +60,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 key={listing.id}
                 className={clsx(
                   'col-span-5 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
-                  i !== 0 ? 'border-t border-primary-200' : '',
+                  { 'border-t border-primary-200': i !== 0, 'text-primary-500': listing.id === id },
                 )}
                 role="navigation"
                 onClick={(e) => {
