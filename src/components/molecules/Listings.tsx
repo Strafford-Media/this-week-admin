@@ -32,27 +32,21 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
           <ul className={clsx('relative grid grid-cols-auto-5 gap-2')}>
             <li
               className={clsx(
-                'sticky top-0 z-10 col-span-5 flex flex-wrap p-2 shadow-md shadow-primary-50',
+                'sticky top-0 z-10 col-span-5 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
                 id ? 'bg-primary-50/80' : 'bg-white/80',
               )}
             >
               <Button
-                className="mb-2 mr-2 @xs:mb-0 @md:ml-auto"
-                PreIcon={DocumentPlusIcon}
-                variant="primary"
-                onClick={() => setOpenNewListingForm(true)}
-              >
-                New Listing
-              </Button>
-              <Button
-                className="mr-0 @md:mr-auto"
                 PreIcon={TagIcon}
-                variant="primary"
+                variant="secondary"
                 onClick={() => {
                   setSearchParams((s) => (s.set('manage-categories', '1'), s))
                 }}
               >
                 Manage Categories
+              </Button>
+              <Button PreIcon={DocumentPlusIcon} variant="primary" onClick={() => setOpenNewListingForm(true)}>
+                New Listing
               </Button>
             </li>
             {data?.listing.map((listing, i, wholeList) => (

@@ -4344,6 +4344,7 @@ export type Fuzzy_Listing_Order_By = {
 
 /** fuzzy_search_categoriesNative Query Arguments */
 export type Fuzzy_Search_Categories_Arguments = {
+  island?: InputMaybe<Scalars['String']>;
   search: Scalars['String'];
 };
 
