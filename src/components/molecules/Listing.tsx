@@ -369,7 +369,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               onChange={(e) => setAndDebounceUpdate('lat_lng', e.target.value)}
             />
             <div ref={setContainer} className="h-40"></div>
-            <div>
+            <div className="mb-4">
               <label>Images</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 <ImageUploader
@@ -512,7 +512,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="mb-4">
               <label>Videos</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 {listing.videos.map((video) => (
