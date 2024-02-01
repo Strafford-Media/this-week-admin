@@ -16,6 +16,7 @@ export type Scalars = {
   bytea: any;
   citext: any;
   jsonb: any;
+  point: any;
   timestamptz: any;
   tsvector: any;
   uuid: any;
@@ -4385,12 +4386,14 @@ export type Jsonb_Comparison_Exp = {
 export type Listing = {
   __typename?: 'listing';
   booking_links: Scalars['jsonb'];
+  business_hours: Scalars['jsonb'];
   business_name: Scalars['String'];
   created_at: Scalars['timestamptz'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   images: Scalars['jsonb'];
   island?: Maybe<Scalars['String']>;
+  lat_lng?: Maybe<Scalars['point']>;
   layout_data: Scalars['jsonb'];
   /** An array relationship */
   listing_category_tags: Array<Listing_Category_Tag>;
@@ -4404,6 +4407,8 @@ export type Listing = {
   primary_phone?: Maybe<Scalars['String']>;
   primary_web_url?: Maybe<Scalars['String']>;
   slogan?: Maybe<Scalars['String']>;
+  slug: Scalars['String'];
+  social_media: Scalars['jsonb'];
   this_week_recommended: Scalars['Boolean'];
   tier: Scalars['String'];
   ts_vector?: Maybe<Scalars['tsvector']>;
@@ -4414,6 +4419,12 @@ export type Listing = {
 
 /** individual business's details */
 export type ListingBooking_LinksArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** individual business's details */
+export type ListingBusiness_HoursArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
 
@@ -4447,6 +4458,12 @@ export type ListingListing_Category_Tags_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Listing_Category_Tag_Order_By>>;
   where?: InputMaybe<Listing_Category_Tag_Bool_Exp>;
+};
+
+
+/** individual business's details */
+export type ListingSocial_MediaArgs = {
+  path?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -4488,8 +4505,10 @@ export type Listing_Aggregate_FieldsCountArgs = {
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Listing_Append_Input = {
   booking_links?: InputMaybe<Scalars['jsonb']>;
+  business_hours?: InputMaybe<Scalars['jsonb']>;
   images?: InputMaybe<Scalars['jsonb']>;
   layout_data?: InputMaybe<Scalars['jsonb']>;
+  social_media?: InputMaybe<Scalars['jsonb']>;
   videos?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -4506,12 +4525,14 @@ export type Listing_Bool_Exp = {
   _not?: InputMaybe<Listing_Bool_Exp>;
   _or?: InputMaybe<Array<Listing_Bool_Exp>>;
   booking_links?: InputMaybe<Jsonb_Comparison_Exp>;
+  business_hours?: InputMaybe<Jsonb_Comparison_Exp>;
   business_name?: InputMaybe<String_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   images?: InputMaybe<Jsonb_Comparison_Exp>;
   island?: InputMaybe<String_Comparison_Exp>;
+  lat_lng?: InputMaybe<Point_Comparison_Exp>;
   layout_data?: InputMaybe<Jsonb_Comparison_Exp>;
   listing_category_tags?: InputMaybe<Listing_Category_Tag_Bool_Exp>;
   listing_category_tags_aggregate?: InputMaybe<Listing_Category_Tag_Aggregate_Bool_Exp>;
@@ -4523,6 +4544,8 @@ export type Listing_Bool_Exp = {
   primary_phone?: InputMaybe<String_Comparison_Exp>;
   primary_web_url?: InputMaybe<String_Comparison_Exp>;
   slogan?: InputMaybe<String_Comparison_Exp>;
+  slug?: InputMaybe<String_Comparison_Exp>;
+  social_media?: InputMaybe<Jsonb_Comparison_Exp>;
   this_week_recommended?: InputMaybe<Boolean_Comparison_Exp>;
   tier?: InputMaybe<String_Comparison_Exp>;
   ts_vector?: InputMaybe<Tsvector_Comparison_Exp>;
@@ -4901,30 +4924,38 @@ export type Listing_Category_Tag_Variance_Order_By = {
 /** unique or primary key constraints on table "listing" */
 export enum Listing_Constraint {
   /** unique or primary key constraint on columns "id" */
-  ListingPkey = 'listing_pkey'
+  ListingPkey = 'listing_pkey',
+  /** unique or primary key constraint on columns "slug" */
+  ListingSlugKey = 'listing_slug_key'
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Listing_Delete_At_Path_Input = {
   booking_links?: InputMaybe<Array<Scalars['String']>>;
+  business_hours?: InputMaybe<Array<Scalars['String']>>;
   images?: InputMaybe<Array<Scalars['String']>>;
   layout_data?: InputMaybe<Array<Scalars['String']>>;
+  social_media?: InputMaybe<Array<Scalars['String']>>;
   videos?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Listing_Delete_Elem_Input = {
   booking_links?: InputMaybe<Scalars['Int']>;
+  business_hours?: InputMaybe<Scalars['Int']>;
   images?: InputMaybe<Scalars['Int']>;
   layout_data?: InputMaybe<Scalars['Int']>;
+  social_media?: InputMaybe<Scalars['Int']>;
   videos?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Listing_Delete_Key_Input = {
   booking_links?: InputMaybe<Scalars['String']>;
+  business_hours?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<Scalars['String']>;
   layout_data?: InputMaybe<Scalars['String']>;
+  social_media?: InputMaybe<Scalars['String']>;
   videos?: InputMaybe<Scalars['String']>;
 };
 
@@ -4937,12 +4968,14 @@ export type Listing_Inc_Input = {
 /** input type for inserting data into table "listing" */
 export type Listing_Insert_Input = {
   booking_links?: InputMaybe<Scalars['jsonb']>;
+  business_hours?: InputMaybe<Scalars['jsonb']>;
   business_name?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
   images?: InputMaybe<Scalars['jsonb']>;
   island?: InputMaybe<Scalars['String']>;
+  lat_lng?: InputMaybe<Scalars['point']>;
   layout_data?: InputMaybe<Scalars['jsonb']>;
   listing_category_tags?: InputMaybe<Listing_Category_Tag_Arr_Rel_Insert_Input>;
   live?: InputMaybe<Scalars['Boolean']>;
@@ -4953,6 +4986,8 @@ export type Listing_Insert_Input = {
   primary_phone?: InputMaybe<Scalars['String']>;
   primary_web_url?: InputMaybe<Scalars['String']>;
   slogan?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
+  social_media?: InputMaybe<Scalars['jsonb']>;
   this_week_recommended?: InputMaybe<Scalars['Boolean']>;
   tier?: InputMaybe<Scalars['String']>;
   ts_vector?: InputMaybe<Scalars['tsvector']>;
@@ -4975,6 +5010,7 @@ export type Listing_Max_Fields = {
   primary_phone?: Maybe<Scalars['String']>;
   primary_web_url?: Maybe<Scalars['String']>;
   slogan?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
   tier?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -4994,6 +5030,7 @@ export type Listing_Min_Fields = {
   primary_phone?: Maybe<Scalars['String']>;
   primary_web_url?: Maybe<Scalars['String']>;
   slogan?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
   tier?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -5024,12 +5061,14 @@ export type Listing_On_Conflict = {
 /** Ordering options when selecting data from "listing". */
 export type Listing_Order_By = {
   booking_links?: InputMaybe<Order_By>;
+  business_hours?: InputMaybe<Order_By>;
   business_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   images?: InputMaybe<Order_By>;
   island?: InputMaybe<Order_By>;
+  lat_lng?: InputMaybe<Order_By>;
   layout_data?: InputMaybe<Order_By>;
   listing_category_tags_aggregate?: InputMaybe<Listing_Category_Tag_Aggregate_Order_By>;
   live?: InputMaybe<Order_By>;
@@ -5040,6 +5079,8 @@ export type Listing_Order_By = {
   primary_phone?: InputMaybe<Order_By>;
   primary_web_url?: InputMaybe<Order_By>;
   slogan?: InputMaybe<Order_By>;
+  slug?: InputMaybe<Order_By>;
+  social_media?: InputMaybe<Order_By>;
   this_week_recommended?: InputMaybe<Order_By>;
   tier?: InputMaybe<Order_By>;
   ts_vector?: InputMaybe<Order_By>;
@@ -5055,8 +5096,10 @@ export type Listing_Pk_Columns_Input = {
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Listing_Prepend_Input = {
   booking_links?: InputMaybe<Scalars['jsonb']>;
+  business_hours?: InputMaybe<Scalars['jsonb']>;
   images?: InputMaybe<Scalars['jsonb']>;
   layout_data?: InputMaybe<Scalars['jsonb']>;
+  social_media?: InputMaybe<Scalars['jsonb']>;
   videos?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -5064,6 +5107,8 @@ export type Listing_Prepend_Input = {
 export enum Listing_Select_Column {
   /** column name */
   BookingLinks = 'booking_links',
+  /** column name */
+  BusinessHours = 'business_hours',
   /** column name */
   BusinessName = 'business_name',
   /** column name */
@@ -5076,6 +5121,8 @@ export enum Listing_Select_Column {
   Images = 'images',
   /** column name */
   Island = 'island',
+  /** column name */
+  LatLng = 'lat_lng',
   /** column name */
   LayoutData = 'layout_data',
   /** column name */
@@ -5095,6 +5142,10 @@ export enum Listing_Select_Column {
   /** column name */
   Slogan = 'slogan',
   /** column name */
+  Slug = 'slug',
+  /** column name */
+  SocialMedia = 'social_media',
+  /** column name */
   ThisWeekRecommended = 'this_week_recommended',
   /** column name */
   Tier = 'tier',
@@ -5109,12 +5160,14 @@ export enum Listing_Select_Column {
 /** input type for updating data in table "listing" */
 export type Listing_Set_Input = {
   booking_links?: InputMaybe<Scalars['jsonb']>;
+  business_hours?: InputMaybe<Scalars['jsonb']>;
   business_name?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
   images?: InputMaybe<Scalars['jsonb']>;
   island?: InputMaybe<Scalars['String']>;
+  lat_lng?: InputMaybe<Scalars['point']>;
   layout_data?: InputMaybe<Scalars['jsonb']>;
   live?: InputMaybe<Scalars['Boolean']>;
   main_category_id?: InputMaybe<Scalars['Int']>;
@@ -5124,6 +5177,8 @@ export type Listing_Set_Input = {
   primary_phone?: InputMaybe<Scalars['String']>;
   primary_web_url?: InputMaybe<Scalars['String']>;
   slogan?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
+  social_media?: InputMaybe<Scalars['jsonb']>;
   this_week_recommended?: InputMaybe<Scalars['Boolean']>;
   tier?: InputMaybe<Scalars['String']>;
   ts_vector?: InputMaybe<Scalars['tsvector']>;
@@ -5163,12 +5218,14 @@ export type Listing_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Listing_Stream_Cursor_Value_Input = {
   booking_links?: InputMaybe<Scalars['jsonb']>;
+  business_hours?: InputMaybe<Scalars['jsonb']>;
   business_name?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
   images?: InputMaybe<Scalars['jsonb']>;
   island?: InputMaybe<Scalars['String']>;
+  lat_lng?: InputMaybe<Scalars['point']>;
   layout_data?: InputMaybe<Scalars['jsonb']>;
   live?: InputMaybe<Scalars['Boolean']>;
   main_category_id?: InputMaybe<Scalars['Int']>;
@@ -5178,6 +5235,8 @@ export type Listing_Stream_Cursor_Value_Input = {
   primary_phone?: InputMaybe<Scalars['String']>;
   primary_web_url?: InputMaybe<Scalars['String']>;
   slogan?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
+  social_media?: InputMaybe<Scalars['jsonb']>;
   this_week_recommended?: InputMaybe<Scalars['Boolean']>;
   tier?: InputMaybe<Scalars['String']>;
   ts_vector?: InputMaybe<Scalars['tsvector']>;
@@ -5197,6 +5256,8 @@ export enum Listing_Update_Column {
   /** column name */
   BookingLinks = 'booking_links',
   /** column name */
+  BusinessHours = 'business_hours',
+  /** column name */
   BusinessName = 'business_name',
   /** column name */
   CreatedAt = 'created_at',
@@ -5208,6 +5269,8 @@ export enum Listing_Update_Column {
   Images = 'images',
   /** column name */
   Island = 'island',
+  /** column name */
+  LatLng = 'lat_lng',
   /** column name */
   LayoutData = 'layout_data',
   /** column name */
@@ -5226,6 +5289,10 @@ export enum Listing_Update_Column {
   PrimaryWebUrl = 'primary_web_url',
   /** column name */
   Slogan = 'slogan',
+  /** column name */
+  Slug = 'slug',
+  /** column name */
+  SocialMedia = 'social_media',
   /** column name */
   ThisWeekRecommended = 'this_week_recommended',
   /** column name */
@@ -6467,6 +6534,19 @@ export enum Order_By {
   /** in descending order, nulls last */
   DescNullsLast = 'desc_nulls_last'
 }
+
+/** Boolean expression to compare columns of type "point". All fields are combined with logical 'AND'. */
+export type Point_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['point']>;
+  _gt?: InputMaybe<Scalars['point']>;
+  _gte?: InputMaybe<Scalars['point']>;
+  _in?: InputMaybe<Array<Scalars['point']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _lt?: InputMaybe<Scalars['point']>;
+  _lte?: InputMaybe<Scalars['point']>;
+  _neq?: InputMaybe<Scalars['point']>;
+  _nin?: InputMaybe<Array<Scalars['point']>>;
+};
 
 export type Query_Root = {
   __typename?: 'query_root';
@@ -8896,7 +8976,7 @@ export type ListingByIdSubQueryVariables = Exact<{
 }>;
 
 
-export type ListingByIdSubQuery = { __typename?: 'query_root', listing_by_pk?: { __typename?: 'listing', id: number, business_name: string, slogan?: string | null, description?: string | null, island?: string | null, created_at: any, updated_at: any, tier: string, live: boolean, primary_address?: string | null, primary_phone?: string | null, primary_email?: string | null, primary_web_url?: string | null, this_week_recommended: boolean, booking_links: any, images: any, videos: any, layout_data: any, listing_category_tags: Array<{ __typename?: 'listing_category_tag', id: number, category_tag_id: number }> } | null };
+export type ListingByIdSubQuery = { __typename?: 'query_root', listing_by_pk?: { __typename?: 'listing', id: number, business_name: string, slogan?: string | null, description?: string | null, island?: string | null, created_at: any, updated_at: any, tier: string, live: boolean, primary_address?: string | null, primary_phone?: string | null, primary_email?: string | null, primary_web_url?: string | null, this_week_recommended: boolean, booking_links: any, images: any, videos: any, layout_data: any, lat_lng?: any | null, listing_category_tags: Array<{ __typename?: 'listing_category_tag', id: number, category_tag_id: number }> } | null };
 
 export type ListingsByCategoryQueryVariables = Exact<{
   categoryId: Scalars['Int'];
@@ -8965,7 +9045,7 @@ export const DeleteAdCycleByIdDocument = {"kind":"Document","definitions":[{"kin
 export const DeleteAdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAd"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteAdMutation, DeleteAdMutationVariables>;
 export const AllListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"AllListings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"business_name"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}}]}}]}}]} as unknown as DocumentNode<AllListingsSubscription, AllListingsSubscriptionVariables>;
 export const AllListingsWithCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllListingsWithCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"business_name"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag_id"}}]}}]}}]}}]} as unknown as DocumentNode<AllListingsWithCategoriesQuery, AllListingsWithCategoriesQueryVariables>;
-export const ListingByIdSubDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingByIDSub"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"slogan"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"primary_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_phone"}},{"kind":"Field","name":{"kind":"Name","value":"primary_email"}},{"kind":"Field","name":{"kind":"Name","value":"primary_web_url"}},{"kind":"Field","name":{"kind":"Name","value":"this_week_recommended"}},{"kind":"Field","name":{"kind":"Name","value":"booking_links"}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"videos"}},{"kind":"Field","name":{"kind":"Name","value":"layout_data"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag_id"}}]}}]}}]}}]} as unknown as DocumentNode<ListingByIdSubQuery, ListingByIdSubQueryVariables>;
+export const ListingByIdSubDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingByIDSub"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"slogan"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"primary_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_phone"}},{"kind":"Field","name":{"kind":"Name","value":"primary_email"}},{"kind":"Field","name":{"kind":"Name","value":"primary_web_url"}},{"kind":"Field","name":{"kind":"Name","value":"this_week_recommended"}},{"kind":"Field","name":{"kind":"Name","value":"booking_links"}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"videos"}},{"kind":"Field","name":{"kind":"Name","value":"layout_data"}},{"kind":"Field","name":{"kind":"Name","value":"lat_lng"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag_id"}}]}}]}}]}}]} as unknown as DocumentNode<ListingByIdSubQuery, ListingByIdSubQueryVariables>;
 export const ListingsByCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingsByCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"categoryId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"listing_category_tags"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"category_tag_id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"categoryId"}}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"category_tag_id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"categoryId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<ListingsByCategoryQuery, ListingsByCategoryQueryVariables>;
 export const GetAdByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAdById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]}}]} as unknown as DocumentNode<GetAdByIdQuery, GetAdByIdQueryVariables>;
 export const AllAdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_bool_exp"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"updated_at"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]}}]} as unknown as DocumentNode<AllAdsQuery, AllAdsQueryVariables>;

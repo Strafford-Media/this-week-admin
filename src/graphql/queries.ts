@@ -49,6 +49,7 @@ export const LISTING_BY_ID = graphql(`
       images
       videos
       layout_data
+      lat_lng
       listing_category_tags {
         id
         category_tag_id

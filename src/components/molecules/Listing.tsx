@@ -1,19 +1,25 @@
-import React, { ComponentProps, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { ComponentProps, useMemo, useRef, useState } from 'react'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
 import { Button, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
 import { ArrowPathIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { BeakerIcon, CameraIcon, StarIcon } from '@heroicons/react/24/solid'
+import { BeakerIcon, CameraIcon, TagIcon, StarIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
-import { DELETE_LISTING, UPDATE_LISTING } from '../../graphql/mutations'
+import {
+  CREATE_CATEGORY_LISTINGS,
+  DELETE_CATEGORY_LISTING_BY_ID,
+  DELETE_LISTING,
+  UPDATE_LISTING,
+} from '../../graphql/mutations'
 import { ListingByIdSubQuery } from '../../gql/graphql'
 import { useMapbox } from '../../hooks'
 import { useMutation } from '@apollo/client'
 import { ImageUploader } from './ImageUploader'
 import { graphql } from '../../gql'
 import clsx from 'clsx'
+import { useCategoryTags } from '../../hooks/useCategoryTags'
 
 const tiers = [
   { value: 'premium', label: 'Premium' },
@@ -32,6 +38,10 @@ export interface ListingProps extends ComponentProps<'div'> {}
 
 export const Listing = ({ className = '', ...props }: ListingProps) => {
   const nhost = useNhostClient()
+
+  const { tags, tagMap } = useCategoryTags()
+
+  const setSearchParams = useSearchParams()[1]
 
   const { id: idFromParams } = useParams()
   const id = Number(idFromParams)
@@ -58,6 +68,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     videos: [],
     booking_links: [],
     layout_data: {},
+    lat_lng: '',
   })
 
   const {
@@ -80,6 +91,14 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     goTo('..')
   }
 
+  const refreshListingData = () => {
+    refetch().then(({ data }) => {
+      if (data.listing_by_pk) {
+        setListing(data.listing_by_pk)
+      }
+    })
+  }
+
   const [updateListing, { loading: saveLoading }] = useMutation(UPDATE_LISTING)
 
   const update = async (key: string, value: any) => {
@@ -96,11 +115,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       })
     }
 
-    refetch().then(({ data }) => {
-      if (data.listing_by_pk) {
-        setListing(data.listing_by_pk)
-      }
-    })
+    refreshListingData()
   }
 
   const updateLayoutData = async (key: string, value: any) => {
@@ -124,11 +139,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       })
     }
 
-    refetch().then(({ data }) => {
-      if (data.listing_by_pk) {
-        setListing(data.listing_by_pk)
-      }
-    })
+    refreshListingData()
   }
 
   const updateImmediately = async (key: string, value: any) => {
@@ -150,6 +161,12 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       update(key, value)
     }, 400)
   }
+
+  const tagOptions = useMemo(() => {
+    return tags
+      .filter((t) => listing.listing_category_tags.every((c) => c.category_tag_id !== t.id))
+      .map((t) => ({ value: `${t.id}`, label: t.label }))
+  }, [tags, listing?.listing_category_tags])
 
   const { setContainer, mapboxRef } = useMapbox()
 
@@ -212,14 +229,95 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               rightLabel="This Week Recommended"
               rightDescription="Publicly recommend this listing"
             />
-            <div className="relative min-h-32 min-w-64">
+            {tags.length ? (
+              <div className="">
+                <label className="block w-full">Category Tags</label>
+                <ul className="flex flex-wrap gap-2 py-2">
+                  {listing.listing_category_tags.map((lct) => (
+                    <li
+                      className="cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white"
+                      key={lct.id}
+                      onClick={async () => {
+                        const res = await nhost.graphql
+                          .request(DELETE_CATEGORY_LISTING_BY_ID, { id: lct.id })
+                          .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                        if (res instanceof Error || res.error) {
+                          return toast.error({ message: 'Unable to remove this tag' })
+                        }
+
+                        refetch().then(({ data }) => {
+                          if (data.listing_by_pk) {
+                            setListing(data.listing_by_pk)
+                          }
+                        })
+                      }}
+                    >
+                      {tagMap[lct.category_tag_id].label}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mb-4 flex items-center">
+                  <Select
+                    className="inline-block"
+                    placeholder="Add a Category Tag"
+                    collapseDescriptionArea
+                    items={tagOptions}
+                    onValueChange={async (t) => {
+                      const ctId = Number(t)
+
+                      if (!ctId) return
+
+                      const res = await nhost.graphql
+                        .request(CREATE_CATEGORY_LISTINGS, {
+                          objects: [{ listing_id: id, category_tag_id: ctId }],
+                        })
+                        .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                      if (res instanceof Error || res.error) {
+                        console.error(res)
+                        return toast.error({
+                          message: `There was an error adding the tag`,
+                          description: `please try again`,
+                        })
+                      }
+
+                      refetch().then(({ data }) => {
+                        if (data.listing_by_pk) {
+                          setListing(data.listing_by_pk)
+                        }
+                      })
+                    }}
+                  ></Select>
+                  <Button
+                    PreIcon={TagIcon}
+                    className="ml-4"
+                    onClick={() => {
+                      setSearchParams((s) => (s.set('manage-categories', '1'), s))
+                    }}
+                  >
+                    Manage Categories
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button
+                onClick={() => {
+                  setSearchParams((s) => (s.set('manage-categories', '1'), s))
+                }}
+              >
+                Configure Category Tags
+              </Button>
+            )}
+            <div className="relative mb-4 min-h-40 min-w-64">
+              <label>Logo</label>
               {listing.layout_data.logo && (
                 <img src={listing.layout_data.logo} alt="Company Logo" className="absolute inset-0 h-full" />
               )}
               <ImageUploader
                 contentLabel="Logo"
                 type="logo"
-                className={clsx('absolute inset-0 h-32 w-64', {
+                className={clsx('absolute inset-0 mt-8 h-32 w-64', {
                   'opacity-100': !listing.layout_data.logo,
                   'opacity-0 focus-within:opacity-95 hover:opacity-95': listing.layout_data.logo,
                 })}
@@ -263,9 +361,15 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               value={listing.primary_address ?? ''}
               onChange={(e) => setAndDebounceUpdate('primary_address', e.target.value)}
             />
+            <TextInput
+              label="Latitude/Longitude"
+              placeholder="ex: (0,0)"
+              value={listing.lat_lng ?? ''}
+              onChange={(e) => setAndDebounceUpdate('lat_lng', e.target.value)}
+            />
             <div ref={setContainer} className="h-40"></div>
             <div>
-              <h3>Images</h3>
+              <label>Images</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 <ImageUploader
                   contentLabel="Images"
@@ -408,7 +512,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               </ul>
             </div>
             <div>
-              <h3>Videos</h3>
+              <label>Videos</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 {listing.videos.map((video) => (
                   <iframe

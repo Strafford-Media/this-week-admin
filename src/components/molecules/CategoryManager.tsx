@@ -18,7 +18,7 @@ import {
 import { CheckIcon, PlusIcon, StarIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { prevDefAndNoProp } from '../../utils/general'
 import { useNhostClient } from '@nhost/react'
-import { Toggle, toast } from '@8thday/react'
+import { Toggle, toast, useEventListener } from '@8thday/react'
 
 export interface CategoryManagerProps extends ComponentProps<'div'> {}
 
@@ -26,6 +26,12 @@ export const CategoryManager = ({ className = '', ...props }: CategoryManagerPro
   const { tags, refetch } = useCategoryTags()
 
   const setSearchParams = useSearchParams()[1]
+
+  useEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      setSearchParams((s) => (s.delete('manage-categories'), s))
+    }
+  })
 
   return (
     <div
