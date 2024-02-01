@@ -112,6 +112,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       return toast.error({
         message: "Couldn't save.",
         description: res.message,
+        duration: 1000,
       })
     }
 
