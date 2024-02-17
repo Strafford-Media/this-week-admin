@@ -1,15 +1,18 @@
 import { useAuthSubscription } from '@nhost/react-apollo'
-import React, { ComponentProps, useState } from 'react'
+import React, { ComponentProps, useMemo, useState } from 'react'
 import { ALL_LISTINGS_SUB } from '../../graphql/queries'
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Button } from '@8thday/react'
+import { Button, toast, useInterval, useRememberedState, useTimeout } from '@8thday/react'
 import clsx from 'clsx'
 import { NewListingModal } from './NewListingModal'
 import { DocumentPlusIcon, TagIcon } from '@heroicons/react/24/outline'
+import { addHour, addMinute } from '@formkit/tempo'
+import { useNhostClient } from '@nhost/react'
 
 export interface ListingsProps extends ComponentProps<'div'> {}
 
 export const Listings = ({ className = '', ...props }: ListingsProps) => {
+  const nhost = useNhostClient()
   const { id: rawParamsId } = useParams()
   const id = Number(rawParamsId)
 
@@ -19,6 +22,23 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
   const { data } = useAuthSubscription(ALL_LISTINGS_SUB)
 
   const goTo = useNavigate()
+
+  const [lastRevalidated, setLastRevalidated] = useRememberedState('this-week-last-revalidated', 0)
+
+  const canRevalidate = useMemo(() => {
+    return (
+      data?.listing.some((l) => new Date(l.updated_at).valueOf() > addHour(new Date(), -2).valueOf()) &&
+      lastRevalidated < addMinute(new Date(), -3).valueOf()
+    )
+  }, [data, lastRevalidated])
+
+  useInterval(
+    () => {
+      console.log('ayo')
+      setLastRevalidated((l) => l - 1)
+    },
+    canRevalidate ? 0 : 3 * 60 * 1000,
+  )
 
   return (
     <div className={`${className}`} {...props}>
@@ -48,6 +68,24 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
               <Button PreIcon={DocumentPlusIcon} variant="primary" onClick={() => setOpenNewListingForm(true)}>
                 New Listing
               </Button>
+              {canRevalidate && (
+                <Button
+                  variant="dismissive"
+                  onClick={async () => {
+                    const res = await nhost.functions.call('duda-revalidate')
+                    if (res.error) {
+                      return toast.error({ message: 'Unable to Refresh Web Cache', description: res.error.message })
+                    }
+                    toast.success({
+                      message: 'Web Cache Refreshed!',
+                      description: 'All listing updates will be live within 3 minutes.',
+                    })
+                    setLastRevalidated(new Date().valueOf())
+                  }}
+                >
+                  Refresh Web Cache
+                </Button>
+              )}
             </li>
             {data?.listing.map((listing, i, wholeList) => (
               <li

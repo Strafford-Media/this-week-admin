@@ -47,6 +47,7 @@
   "dependencies": {
     "@8thday/react": "^0.8.10",
     "@apollo/client": "^3.7.3",
+    "@formkit/tempo": "^0.0.8",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",
     "@fullcalendar/interaction": "^6.1.10",

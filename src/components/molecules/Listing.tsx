@@ -20,7 +20,6 @@ import { ImageUploader } from './ImageUploader'
 import { graphql } from '../../gql'
 import clsx from 'clsx'
 import { useCategoryTags } from '../../hooks/useCategoryTags'
-import { createPortal } from 'react-dom'
 
 interface BookingLink {
   label: string
