@@ -3,9 +3,9 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
-import { Button, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
-import { ArrowPathIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { BeakerIcon, CameraIcon, TagIcon, StarIcon } from '@heroicons/react/24/solid'
+import { Button, Modal, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
+import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { BeakerIcon, CameraIcon, StarIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
 import {
   CREATE_CATEGORY_LISTINGS,
@@ -20,6 +20,20 @@ import { ImageUploader } from './ImageUploader'
 import { graphql } from '../../gql'
 import clsx from 'clsx'
 import { useCategoryTags } from '../../hooks/useCategoryTags'
+import { createPortal } from 'react-dom'
+
+interface BookingLink {
+  label: string
+  shortname: string
+  item: string
+  sheet: string
+  asn: string
+  'asn-ref': string
+  'full-item': boolean
+  flow: string
+  branding: boolean
+  'bookable-only': boolean
+}
 
 const tiers = [
   { value: 'premium', label: 'Premium' },
@@ -86,10 +100,6 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       }
     },
   })
-
-  if (called && !fetchLoading && !error && !data?.listing_by_pk) {
-    goTo('..')
-  }
 
   const refreshListingData = () => {
     refetch().then(({ data }) => {
@@ -169,7 +179,17 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       .map((t) => ({ value: `${t.id}`, label: t.label }))
   }, [tags, listing?.listing_category_tags])
 
+  const bookingLinkValidation = useMemo(() => {
+    return (listing?.booking_links ?? []).map((bl: BookingLink) => !!bl.shortname && !!bl.item && !!bl.label)
+  }, [listing?.booking_links])
+
+  const [openBookingLink, setOpenBookingLink] = useState(-1)
+
   const { setContainer, mapboxRef } = useMapbox()
+
+  if (called && !fetchLoading && !error && !data?.listing_by_pk) {
+    goTo('..')
+  }
 
   return (
     <div className={`${className} h-full max-h-content overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
@@ -545,6 +565,168 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 </form>
               </ul>
             </div>
+            <div className="mb-6">
+              <label className="mb-4">Fareharbor Booking Links</label>
+              <ul className="flex flex-wrap gap-2">
+                {listing.booking_links?.map((bl: BookingLink, i: number) => (
+                  <li
+                    key={i}
+                    className="flex-center relative h-20 min-w-32 flex-col rounded p-2 shadow-md"
+                    tabIndex={0}
+                    onClick={(e) => setOpenBookingLink(i)}
+                  >
+                    <span className="absolute left-1 top-1 text-[0.6rem] text-gray-400">{bl.shortname}</span>
+                    <em className="text-xs text-gray-600">Item</em>
+                    <span className="">{bl.item || '???'}</span>
+                    {openBookingLink === i && (
+                      <Modal portal onClose={() => setOpenBookingLink(-1)}>
+                        <div className="flex flex-col gap-y-3">
+                          <TextInput
+                            value={bl.label}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'label', e.target.value),
+                              )
+                            }
+                            label="Button Label"
+                            collapseDescriptionArea
+                            required
+                          />
+                          <TextInput
+                            value={bl.shortname}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'shortname', e.target.value),
+                              )
+                            }
+                            label="Company shortname"
+                            description="Fareharbor customer identifier"
+                            required
+                          />
+                          <TextInput
+                            value={bl.item}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'item', e.target.value),
+                              )
+                            }
+                            label="Item ID"
+                            placeholder="usually a 3-6 digit number"
+                            collapseDescriptionArea
+                            required
+                          />
+                          <Toggle
+                            rightLabel="Full Item"
+                            rightDescription="Include item description and images"
+                            checked={bl['full-item']}
+                            setChecked={(c) => {
+                              updateImmediately(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'full-item', c),
+                              )
+                            }}
+                          />
+                          <TextInput
+                            value={bl.sheet}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'sheet', e.target.value),
+                              )
+                            }
+                            label="Pricing Sheet ID"
+                            placeholder="usually a 3-6 digit number"
+                            collapseDescriptionArea
+                          />
+                          <TextInput
+                            label="ASN"
+                            value={bl.asn}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'asn', e.target.value),
+                              )
+                            }
+                            collapseDescriptionArea
+                          />
+                          <TextInput
+                            label="asn-ref"
+                            value={bl['asn-ref']}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'asn-ref', e.target.value),
+                              )
+                            }
+                            collapseDescriptionArea
+                          />
+                          <TextInput
+                            value={bl.flow}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'flow', e.target.value),
+                              )
+                            }
+                            label="Flow ID"
+                            description="Specify a defined sales flow (leave empty for defaults)"
+                          />
+                          <Toggle
+                            rightLabel="Branding"
+                            checked={bl.branding}
+                            setChecked={(c) => {
+                              updateImmediately(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'branding', c),
+                              )
+                            }}
+                          />
+                          <Toggle
+                            rightLabel="Bookable Only"
+                            rightDescription="Hide closed and call to book availabilities"
+                            checked={bl['bookable-only']}
+                            setChecked={(c) => {
+                              updateImmediately(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'bookable-only', c),
+                              )
+                            }}
+                          />
+                        </div>
+                      </Modal>
+                    )}
+                  </li>
+                ))}
+                <Button
+                  PreIcon={PlusIcon}
+                  className="self-center"
+                  onClick={() => {
+                    updateImmediately(
+                      'booking_links',
+                      (listing.booking_links ?? []).concat([
+                        {
+                          label: 'BOOK NOW',
+                          shortname: '',
+                          item: '',
+                          sheet: '',
+                          asn: 'fhdn',
+                          'asn-ref': 'thisweekhawaii',
+                          'full-item': 'yes',
+                          flow: 'no',
+                          branding: 'yes',
+                          'bookable-only': 'yes',
+                        },
+                      ]),
+                    )
+                  }}
+                >
+                  Add a Fareharbor Booking Link
+                </Button>
+              </ul>
+            </div>
             <Button
               PreIcon={TrashIcon}
               variant="destructive"
@@ -584,4 +766,16 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       )}
     </div>
   )
+}
+
+const updateBookingLinks = (links: BookingLink[], index: number, key: keyof BookingLink, value: any) => {
+  return links.map((bl, i) => {
+    if (index === i) {
+      return {
+        ...bl,
+        [key]: value,
+      }
+    }
+    return bl
+  })
 }

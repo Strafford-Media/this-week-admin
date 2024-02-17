@@ -13,11 +13,17 @@ import { ChangePassword } from './components/molecules/ChangePassword'
 import { Ads } from './components/molecules/Ads'
 import mapbox from 'mapbox-gl'
 import { AdDesigner } from './components/molecules/AdDesigner'
-import { Redirect } from '@8thday/react'
+import { Redirect, customizeButtonClasses } from '@8thday/react'
 import { AdScheduler } from './components/molecules/AdScheduler'
 import { CategoryTagProvider } from './hooks/useCategoryTags'
 
 mapbox.accessToken = 'pk.eyJ1IjoidGVocHNhbG1pc3QiLCJhIjoiY2tjOG1qYWI1MGU0eDJ0bXA4eW9oMWJheiJ9.mbn1UUudizfymnvIOvdCmg'
+
+customizeButtonClasses({
+  variants: {
+    secondary: `border-transparent bg-secondary-100 text-secondary-700 enabled:hover:bg-secondary-200 focus:ring-secondary-500`,
+  },
+})
 
 const nhost = new NhostClient({
   subdomain: process.env.REACT_APP_NHOST_SUBDOMAIN,

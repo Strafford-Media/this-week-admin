@@ -26,14 +26,14 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
         <div
           className={clsx(
             'col-start-1 row-start-1 row-end-2 max-h-full overflow-y-auto transition-all duration-300 @container',
-            id ? 'col-end-2 bg-primary-50' : 'z-10 col-end-3 bg-white',
+            id ? 'col-end-2 bg-secondary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
           <ul className={clsx('relative grid grid-cols-auto-5 gap-2')}>
             <li
               className={clsx(
-                'sticky top-0 z-10 col-span-5 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
-                id ? 'bg-primary-50/80' : 'bg-white/80',
+                'sticky top-0 z-10 col-span-5 flex flex-wrap gap-2 p-2 shadow-md shadow-secondary-50',
+                id ? 'bg-secondary-50/80' : 'bg-white/80',
               )}
             >
               <Button
@@ -54,9 +54,10 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 key={listing.id}
                 className={clsx(
                   'col-span-5 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
-                  { 'border-t border-primary-200': i !== 0, 'text-primary-500': listing.id === id },
+                  { 'border-t border-secondary-100': i !== 0, 'text-primary-500': listing.id === id },
                 )}
                 role="navigation"
+                tabIndex={0}
                 onClick={(e) => {
                   if (id === listing.id) return
 

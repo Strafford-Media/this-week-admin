@@ -4402,6 +4402,8 @@ export type Listing = {
   live: Scalars['Boolean'];
   main_category_id?: Maybe<Scalars['Int']>;
   paid_until?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "permalink_for_listing" */
+  permalink?: Maybe<Scalars['String']>;
   primary_address?: Maybe<Scalars['String']>;
   primary_email?: Maybe<Scalars['String']>;
   primary_phone?: Maybe<Scalars['String']>;
@@ -4539,6 +4541,7 @@ export type Listing_Bool_Exp = {
   live?: InputMaybe<Boolean_Comparison_Exp>;
   main_category_id?: InputMaybe<Int_Comparison_Exp>;
   paid_until?: InputMaybe<Timestamptz_Comparison_Exp>;
+  permalink?: InputMaybe<String_Comparison_Exp>;
   primary_address?: InputMaybe<String_Comparison_Exp>;
   primary_email?: InputMaybe<String_Comparison_Exp>;
   primary_phone?: InputMaybe<String_Comparison_Exp>;
@@ -4924,6 +4927,8 @@ export type Listing_Category_Tag_Variance_Order_By = {
 /** unique or primary key constraints on table "listing" */
 export enum Listing_Constraint {
   /** unique or primary key constraint on columns "id" */
+  ListingIdKey = 'listing_id_key',
+  /** unique or primary key constraint on columns "id" */
   ListingPkey = 'listing_pkey',
   /** unique or primary key constraint on columns "slug" */
   ListingSlugKey = 'listing_slug_key'
@@ -5005,6 +5010,8 @@ export type Listing_Max_Fields = {
   island?: Maybe<Scalars['String']>;
   main_category_id?: Maybe<Scalars['Int']>;
   paid_until?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "permalink_for_listing" */
+  permalink?: Maybe<Scalars['String']>;
   primary_address?: Maybe<Scalars['String']>;
   primary_email?: Maybe<Scalars['String']>;
   primary_phone?: Maybe<Scalars['String']>;
@@ -5025,6 +5032,8 @@ export type Listing_Min_Fields = {
   island?: Maybe<Scalars['String']>;
   main_category_id?: Maybe<Scalars['Int']>;
   paid_until?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "permalink_for_listing" */
+  permalink?: Maybe<Scalars['String']>;
   primary_address?: Maybe<Scalars['String']>;
   primary_email?: Maybe<Scalars['String']>;
   primary_phone?: Maybe<Scalars['String']>;
@@ -5074,6 +5083,7 @@ export type Listing_Order_By = {
   live?: InputMaybe<Order_By>;
   main_category_id?: InputMaybe<Order_By>;
   paid_until?: InputMaybe<Order_By>;
+  permalink?: InputMaybe<Order_By>;
   primary_address?: InputMaybe<Order_By>;
   primary_email?: InputMaybe<Order_By>;
   primary_phone?: InputMaybe<Order_By>;
