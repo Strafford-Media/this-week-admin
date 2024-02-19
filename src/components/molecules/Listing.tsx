@@ -23,6 +23,8 @@ import { useCategoryTags } from '../../hooks/useCategoryTags'
 
 interface BookingLink {
   label: string
+  description: string
+  title: string
   shortname: string
   item: string
   sheet: string
@@ -581,6 +583,28 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                       <Modal portal onClose={() => setOpenBookingLink(-1)}>
                         <div className="flex flex-col gap-y-3">
                           <TextInput
+                            value={bl.title}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'title', e.target.value),
+                              )
+                            }
+                            label="Link Heading"
+                            collapseDescriptionArea
+                          />
+                          <TextArea
+                            value={bl.description}
+                            onChange={(e) =>
+                              setAndDebounceUpdate(
+                                'booking_links',
+                                updateBookingLinks(listing.booking_links, i, 'description', e.target.value),
+                              )
+                            }
+                            label="Link Description"
+                            collapseDescriptionArea
+                          />
+                          <TextInput
                             value={bl.label}
                             onChange={(e) =>
                               setAndDebounceUpdate(
@@ -707,6 +731,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                       'booking_links',
                       (listing.booking_links ?? []).concat([
                         {
+                          title: '',
+                          description: '',
                           label: 'BOOK NOW',
                           shortname: '',
                           item: '',
