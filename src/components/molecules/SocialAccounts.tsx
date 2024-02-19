@@ -98,23 +98,26 @@ export const SocialAccounts = ({
 }: SocialAccountsProps) => {
   const [edit, setEdit] = useState(false)
 
+  const chooseIcon = (key: string) => {
+    setEdit(true)
+
+    setTimeout(() => {
+      document.querySelector<HTMLInputElement>(`#social-input-${key}`)?.focus()
+    }, 10)
+  }
+
   return (
     <div className={`${className}`} {...props}>
       <label className="mb-2 block">Social Media Links</label>
-      <ul
-        role="button"
-        className="group flex w-fit flex-wrap gap-4 ring-primary-200 focus:outline-none focus:ring-2"
-        onClick={() => setEdit(true)}
-        // onKeyDown={(e) => e.key === 'Enter' && setEdit(true)}
-      >
+      <ul role="button" className="group flex w-fit flex-wrap gap-4 ring-primary-200 focus:outline-none focus:ring-2">
         {socialAccountsInputs.map((sa) => (
           <li
             key={sa.key}
-            onClick={() => {
-              setTimeout(() => {
-                document.querySelector<HTMLInputElement>(`#social-input-${sa.key}`)?.focus()
-              }, 10)
-            }}
+            className="rounded-md ring-primary-200 ring-offset-2 focus:outline-none focus:ring-2"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && chooseIcon(sa.key)}
+            onClick={() => chooseIcon(sa.key)}
           >
             <svg
               className={clsx(
