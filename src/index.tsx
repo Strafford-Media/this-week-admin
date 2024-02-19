@@ -16,6 +16,7 @@ import { AdDesigner } from './components/molecules/AdDesigner'
 import { Redirect, customizeButtonClasses } from '@8thday/react'
 import { AdScheduler } from './components/molecules/AdScheduler'
 import { CategoryTagProvider } from './hooks/useCategoryTags'
+import { SVGIcons } from './components/atoms/SVGIcons'
 
 mapbox.accessToken = 'pk.eyJ1IjoidGVocHNhbG1pc3QiLCJhIjoiY2tjOG1qYWI1MGU0eDJ0bXA4eW9oMWJheiJ9.mbn1UUudizfymnvIOvdCmg'
 
@@ -92,6 +93,7 @@ root.render(
       <CategoryTagProvider>
         <RouterProvider router={router} />
         <Toaster position="top-right" />
+        <SVGIcons />
       </CategoryTagProvider>
     </NhostApolloProvider>
   </NhostProvider>,
