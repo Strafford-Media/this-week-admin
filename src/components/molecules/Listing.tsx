@@ -580,8 +580,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                     <em className="text-xs text-gray-600">Item</em>
                     <span className="">{bl.item || '???'}</span>
                     {openBookingLink === i && (
-                      <Modal portal onClose={() => setOpenBookingLink(-1)}>
-                        <div className="flex flex-col gap-y-3">
+                      <Modal portal onClose={() => setOpenBookingLink(-1)} className="w-2xl">
+                        <div className="flex w-2xl max-w-full flex-col gap-y-3">
                           <TextInput
                             value={bl.title}
                             onChange={(e) =>
