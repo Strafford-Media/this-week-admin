@@ -20,6 +20,7 @@ import { ImageUploader } from './ImageUploader'
 import { graphql } from '../../gql'
 import clsx from 'clsx'
 import { useCategoryTags } from '../../hooks/useCategoryTags'
+import { SocialAccounts } from './SocialAccounts'
 
 interface BookingLink {
   label: string
@@ -79,6 +80,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     listing_category_tags: [],
     updated_at: '',
     this_week_recommended: false,
+    social_media: {},
     images: [],
     videos: [],
     booking_links: [],
@@ -250,6 +252,11 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               setChecked={(c) => updateImmediately('this_week_recommended', c)}
               rightLabel="This Week Recommended"
               rightDescription="Publicly recommend this listing"
+            />
+            <SocialAccounts
+              className="mb-4"
+              socialAccounts={listing.social_media}
+              setSocialAccounts={(sa) => setAndDebounceUpdate('social_media', sa)}
             />
             {tags.length ? (
               <div className="">
