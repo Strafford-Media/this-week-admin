@@ -112,7 +112,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
   const [updateListing, { loading: saveLoading }] = useMutation(UPDATE_LISTING)
 
-  const update = async (key: string, value: any) => {
+  const update = async (key: string, value: any, shouldRefresh = true) => {
     if (data?.listing_by_pk?.[key] === value) return
 
     const res = await updateListing({ variables: { id, set: { [key]: value } } }).catch((err) =>
@@ -127,7 +127,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
       })
     }
 
-    refreshListingData()
+    shouldRefresh && refreshListingData()
   }
 
   const updateLayoutData = async (key: string, value: any) => {
@@ -170,7 +170,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
     clearTimeout(timeoutIdRef.current)
     timeoutIdRef.current = window.setTimeout(() => {
-      update(key, value)
+      update(key, value, false)
     }, 400)
   }
 
