@@ -668,7 +668,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                               onChange={(e) =>
                                 setAndDebounceUpdate(
                                   'booking_links',
-                                  updateBookingLinks(listing.booking_links, i, 'shortname', e.target.value),
+                                  updateBookingLinks(listing.booking_links, i, 'href', e.target.value),
                                 )
                               }
                               required
