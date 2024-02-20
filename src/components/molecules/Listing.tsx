@@ -21,8 +21,10 @@ import { graphql } from '../../gql'
 import clsx from 'clsx'
 import { useCategoryTags } from '../../hooks/useCategoryTags'
 import { SocialAccounts } from './SocialAccounts'
+import { CreateBookingLink } from './CreateBookingLink'
 
 interface BookingLink {
+  type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
   label: string
   description: string
   title: string
@@ -35,6 +37,8 @@ interface BookingLink {
   flow: string
   branding: boolean
   'bookable-only': boolean
+  script: string
+  href: string
 }
 
 const tiers = [
@@ -66,6 +70,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
   const [fixable, setFixable] = useState({})
   const [erroredImg, setErroredImg] = useState({})
+
+  const [openCreateBookingModal, setOpenCreateBookingModal] = useState(false)
 
   const [newVidUrl, setNewVidUrl] = useState('')
   const [listing, setListing] = useState<NonNullable<ListingByIdSubQuery['listing_by_pk']>>({
@@ -574,188 +580,229 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               </ul>
             </div>
             <div className="mb-6">
-              <label className="mb-4">Fareharbor Booking Links</label>
+              <label className="mb-4">Booking Links</label>
               <ul className="flex flex-wrap gap-2">
                 {listing.booking_links?.map((bl: BookingLink, i: number) => (
-                  <li
-                    key={i}
-                    className="flex-center relative h-20 min-w-32 flex-col rounded p-2 shadow-md"
-                    tabIndex={0}
-                    onClick={(e) => setOpenBookingLink(i)}
-                  >
-                    <span className="absolute left-1 top-1 text-[0.6rem] text-gray-400">{bl.shortname}</span>
-                    <em className="text-xs text-gray-600">Item</em>
-                    <span className="">{bl.item || '???'}</span>
+                  <li key={i} tabIndex={0} onClick={(e) => setOpenBookingLink(i)}>
+                    <div className="flex w-full max-w-80 cursor-pointer flex-col items-center gap-4 rounded-md border border-gray-300 p-4 shadow-md">
+                      {bl.type === 'fareharbor-grid' ? (
+                        <>
+                          <h4>Fareharbor Grid</h4>
+                          <p>Flow ID: {getFlowFromScript(bl.script)}</p>
+                        </>
+                      ) : (
+                        <>
+                          <h4>{bl.title}</h4>
+                          <div className="text-justify">{bl.description}</div>
+                          <Button variant="primary">{bl.label}</Button>
+                        </>
+                      )}
+                    </div>
                     {openBookingLink === i && (
                       <Modal portal onClose={() => setOpenBookingLink(-1)} className="w-2xl">
                         <div className="flex w-2xl max-w-full flex-col gap-y-3">
-                          <TextInput
-                            value={bl.title}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'title', e.target.value),
-                              )
-                            }
-                            label="Link Heading"
-                            collapseDescriptionArea
-                          />
-                          <TextArea
-                            value={bl.description}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'description', e.target.value),
-                              )
-                            }
-                            label="Link Description"
-                            collapseDescriptionArea
-                          />
-                          <TextInput
-                            value={bl.label}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'label', e.target.value),
-                              )
-                            }
-                            label="Button Label"
-                            collapseDescriptionArea
-                            required
-                          />
-                          <TextInput
-                            value={bl.shortname}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'shortname', e.target.value),
-                              )
-                            }
-                            label="Company shortname"
-                            description="Fareharbor customer identifier"
-                            required
-                          />
-                          <TextInput
-                            value={bl.item}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'item', e.target.value),
-                              )
-                            }
-                            label="Item ID"
-                            placeholder="usually a 3-6 digit number"
-                            collapseDescriptionArea
-                            required
-                          />
-                          <Toggle
-                            rightLabel="Full Item"
-                            rightDescription="Include item description and images"
-                            checked={bl['full-item']}
-                            setChecked={(c) => {
-                              updateImmediately(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'full-item', c),
-                              )
+                          <h3 className="mb-4">
+                            {bl.type === 'external'
+                              ? 'External Booking Link'
+                              : bl.type === 'fareharbor-item'
+                                ? 'Single Fareharbor Item'
+                                : 'Fareharbor Grid'}
+                          </h3>
+                          {bl.type !== 'fareharbor-grid' && (
+                            <>
+                              <TextInput
+                                value={bl.title}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'title', e.target.value),
+                                  )
+                                }
+                                label="Link Heading"
+                                collapseDescriptionArea
+                              />
+                              <TextArea
+                                value={bl.description}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'description', e.target.value),
+                                  )
+                                }
+                                label="Link Description"
+                                collapseDescriptionArea
+                              />
+                              <TextInput
+                                value={bl.label}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'label', e.target.value),
+                                  )
+                                }
+                                label="Button Label"
+                                collapseDescriptionArea
+                                required
+                              />
+                            </>
+                          )}
+                          {bl.type === 'fareharbor-grid' && (
+                            <TextArea
+                              className="mb-4"
+                              label="Fareharbor Script"
+                              description="Paste the code provided in the Fareharbor dashboard for a grid of items."
+                              value={bl.script}
+                              onChange={(e) =>
+                                setAndDebounceUpdate(
+                                  'booking_links',
+                                  updateBookingLinks(listing.booking_links, i, 'script', e.target.value),
+                                )
+                              }
+                              required
+                            />
+                          )}
+                          {bl.type === 'external' && (
+                            <TextInput
+                              label="Link URL"
+                              value={bl.href}
+                              onChange={(e) =>
+                                setAndDebounceUpdate(
+                                  'booking_links',
+                                  updateBookingLinks(listing.booking_links, i, 'shortname', e.target.value),
+                                )
+                              }
+                              required
+                            />
+                          )}
+                          {bl.type === 'fareharbor-item' && (
+                            <>
+                              <TextInput
+                                value={bl.shortname}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'shortname', e.target.value),
+                                  )
+                                }
+                                label="Company shortname"
+                                description="Fareharbor customer identifier"
+                                required
+                              />
+                              <TextInput
+                                value={bl.item}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'item', e.target.value),
+                                  )
+                                }
+                                label="Item ID"
+                                placeholder="usually a 3-6 digit number"
+                                collapseDescriptionArea
+                                required
+                              />
+                              <Toggle
+                                rightLabel="Full Item"
+                                rightDescription="Include item description and images"
+                                checked={bl['full-item']}
+                                setChecked={(c) => {
+                                  updateImmediately(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'full-item', c),
+                                  )
+                                }}
+                              />
+                              <TextInput
+                                value={bl.sheet}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'sheet', e.target.value),
+                                  )
+                                }
+                                label="Pricing Sheet ID"
+                                placeholder="usually a 3-6 digit number"
+                                collapseDescriptionArea
+                              />
+                              <TextInput
+                                label="ASN"
+                                value={bl.asn}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'asn', e.target.value),
+                                  )
+                                }
+                                collapseDescriptionArea
+                              />
+                              <TextInput
+                                label="asn-ref"
+                                value={bl['asn-ref']}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'asn-ref', e.target.value),
+                                  )
+                                }
+                                collapseDescriptionArea
+                              />
+                              <TextInput
+                                value={bl.flow}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'flow', e.target.value),
+                                  )
+                                }
+                                label="Flow ID"
+                                description="Specify a defined sales flow (leave empty for defaults)"
+                              />
+                              <Toggle
+                                rightLabel="Branding"
+                                checked={bl.branding}
+                                setChecked={(c) => {
+                                  updateImmediately(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'branding', c),
+                                  )
+                                }}
+                              />
+                              <Toggle
+                                rightLabel="Bookable Only"
+                                rightDescription="Hide closed and call to book availabilities"
+                                checked={bl['bookable-only']}
+                                setChecked={(c) => {
+                                  updateImmediately(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'bookable-only', c),
+                                  )
+                                }}
+                              />
+                            </>
+                          )}
+                          <Button
+                            className="self-start"
+                            PreIcon={TrashIcon}
+                            variant="destructive"
+                            onClick={() => {
+                              if (confirm('Deleting a booking link is irrevocable. Continue?')) {
+                                updateImmediately(
+                                  'booking_links',
+                                  listing.booking_links.filter((_, ix) => ix !== i),
+                                )
+                                setOpenBookingLink(-1)
+                              }
                             }}
-                          />
-                          <TextInput
-                            value={bl.sheet}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'sheet', e.target.value),
-                              )
-                            }
-                            label="Pricing Sheet ID"
-                            placeholder="usually a 3-6 digit number"
-                            collapseDescriptionArea
-                          />
-                          <TextInput
-                            label="ASN"
-                            value={bl.asn}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'asn', e.target.value),
-                              )
-                            }
-                            collapseDescriptionArea
-                          />
-                          <TextInput
-                            label="asn-ref"
-                            value={bl['asn-ref']}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'asn-ref', e.target.value),
-                              )
-                            }
-                            collapseDescriptionArea
-                          />
-                          <TextInput
-                            value={bl.flow}
-                            onChange={(e) =>
-                              setAndDebounceUpdate(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'flow', e.target.value),
-                              )
-                            }
-                            label="Flow ID"
-                            description="Specify a defined sales flow (leave empty for defaults)"
-                          />
-                          <Toggle
-                            rightLabel="Branding"
-                            checked={bl.branding}
-                            setChecked={(c) => {
-                              updateImmediately(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'branding', c),
-                              )
-                            }}
-                          />
-                          <Toggle
-                            rightLabel="Bookable Only"
-                            rightDescription="Hide closed and call to book availabilities"
-                            checked={bl['bookable-only']}
-                            setChecked={(c) => {
-                              updateImmediately(
-                                'booking_links',
-                                updateBookingLinks(listing.booking_links, i, 'bookable-only', c),
-                              )
-                            }}
-                          />
+                          >
+                            Delete Booking Link
+                          </Button>
                         </div>
                       </Modal>
                     )}
                   </li>
                 ))}
-                <Button
-                  PreIcon={PlusIcon}
-                  className="self-center"
-                  onClick={() => {
-                    updateImmediately(
-                      'booking_links',
-                      (listing.booking_links ?? []).concat([
-                        {
-                          title: '',
-                          description: '',
-                          label: 'BOOK NOW',
-                          shortname: '',
-                          item: '',
-                          sheet: '',
-                          asn: 'fhdn',
-                          'asn-ref': 'thisweekhawaii',
-                          'full-item': 'yes',
-                          flow: 'no',
-                          branding: 'yes',
-                          'bookable-only': 'yes',
-                        },
-                      ]),
-                    )
-                  }}
-                >
-                  Add a Fareharbor Booking Link
+                <Button PreIcon={PlusIcon} className="self-center" onClick={() => setOpenCreateBookingModal(true)}>
+                  Add a Booking Link
                 </Button>
               </ul>
             </div>
@@ -796,6 +843,67 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
           </div>
         </>
       )}
+      {openCreateBookingModal && (
+        <Modal onClose={() => setOpenCreateBookingModal(false)}>
+          <CreateBookingLink
+            onCreate={(type) => {
+              if (type === 'fareharbor-item') {
+                updateImmediately(
+                  'booking_links',
+                  (listing.booking_links ?? []).concat([
+                    {
+                      type,
+                      title: '',
+                      description: '',
+                      label: 'BOOK NOW',
+                      shortname: '',
+                      item: '',
+                      sheet: '',
+                      asn: 'fhdn',
+                      'asn-ref': 'thisweekhawaii',
+                      'full-item': 'yes',
+                      flow: 'no',
+                      branding: 'yes',
+                      'bookable-only': 'yes',
+                    },
+                  ]),
+                )
+              }
+
+              if (type === 'fareharbor-grid') {
+                updateImmediately(
+                  'booking_links',
+                  (listing.booking_links ?? []).concat([
+                    {
+                      type,
+                      script: '',
+                    },
+                  ]),
+                )
+              }
+
+              if (type === 'external') {
+                updateImmediately(
+                  'booking_links',
+                  (listing.booking_links ?? []).concat([
+                    {
+                      type,
+                      title: '',
+                      description: '',
+                      label: 'BOOK NOW',
+                      href: '',
+                    },
+                  ]),
+                )
+              }
+
+              setOpenCreateBookingModal(false)
+              setOpenBookingLink(listing.booking_links.length)
+            }}
+            onCancel={() => setOpenCreateBookingModal(false)}
+          />
+        </Modal>
+      )}
     </div>
   )
 }
@@ -810,4 +918,15 @@ const updateBookingLinks = (links: BookingLink[], index: number, key: keyof Book
     }
     return bl
   })
+}
+
+const flowRegex = /[&?]flow=(\d+)/
+const getFlowFromScript = (script: string) => {
+  const matches = script.match(flowRegex)
+
+  if (!matches) {
+    return 'None'
+  }
+
+  return matches[1]
 }
