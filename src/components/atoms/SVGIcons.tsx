@@ -5,7 +5,7 @@ export interface SVGIconsProps extends ComponentProps<'div'> {}
 
 export const SVGIcons = ({ className = '', ...props }: SVGIconsProps) => {
   return createPortal(
-    <svg xmlns="http://www.w3.org/2000/svg">
+    <svg xmlns="http://www.w3.org/2000/svg" className="hidden">
       <symbol id="svg_icon_facebook" viewBox="0 0 32 32">
         <path fill="currentColor" d="M19 6h5V0h-5a7 7 0 0 0-7 7v3H8v6h4v16h6V16h5l1-6h-6V7a1 1 0 0 1 1-1Z"></path>
       </symbol>
