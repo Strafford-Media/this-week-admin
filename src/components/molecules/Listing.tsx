@@ -14,7 +14,6 @@ import {
   UPDATE_LISTING,
 } from '../../graphql/mutations'
 import { ListingByIdSubQuery } from '../../gql/graphql'
-import { useMapbox } from '../../hooks'
 import { useMutation } from '@apollo/client'
 import { ImageUploader } from './ImageUploader'
 import { graphql } from '../../gql'
@@ -22,6 +21,7 @@ import clsx from 'clsx'
 import { useCategoryTags } from '../../hooks/useCategoryTags'
 import { SocialAccounts } from './SocialAccounts'
 import { CreateBookingLink } from './CreateBookingLink'
+import { BusinessHours } from './BusinessHours'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
@@ -87,6 +87,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     updated_at: '',
     this_week_recommended: false,
     social_media: {},
+    business_hours: {},
     images: [],
     videos: [],
     booking_links: [],
@@ -194,8 +195,6 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
   const [openBookingLink, setOpenBookingLink] = useState(-1)
 
-  const { setContainer, mapboxRef } = useMapbox()
-
   if (called && !fetchLoading && !error && !data?.listing_by_pk) {
     goTo('..')
   }
@@ -227,45 +226,47 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             </button>
             {(fetchLoading || saveLoading) && <ArrowPathIcon className="h-5 w-5 animate-spin" />}
           </div>
-          <div className="max-w-3xl">
+          <div className="max-w-3xl space-y-4">
             <TextInput
+              collapseDescriptionArea
               label="Business Name"
               value={listing.business_name}
               onChange={(e) => setAndDebounceUpdate('business_name', e.target.value)}
             />
             <Select
+              collapseDescriptionArea
               label="Tier"
               value={listing.tier}
               onValueChange={(v) => updateImmediately('tier', v)}
               items={tiers}
             />
             <Select
+              collapseDescriptionArea
               label="Island"
               value={listing.island ?? ''}
               onValueChange={(v) => updateImmediately('island', v)}
               items={islands}
             />
             <Toggle
-              className="mb-4 !flex"
+              className="!flex"
               checked={listing.live}
               setChecked={(c) => updateImmediately('live', c)}
               rightLabel="Live"
               rightDescription="Show this listing to the public"
             />
             <Toggle
-              className="mb-4 !flex"
+              className="!flex"
               checked={listing.this_week_recommended}
               setChecked={(c) => updateImmediately('this_week_recommended', c)}
               rightLabel="This Week Recommended"
               rightDescription="Publicly recommend this listing"
             />
             <SocialAccounts
-              className="mb-4"
               socialAccounts={listing.social_media}
               setSocialAccounts={(sa) => setAndDebounceUpdate('social_media', sa)}
             />
             {tags.length ? (
-              <div className="">
+              <div>
                 <label className="block w-full">Category Tags</label>
                 <ul className="flex flex-wrap gap-2 py-2">
                   {listing.listing_category_tags.map((lct) => (
@@ -292,7 +293,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                     </li>
                   ))}
                 </ul>
-                <div className="mb-4 flex items-center">
+                <div className="flex items-center">
                   <Select
                     className="inline-block"
                     placeholder="Add a Category Tag"
@@ -344,7 +345,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 Configure Category Tags
               </Button>
             )}
-            <div className="relative mb-4 min-h-40 min-w-64">
+            <div className="relative min-h-40 min-w-64">
               <label>Logo</label>
               {listing.layout_data.logo && (
                 <img src={listing.layout_data.logo} alt="Company Logo" className="absolute inset-0 h-full" />
@@ -367,43 +368,53 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               />
             </div>
             <TextInput
+              collapseDescriptionArea
               label="Short Slogan"
               value={listing.slogan ?? ''}
               onChange={(e) => setAndDebounceUpdate('slogan', e.target.value)}
             />
             <TextArea
+              collapseDescriptionArea
               label="Description"
               value={listing.description ?? ''}
               onChange={(e) => setAndDebounceUpdate('description', e.target.value)}
             />
             <TextInput
+              collapseDescriptionArea
               label="Primary Email"
               value={listing.primary_email ?? ''}
               onChange={(e) => setAndDebounceUpdate('primary_email', e.target.value)}
             />
             <TextInput
+              collapseDescriptionArea
               label="Primary Phone"
               value={listing.primary_phone ?? ''}
               onChange={(e) => setAndDebounceUpdate('primary_phone', e.target.value)}
             />
             <TextInput
+              collapseDescriptionArea
               label="Primary Website URL"
               value={listing.primary_web_url ?? ''}
               onChange={(e) => setAndDebounceUpdate('primary_web_url', e.target.value)}
             />
             <TextInput
               label="Primary Address"
+              description="Optional if Latitude/Longitude provided"
               value={listing.primary_address ?? ''}
               onChange={(e) => setAndDebounceUpdate('primary_address', e.target.value)}
             />
             <TextInput
+              description="Optional if Primary Address provided"
               label="Latitude/Longitude"
               placeholder="ex: (0,0)"
               value={listing.lat_lng ?? ''}
               onChange={(e) => setAndDebounceUpdate('lat_lng', e.target.value)}
             />
-            <div ref={setContainer} className="h-40"></div>
-            <div className="mb-4">
+            <BusinessHours
+              businessHours={listing.business_hours}
+              onUpdate={(bh) => setAndDebounceUpdate('business_hours', bh)}
+            />
+            <div>
               <label>Images</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 <ImageUploader
@@ -546,7 +557,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 ))}
               </ul>
             </div>
-            <div className="mb-4">
+            <div>
               <label>Videos</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 {listing.videos.map((video) => (
@@ -594,7 +605,9 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                         <>
                           <h4>{bl.title}</h4>
                           <div className="text-justify">{bl.description}</div>
-                          <Button variant="primary">{bl.label}</Button>
+                          <Button tabIndex={-1} variant="primary">
+                            {bl.label}
+                          </Button>
                         </>
                       )}
                     </div>
@@ -676,6 +689,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                           )}
                           {bl.type === 'fareharbor-item' && (
                             <>
+                              <hr className="my-8" />
+                              <h3 className="font-normal">Advanced Options</h3>
                               <TextInput
                                 value={bl.shortname}
                                 onChange={(e) =>
@@ -780,6 +795,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                               />
                             </>
                           )}
+                          <hr className="my-6" />
                           <Button
                             className="self-start"
                             PreIcon={TrashIcon}
@@ -806,6 +822,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 </Button>
               </ul>
             </div>
+            <hr className="!my-12" />
             <Button
               PreIcon={TrashIcon}
               variant="destructive"
@@ -823,7 +840,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             >
               Delete Listing
             </Button>
-            <Button
+            {/* <Button
               PreIcon={BeakerIcon}
               variant="secondary"
               onClick={async (e) => {
@@ -839,7 +856,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               }}
             >
               Test
-            </Button>
+            </Button> */}
           </div>
         </>
       )}

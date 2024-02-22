@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: colors.rose,
-        secondary: colors.amber,
+        primary: colors.sky,
+        secondary: colors.yellow,
       },
       minHeight: (theme) => ({
         ...theme('spacing'),

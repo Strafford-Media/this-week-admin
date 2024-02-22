@@ -46,6 +46,7 @@ export const LISTING_BY_ID = graphql(`
       primary_web_url
       this_week_recommended
       booking_links
+      business_hours
       social_media
       images
       videos
