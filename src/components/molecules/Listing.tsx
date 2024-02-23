@@ -562,7 +562,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               <label>Videos</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 {listing.videos.map((video, i) => (
-                  <div className="relative w-fit">
+                  <div className="relative w-fit" key={video.id}>
                     <VideoPlayer videoDetails={video} />
                     <Button
                       className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"

@@ -19,7 +19,6 @@ export const VideoPlayer = ({ className = '', videoDetails, ...props }: VideoPla
 
   return (
     <iframe
-      key={id}
       width="560"
       height="315"
       src={`${sources[type]}${id}`}
