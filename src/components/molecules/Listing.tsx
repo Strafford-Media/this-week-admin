@@ -22,6 +22,7 @@ import { useCategoryTags } from '../../hooks/useCategoryTags'
 import { SocialAccounts } from './SocialAccounts'
 import { CreateBookingLink } from './CreateBookingLink'
 import { BusinessHours } from './BusinessHours'
+import { VideoPlayer } from './VideoPlayer'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
@@ -560,16 +561,21 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             <div>
               <label>Videos</label>
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                {listing.videos.map((video) => (
-                  <iframe
-                    key={video.url}
-                    width="560"
-                    height="315"
-                    src={video.url}
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
+                {listing.videos.map((video, i) => (
+                  <div className="relative w-fit">
+                    <VideoPlayer videoDetails={video} />
+                    <Button
+                      className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"
+                      variant="destructive"
+                      PostIcon={TrashIcon}
+                      onClick={() =>
+                        updateImmediately(
+                          'videos',
+                          listing.videos.filter((_, idx) => idx !== i),
+                        )
+                      }
+                    ></Button>
+                  </div>
                 ))}
                 <form
                   onSubmit={(e) => {
@@ -578,7 +584,19 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
                     if (!newVidUrl) return
 
-                    update('videos', listing.videos.concat([{ url: newVidUrl }]))
+                    // parse id and type out of url
+                    const { id, type } = parseVideoUrl(newVidUrl)
+
+                    if (!id || !type) {
+                      return toast.error({
+                        message: 'Unable to parse url',
+                        description: 'Try copying the url directly from the browser or share button.',
+                      })
+                    }
+
+                    setNewVidUrl('')
+
+                    update('videos', listing.videos.concat([{ url: newVidUrl, id, type }]))
                   }}
                 >
                   <TextInput
@@ -946,4 +964,48 @@ const getFlowFromScript = (script: string) => {
   }
 
   return matches[1]
+}
+
+const parseVideoUrl = (url: string) => {
+  if (!url) return { id: '', type: '' }
+
+  // youtube in query param
+  if (url.includes('youtube.com/watch?')) {
+    const search = new URLSearchParams(url.split('?')[1])
+
+    return {
+      type: 'youtube',
+      id: search.get('v') ?? '',
+    }
+  }
+
+  // youtube in pathname
+  if (url.includes('youtu.be') || url.includes('youtube.com')) {
+    return {
+      type: 'youtube',
+      id: finalPathParam(url),
+    }
+  }
+
+  // dailymotion
+  if (url.includes('dai.ly') || url.includes('dailymotion.com')) {
+    return {
+      type: 'dailymotion',
+      id: finalPathParam(url),
+    }
+  }
+
+  // vimeo
+  if (url.includes('vimeo.com')) {
+    return {
+      type: 'vimeo',
+      id: finalPathParam(url),
+    }
+  }
+
+  return { id: '', type: '' }
+}
+
+const finalPathParam = (url: string) => {
+  return url.split('?')[0].split('/').pop()
 }
