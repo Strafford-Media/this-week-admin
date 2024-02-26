@@ -970,7 +970,7 @@ const parseVideoUrl = (url: string) => {
   if (!url) return { id: '', type: '' }
 
   // youtube in query param
-  if (url.includes('youtube.com/watch?')) {
+  if (url.includes('youtube.com/watch?') || url.includes('youtu.be/watch?')) {
     const search = new URLSearchParams(url.split('?')[1])
 
     return {

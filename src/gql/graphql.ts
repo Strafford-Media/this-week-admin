@@ -4351,6 +4351,7 @@ export type Fuzzy_Search_Categories_Arguments = {
 
 /** fuzzy_search_listingsNative Query Arguments */
 export type Fuzzy_Search_Listings_Arguments = {
+  island?: InputMaybe<Scalars['String']>;
   search: Scalars['String'];
 };
 
@@ -7132,6 +7133,7 @@ export type Query_RootVirusesAggregateArgs = {
 
 export type Search_Listings_Args = {
   search?: InputMaybe<Scalars['String']>;
+  search_island?: InputMaybe<Scalars['String']>;
 };
 
 export type Subscription_Root = {
