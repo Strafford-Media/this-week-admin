@@ -270,29 +270,32 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               <div>
                 <label className="block w-full">Category Tags</label>
                 <ul className="flex flex-wrap gap-2 py-2">
-                  {listing.listing_category_tags.map((lct) => (
-                    <li
-                      className="cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white"
-                      key={lct.id}
-                      onClick={async () => {
-                        const res = await nhost.graphql
-                          .request(DELETE_CATEGORY_LISTING_BY_ID, { id: lct.id })
-                          .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+                  {listing.listing_category_tags.map(
+                    (lct) =>
+                      tagMap[lct.category_tag_id] && (
+                        <li
+                          className="cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white"
+                          key={lct.id}
+                          onClick={async () => {
+                            const res = await nhost.graphql
+                              .request(DELETE_CATEGORY_LISTING_BY_ID, { id: lct.id })
+                              .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
-                        if (res instanceof Error || res.error) {
-                          return toast.error({ message: 'Unable to remove this tag' })
-                        }
+                            if (res instanceof Error || res.error) {
+                              return toast.error({ message: 'Unable to remove this tag' })
+                            }
 
-                        refetch().then(({ data }) => {
-                          if (data.listing_by_pk) {
-                            setListing(data.listing_by_pk)
-                          }
-                        })
-                      }}
-                    >
-                      {tagMap[lct.category_tag_id].label}
-                    </li>
-                  ))}
+                            refetch().then(({ data }) => {
+                              if (data.listing_by_pk) {
+                                setListing(data.listing_by_pk)
+                              }
+                            })
+                          }}
+                        >
+                          {tagMap[lct.category_tag_id].label}
+                        </li>
+                      ),
+                  )}
                 </ul>
                 <div className="flex items-center">
                   <Select
