@@ -35,6 +35,13 @@ export type Boolean_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['Boolean']>>;
 };
 
+export type CheckImagePayload = {
+  __typename?: 'CheckImagePayload';
+  error?: Maybe<Scalars['String']>;
+  existing_url?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
 /** Boolean expression to compare columns of type "Float". All fields are combined with logical 'AND'. */
 export type Float_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['Float']>;
@@ -4355,6 +4362,257 @@ export type Fuzzy_Search_Listings_Arguments = {
   search: Scalars['String'];
 };
 
+/** mapping of images to source URLs, active URLs, and IDs */
+export type Image = {
+  __typename?: 'image';
+  created_at: Scalars['timestamptz'];
+  hash?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  source_url: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+  url: Scalars['String'];
+};
+
+/** aggregated selection of "image" */
+export type Image_Aggregate = {
+  __typename?: 'image_aggregate';
+  aggregate?: Maybe<Image_Aggregate_Fields>;
+  nodes: Array<Image>;
+};
+
+/** aggregate fields of "image" */
+export type Image_Aggregate_Fields = {
+  __typename?: 'image_aggregate_fields';
+  avg?: Maybe<Image_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Image_Max_Fields>;
+  min?: Maybe<Image_Min_Fields>;
+  stddev?: Maybe<Image_Stddev_Fields>;
+  stddev_pop?: Maybe<Image_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Image_Stddev_Samp_Fields>;
+  sum?: Maybe<Image_Sum_Fields>;
+  var_pop?: Maybe<Image_Var_Pop_Fields>;
+  var_samp?: Maybe<Image_Var_Samp_Fields>;
+  variance?: Maybe<Image_Variance_Fields>;
+};
+
+
+/** aggregate fields of "image" */
+export type Image_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Image_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Image_Avg_Fields = {
+  __typename?: 'image_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "image". All fields are combined with a logical 'AND'. */
+export type Image_Bool_Exp = {
+  _and?: InputMaybe<Array<Image_Bool_Exp>>;
+  _not?: InputMaybe<Image_Bool_Exp>;
+  _or?: InputMaybe<Array<Image_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  hash?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  source_url?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  url?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "image" */
+export enum Image_Constraint {
+  /** unique or primary key constraint on columns "hash" */
+  ImageHashKey = 'image_hash_key',
+  /** unique or primary key constraint on columns "id" */
+  ImagePkey = 'image_pkey',
+  /** unique or primary key constraint on columns "source_url" */
+  ImageSourceUrlKey = 'image_source_url_key',
+  /** unique or primary key constraint on columns "url" */
+  ImageUrlKey = 'image_url_key'
+}
+
+/** input type for incrementing numeric columns in table "image" */
+export type Image_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "image" */
+export type Image_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  hash?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  source_url?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  url?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Image_Max_Fields = {
+  __typename?: 'image_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  hash?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  source_url?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  url?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Image_Min_Fields = {
+  __typename?: 'image_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  hash?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  source_url?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  url?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "image" */
+export type Image_Mutation_Response = {
+  __typename?: 'image_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Image>;
+};
+
+/** on_conflict condition type for table "image" */
+export type Image_On_Conflict = {
+  constraint: Image_Constraint;
+  update_columns?: Array<Image_Update_Column>;
+  where?: InputMaybe<Image_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "image". */
+export type Image_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  hash?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  source_url?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  url?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: image */
+export type Image_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "image" */
+export enum Image_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Hash = 'hash',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  SourceUrl = 'source_url',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  Url = 'url'
+}
+
+/** input type for updating data in table "image" */
+export type Image_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  hash?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  source_url?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  url?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Image_Stddev_Fields = {
+  __typename?: 'image_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Image_Stddev_Pop_Fields = {
+  __typename?: 'image_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Image_Stddev_Samp_Fields = {
+  __typename?: 'image_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "image" */
+export type Image_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Image_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Image_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  hash?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  source_url?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  url?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate sum on columns */
+export type Image_Sum_Fields = {
+  __typename?: 'image_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "image" */
+export enum Image_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Hash = 'hash',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  SourceUrl = 'source_url',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  Url = 'url'
+}
+
+export type Image_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Image_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Image_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Image_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Image_Var_Pop_Fields = {
+  __typename?: 'image_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Image_Var_Samp_Fields = {
+  __typename?: 'image_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Image_Variance_Fields = {
+  __typename?: 'image_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
 export type Jsonb_Cast_Exp = {
   String?: InputMaybe<String_Comparison_Exp>;
 };
@@ -5423,6 +5681,10 @@ export type Mutation_Root = {
   delete_category_tag?: Maybe<Category_Tag_Mutation_Response>;
   /** delete single row from the table: "category_tag" */
   delete_category_tag_by_pk?: Maybe<Category_Tag>;
+  /** delete data from the table: "image" */
+  delete_image?: Maybe<Image_Mutation_Response>;
+  /** delete single row from the table: "image" */
+  delete_image_by_pk?: Maybe<Image>;
   /** delete data from the table: "listing" */
   delete_listing?: Maybe<Listing_Mutation_Response>;
   /** delete single row from the table: "listing" */
@@ -5495,6 +5757,10 @@ export type Mutation_Root = {
   insert_category_tag?: Maybe<Category_Tag_Mutation_Response>;
   /** insert a single row into the table: "category_tag" */
   insert_category_tag_one?: Maybe<Category_Tag>;
+  /** insert data into the table: "image" */
+  insert_image?: Maybe<Image_Mutation_Response>;
+  /** insert a single row into the table: "image" */
+  insert_image_one?: Maybe<Image>;
   /** insert data into the table: "listing" */
   insert_listing?: Maybe<Listing_Mutation_Response>;
   /** insert data into the table: "listing_category_tag" */
@@ -5595,6 +5861,12 @@ export type Mutation_Root = {
   update_category_tag_many?: Maybe<Array<Maybe<Category_Tag_Mutation_Response>>>;
   /** update multiples rows of table: "storage.files" */
   update_files_many?: Maybe<Array<Maybe<Files_Mutation_Response>>>;
+  /** update data of the table: "image" */
+  update_image?: Maybe<Image_Mutation_Response>;
+  /** update single row of the table: "image" */
+  update_image_by_pk?: Maybe<Image>;
+  /** update multiples rows of table: "image" */
+  update_image_many?: Maybe<Array<Maybe<Image_Mutation_Response>>>;
   /** update data of the table: "listing" */
   update_listing?: Maybe<Listing_Mutation_Response>;
   /** update single row of the table: "listing" */
@@ -5804,6 +6076,18 @@ export type Mutation_RootDelete_Category_TagArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Category_Tag_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_ImageArgs = {
+  where: Image_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Image_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -6053,6 +6337,20 @@ export type Mutation_RootInsert_Category_TagArgs = {
 export type Mutation_RootInsert_Category_Tag_OneArgs = {
   object: Category_Tag_Insert_Input;
   on_conflict?: InputMaybe<Category_Tag_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_ImageArgs = {
+  objects: Array<Image_Insert_Input>;
+  on_conflict?: InputMaybe<Image_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Image_OneArgs = {
+  object: Image_Insert_Input;
+  on_conflict?: InputMaybe<Image_On_Conflict>;
 };
 
 
@@ -6457,6 +6755,28 @@ export type Mutation_RootUpdate_Files_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_ImageArgs = {
+  _inc?: InputMaybe<Image_Inc_Input>;
+  _set?: InputMaybe<Image_Set_Input>;
+  where: Image_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Image_By_PkArgs = {
+  _inc?: InputMaybe<Image_Inc_Input>;
+  _set?: InputMaybe<Image_Set_Input>;
+  pk_columns: Image_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Image_ManyArgs = {
+  updates: Array<Image_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_ListingArgs = {
   _append?: InputMaybe<Listing_Append_Input>;
   _delete_at_path?: InputMaybe<Listing_Delete_At_Path_Input>;
@@ -6639,6 +6959,8 @@ export type Query_Root = {
   category_tag_aggregate: Category_Tag_Aggregate;
   /** fetch data from the table: "category_tag" using primary key columns */
   category_tag_by_pk?: Maybe<Category_Tag>;
+  /** check if an image exists in duda (theoretically) */
+  checkImage: CheckImagePayload;
   /** fetch data from the table: "storage.files" using primary key columns */
   file?: Maybe<Files>;
   /** An array relationship */
@@ -6647,6 +6969,12 @@ export type Query_Root = {
   filesAggregate: Files_Aggregate;
   fuzzy_search_categories: Array<Fuzzy_Category_Tag>;
   fuzzy_search_listings: Array<Fuzzy_Listing>;
+  /** fetch data from the table: "image" */
+  image: Array<Image>;
+  /** fetch aggregated fields from the table: "image" */
+  image_aggregate: Image_Aggregate;
+  /** fetch data from the table: "image" using primary key columns */
+  image_by_pk?: Maybe<Image>;
   /** fetch data from the table: "listing" */
   listing: Array<Listing>;
   /** fetch aggregated fields from the table: "listing" */
@@ -6977,6 +7305,11 @@ export type Query_RootCategory_Tag_By_PkArgs = {
 };
 
 
+export type Query_RootCheckImageArgs = {
+  url: Scalars['String'];
+};
+
+
 export type Query_RootFileArgs = {
   id: Scalars['uuid'];
 };
@@ -7017,6 +7350,29 @@ export type Query_RootFuzzy_Search_ListingsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Fuzzy_Listing_Order_By>>;
   where?: InputMaybe<Fuzzy_Listing_Bool_Exp_Bool_Exp>;
+};
+
+
+export type Query_RootImageArgs = {
+  distinct_on?: InputMaybe<Array<Image_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Image_Order_By>>;
+  where?: InputMaybe<Image_Bool_Exp>;
+};
+
+
+export type Query_RootImage_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Image_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Image_Order_By>>;
+  where?: InputMaybe<Image_Bool_Exp>;
+};
+
+
+export type Query_RootImage_By_PkArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -7252,6 +7608,14 @@ export type Subscription_Root = {
   files_stream: Array<Files>;
   fuzzy_search_categories: Array<Fuzzy_Category_Tag>;
   fuzzy_search_listings: Array<Fuzzy_Listing>;
+  /** fetch data from the table: "image" */
+  image: Array<Image>;
+  /** fetch aggregated fields from the table: "image" */
+  image_aggregate: Image_Aggregate;
+  /** fetch data from the table: "image" using primary key columns */
+  image_by_pk?: Maybe<Image>;
+  /** fetch data from the table in a streaming manner: "image" */
+  image_stream: Array<Image>;
   /** fetch data from the table: "listing" */
   listing: Array<Listing>;
   /** fetch aggregated fields from the table: "listing" */
@@ -7728,6 +8092,36 @@ export type Subscription_RootFuzzy_Search_ListingsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Fuzzy_Listing_Order_By>>;
   where?: InputMaybe<Fuzzy_Listing_Bool_Exp_Bool_Exp>;
+};
+
+
+export type Subscription_RootImageArgs = {
+  distinct_on?: InputMaybe<Array<Image_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Image_Order_By>>;
+  where?: InputMaybe<Image_Bool_Exp>;
+};
+
+
+export type Subscription_RootImage_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Image_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Image_Order_By>>;
+  where?: InputMaybe<Image_Bool_Exp>;
+};
+
+
+export type Subscription_RootImage_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootImage_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Image_Stream_Cursor_Input>>;
+  where?: InputMaybe<Image_Bool_Exp>;
 };
 
 
@@ -8829,6 +9223,13 @@ export type Virus_Updates = {
   where: Virus_Bool_Exp;
 };
 
+export type CheckImageQueryVariables = Exact<{
+  url: Scalars['String'];
+}>;
+
+
+export type CheckImageQuery = { __typename?: 'query_root', checkImage: { __typename?: 'CheckImagePayload', success: boolean, error?: string | null, existing_url?: string | null } };
+
 export type UploadImageMutationVariables = Exact<{
   entityId: Scalars['Int'];
   src: Scalars['String'];
@@ -9036,6 +9437,7 @@ export type GetCategoryTagsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetCategoryTagsQuery = { __typename?: 'query_root', category_tag: Array<{ __typename?: 'category_tag', id: number, label: string, is_primary: boolean, listing_category_tags_aggregate: { __typename?: 'listing_category_tag_aggregate', aggregate?: { __typename?: 'listing_category_tag_aggregate_fields', count: number } | null } }> };
 
 
+export const CheckImageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"checkImage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"url"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"checkImage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"url"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"existing_url"}}]}}]}}]} as unknown as DocumentNode<CheckImageQuery, CheckImageQueryVariables>;
 export const UploadImageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"uploadImage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"src"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"destination"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadImage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"entityId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}}},{"kind":"Argument","name":{"kind":"Name","value":"src"},"value":{"kind":"Variable","name":{"kind":"Name","value":"src"}}},{"kind":"Argument","name":{"kind":"Name","value":"destination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"destination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"new_url"}}]}}]}}]} as unknown as DocumentNode<UploadImageMutation, UploadImageMutationVariables>;
 export const UpdateLayoutDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateLayoutData"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layoutData"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"jsonb"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_append"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"layout_data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layoutData"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateLayoutDataMutation, UpdateLayoutDataMutationVariables>;
 export const FixImageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"fixImage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"src"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadImage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"entityId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}}},{"kind":"Argument","name":{"kind":"Name","value":"src"},"value":{"kind":"Variable","name":{"kind":"Name","value":"src"}}},{"kind":"Argument","name":{"kind":"Name","value":"fix"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"fixed_url"}}]}}]}}]} as unknown as DocumentNode<FixImageMutation, FixImageMutationVariables>;

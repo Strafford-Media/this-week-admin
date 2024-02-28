@@ -13,6 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
+    "\n          query checkImage($url: String!) {\n            checkImage(url: $url) {\n              success\n              error\n              existing_url\n            }\n          }\n        ": types.CheckImageDocument,
     "\n          mutation uploadImage($entityId: Int!, $src: String!, $destination: String) {\n            uploadImage(entityId: $entityId, src: $src, destination: $destination) {\n              success\n              error\n              new_url\n            }\n          }\n        ": types.UploadImageDocument,
     "\n          mutation updateLayoutData($id: Int!, $layoutData: jsonb!) {\n            update_listing_by_pk(pk_columns: { id: $id }, _append: { layout_data: $layoutData }) {\n              id\n            }\n          }\n        ": types.UpdateLayoutDataDocument,
     "\n                                  mutation fixImage($entityId: Int!, $src: String!) {\n                                    uploadImage(entityId: $entityId, src: $src, fix: true) {\n                                      success\n                                      error\n                                      fixed_url\n                                    }\n                                  }\n                                ": types.FixImageDocument,
@@ -58,6 +59,10 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n          query checkImage($url: String!) {\n            checkImage(url: $url) {\n              success\n              error\n              existing_url\n            }\n          }\n        "): (typeof documents)["\n          query checkImage($url: String!) {\n            checkImage(url: $url) {\n              success\n              error\n              existing_url\n            }\n          }\n        "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

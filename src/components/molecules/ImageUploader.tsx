@@ -27,6 +27,34 @@ export const ImageUploader = ({
   const uploadURL = async (src: string) => {
     setImageUploading(true)
 
+    // check if image exists in duda already
+    const checkRes = await nhost.graphql
+      .request(
+        graphql(`
+          query checkImage($url: String!) {
+            checkImage(url: $url) {
+              success
+              error
+              existing_url
+            }
+          }
+        `),
+        {
+          url: src,
+        },
+      )
+      .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+    if (checkRes instanceof Error || checkRes.error || checkRes.data.checkImage.error) {
+      console.error(checkRes)
+    }
+
+    // if exists, use the existing url to upload
+    const uploadSrc =
+      !(checkRes instanceof Error) && checkRes?.data?.checkImage?.success && checkRes.data.checkImage.existing_url
+        ? checkRes.data.checkImage.existing_url
+        : src
+
     const res = await nhost.graphql
       .request(
         graphql(`
@@ -40,7 +68,7 @@ export const ImageUploader = ({
         `),
         {
           entityId,
-          src,
+          src: uploadSrc,
           destination: type,
         },
       )
