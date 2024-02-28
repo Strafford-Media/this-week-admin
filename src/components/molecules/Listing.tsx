@@ -5,7 +5,7 @@ import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
 import { Button, Modal, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
 import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { BeakerIcon, CameraIcon, StarIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { CameraIcon, StarIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
 import {
   CREATE_CATEGORY_LISTINGS,
@@ -383,234 +383,6 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               value={listing.description ?? ''}
               onChange={(e) => setAndDebounceUpdate('description', e.target.value)}
             />
-            <TextInput
-              collapseDescriptionArea
-              label="Primary Email"
-              value={listing.primary_email ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_email', e.target.value)}
-            />
-            <TextInput
-              collapseDescriptionArea
-              label="Primary Phone"
-              value={listing.primary_phone ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_phone', e.target.value)}
-            />
-            <TextInput
-              collapseDescriptionArea
-              label="Primary Website URL"
-              value={listing.primary_web_url ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_web_url', e.target.value)}
-            />
-            <TextInput
-              label="Primary Address"
-              description="Optional if Latitude/Longitude provided"
-              value={listing.primary_address ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_address', e.target.value)}
-            />
-            <TextInput
-              description="Optional if Primary Address provided"
-              label="Latitude/Longitude"
-              placeholder="ex: (0,0)"
-              value={listing.lat_lng ?? ''}
-              onChange={(e) => setAndDebounceUpdate('lat_lng', e.target.value)}
-            />
-            <BusinessHours
-              businessHours={listing.business_hours}
-              onUpdate={(bh) => setAndDebounceUpdate('business_hours', bh)}
-            />
-            <div>
-              <label>Images</label>
-              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                <ImageUploader
-                  contentLabel="Images"
-                  className="h-32 w-64"
-                  entityId={id}
-                  onSuccess={() => {
-                    refetch().then(({ data }) => {
-                      if (data.listing_by_pk) {
-                        setListing(data.listing_by_pk)
-                      }
-                    })
-                  }}
-                />
-                {listing.images.map((image) => (
-                  <li
-                    className={clsx('group relative h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
-                    key={image.original_url}
-                  >
-                    <img
-                      className="h-full w-full rounded shadow"
-                      src={image.url}
-                      alt={image.original_url}
-                      onError={async () => {
-                        setErroredImg((e) => ({ ...e, [image.url]: true }))
-                        if (image.original_url) {
-                          const fetchable = await fetch(image.original_url).then((r) => r.ok)
-
-                          if (fetchable) {
-                            setFixable((f) => ({ ...f, [image.url]: true }))
-                          }
-                        }
-                      }}
-                    />
-                    <div className="flex-center absolute right-0 top-0 gap-2">
-                      {listing.layout_data.main_image === image.url && <StarIcon className="h-6 w-6 text-yellow-400" />}
-                      {listing.layout_data.action_shot1 === image.url && (
-                        <CameraIcon className="h-6 w-6 text-indigo-400" />
-                      )}
-                    </div>
-                    <div className="flex-center invisible absolute inset-0 flex-wrap gap-1 bg-primary-50/25 group-hover:visible">
-                      {!fixable[image.url] && listing.layout_data.main_image !== image.url && (
-                        <Button
-                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                          PreIcon={StarIcon}
-                          onClick={async () => {
-                            updateLayoutData('main_image', image.url)
-                          }}
-                        >
-                          Set as Main
-                        </Button>
-                      )}
-                      {!fixable[image.url] && listing.layout_data.action_shot1 !== image.url && (
-                        <Button
-                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                          PreIcon={CameraIcon}
-                          onClick={async () => {
-                            updateLayoutData('action_shot1', image.url)
-                          }}
-                        >
-                          Set as Action Shot
-                        </Button>
-                      )}
-                      {fixable[image.url] && (
-                        <Button
-                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                          PreIcon={TrashIcon}
-                          onClick={async () => {
-                            const res = await nhost.graphql
-                              .request(
-                                graphql(`
-                                  mutation fixImage($entityId: Int!, $src: String!) {
-                                    uploadImage(entityId: $entityId, src: $src, fix: true) {
-                                      success
-                                      error
-                                      fixed_url
-                                    }
-                                  }
-                                `),
-                                {
-                                  entityId: id,
-                                  src: image.original_url,
-                                },
-                              )
-                              .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
-
-                            if (res instanceof Error || res.data?.uploadImage.error) {
-                              toast.error({
-                                message: 'Fixing Image Failed',
-                                description: res instanceof Error ? res.message : res.data?.uploadImage.error,
-                              })
-                              return console.error(res)
-                            }
-
-                            if (res.data?.uploadImage.fixed_url) {
-                              toast.success({
-                                message: 'Image Restored!',
-                              })
-
-                              updateImmediately(
-                                'images',
-                                listing.images.map((i) =>
-                                  i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
-                                ),
-                              ).then(() => {
-                                setErroredImg((e) => ({ ...e, [image.url]: false }))
-                                setFixable((f) => ({ ...f, [image.url]: false }))
-                              })
-                            }
-                          }}
-                        >
-                          Fix Image
-                        </Button>
-                      )}
-                      <Button
-                        className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                        variant="destructive"
-                        PreIcon={TrashIcon}
-                        onClick={async () => {
-                          if (confirm('Deleting here does not remove from the Duda media manager.')) {
-                            updateImmediately(
-                              'images',
-                              listing.images.filter((i) => i.url !== image.url),
-                            )
-
-                            if (listing.layout_data.main_image === image.url) {
-                              updateLayoutData('main_image', '')
-                            }
-
-                            if (listing.layout_data.action_shot1 === image.url) {
-                              updateLayoutData('action_shot1', '')
-                            }
-                          }
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <label>Videos</label>
-              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                {listing.videos.map((video, i) => (
-                  <div className="relative w-fit" key={video.id}>
-                    <VideoPlayer videoDetails={video} />
-                    <Button
-                      className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"
-                      variant="destructive"
-                      PostIcon={TrashIcon}
-                      onClick={() =>
-                        updateImmediately(
-                          'videos',
-                          listing.videos.filter((_, idx) => idx !== i),
-                        )
-                      }
-                    ></Button>
-                  </div>
-                ))}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-
-                    if (!newVidUrl) return
-
-                    // parse id and type out of url
-                    const { id, type } = parseVideoUrl(newVidUrl)
-
-                    if (!id || !type) {
-                      return toast.error({
-                        message: 'Unable to parse url',
-                        description: 'Try copying the url directly from the browser or share button.',
-                      })
-                    }
-
-                    setNewVidUrl('')
-
-                    update('videos', listing.videos.concat([{ url: newVidUrl, id, type }]))
-                  }}
-                >
-                  <TextInput
-                    label="Add Video by URL"
-                    description="Enter a youtube, vimeo, or daily motion video url"
-                    value={newVidUrl}
-                    onChange={(e) => setNewVidUrl(e.target.value)}
-                  />
-                </form>
-              </ul>
-            </div>
             <div className="mb-6">
               <label className="mb-4">Booking Links</label>
               <ul className="flex flex-wrap gap-2">
@@ -841,6 +613,234 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 <Button PreIcon={PlusIcon} className="self-center" onClick={() => setOpenCreateBookingModal(true)}>
                   Add a Booking Link
                 </Button>
+              </ul>
+            </div>
+            <TextInput
+              collapseDescriptionArea
+              label="Primary Email"
+              value={listing.primary_email ?? ''}
+              onChange={(e) => setAndDebounceUpdate('primary_email', e.target.value)}
+            />
+            <TextInput
+              collapseDescriptionArea
+              label="Primary Phone"
+              value={listing.primary_phone ?? ''}
+              onChange={(e) => setAndDebounceUpdate('primary_phone', e.target.value)}
+            />
+            <TextInput
+              collapseDescriptionArea
+              label="Primary Website URL"
+              value={listing.primary_web_url ?? ''}
+              onChange={(e) => setAndDebounceUpdate('primary_web_url', e.target.value)}
+            />
+            <TextInput
+              label="Primary Address"
+              description="Optional if Latitude/Longitude provided"
+              value={listing.primary_address ?? ''}
+              onChange={(e) => setAndDebounceUpdate('primary_address', e.target.value)}
+            />
+            <TextInput
+              description="Optional if Primary Address provided"
+              label="Latitude/Longitude"
+              placeholder="ex: (0,0)"
+              value={listing.lat_lng ?? ''}
+              onChange={(e) => setAndDebounceUpdate('lat_lng', e.target.value)}
+            />
+            <BusinessHours
+              businessHours={listing.business_hours}
+              onUpdate={(bh) => setAndDebounceUpdate('business_hours', bh)}
+            />
+            <div>
+              <label>Images</label>
+              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
+                <ImageUploader
+                  contentLabel="Images"
+                  className="h-32 w-64"
+                  entityId={id}
+                  onSuccess={() => {
+                    refetch().then(({ data }) => {
+                      if (data.listing_by_pk) {
+                        setListing(data.listing_by_pk)
+                      }
+                    })
+                  }}
+                />
+                {listing.images.map((image) => (
+                  <li
+                    className={clsx('group relative h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
+                    key={image.original_url}
+                  >
+                    <img
+                      className="h-full w-full rounded shadow"
+                      src={image.url}
+                      alt={image.original_url}
+                      onError={async () => {
+                        setErroredImg((e) => ({ ...e, [image.url]: true }))
+                        if (image.original_url) {
+                          const fetchable = await fetch(image.original_url).then((r) => r.ok)
+
+                          if (fetchable) {
+                            setFixable((f) => ({ ...f, [image.url]: true }))
+                          }
+                        }
+                      }}
+                    />
+                    <div className="flex-center absolute right-0 top-0 gap-2">
+                      {listing.layout_data.main_image === image.url && <StarIcon className="h-6 w-6 text-yellow-400" />}
+                      {listing.layout_data.action_shot1 === image.url && (
+                        <CameraIcon className="h-6 w-6 text-indigo-400" />
+                      )}
+                    </div>
+                    <div className="flex-center invisible absolute inset-0 flex-wrap gap-1 bg-primary-50/25 group-hover:visible">
+                      {!fixable[image.url] && listing.layout_data.main_image !== image.url && (
+                        <Button
+                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
+                          PreIcon={StarIcon}
+                          onClick={async () => {
+                            updateLayoutData('main_image', image.url)
+                          }}
+                        >
+                          Set as Main
+                        </Button>
+                      )}
+                      {!fixable[image.url] && listing.layout_data.action_shot1 !== image.url && (
+                        <Button
+                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
+                          PreIcon={CameraIcon}
+                          onClick={async () => {
+                            updateLayoutData('action_shot1', image.url)
+                          }}
+                        >
+                          Set as Action Shot
+                        </Button>
+                      )}
+                      {fixable[image.url] && (
+                        <Button
+                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
+                          PreIcon={TrashIcon}
+                          onClick={async () => {
+                            const res = await nhost.graphql
+                              .request(
+                                graphql(`
+                                  mutation fixImage($entityId: Int!, $src: String!) {
+                                    uploadImage(entityId: $entityId, src: $src, fix: true) {
+                                      success
+                                      error
+                                      fixed_url
+                                    }
+                                  }
+                                `),
+                                {
+                                  entityId: id,
+                                  src: image.original_url,
+                                },
+                              )
+                              .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                            if (res instanceof Error || res.data?.uploadImage.error) {
+                              toast.error({
+                                message: 'Fixing Image Failed',
+                                description: res instanceof Error ? res.message : res.data?.uploadImage.error,
+                              })
+                              return console.error(res)
+                            }
+
+                            if (res.data?.uploadImage.fixed_url) {
+                              toast.success({
+                                message: 'Image Restored!',
+                              })
+
+                              updateImmediately(
+                                'images',
+                                listing.images.map((i) =>
+                                  i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
+                                ),
+                              ).then(() => {
+                                setErroredImg((e) => ({ ...e, [image.url]: false }))
+                                setFixable((f) => ({ ...f, [image.url]: false }))
+                              })
+                            }
+                          }}
+                        >
+                          Fix Image
+                        </Button>
+                      )}
+                      <Button
+                        className="text-xs [&>svg]:h-4 [&>svg]:w-4"
+                        variant="destructive"
+                        PreIcon={TrashIcon}
+                        onClick={async () => {
+                          if (confirm('Deleting here does not remove from the Duda media manager.')) {
+                            updateImmediately(
+                              'images',
+                              listing.images.filter((i) => i.url !== image.url),
+                            )
+
+                            if (listing.layout_data.main_image === image.url) {
+                              updateLayoutData('main_image', '')
+                            }
+
+                            if (listing.layout_data.action_shot1 === image.url) {
+                              updateLayoutData('action_shot1', '')
+                            }
+                          }
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <label>Videos</label>
+              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
+                {listing.videos.map((video, i) => (
+                  <div className="relative w-fit" key={video.id}>
+                    <VideoPlayer videoDetails={video} />
+                    <Button
+                      className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"
+                      variant="destructive"
+                      PostIcon={TrashIcon}
+                      onClick={() =>
+                        updateImmediately(
+                          'videos',
+                          listing.videos.filter((_, idx) => idx !== i),
+                        )
+                      }
+                    ></Button>
+                  </div>
+                ))}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+
+                    if (!newVidUrl) return
+
+                    // parse id and type out of url
+                    const { id, type } = parseVideoUrl(newVidUrl)
+
+                    if (!id || !type) {
+                      return toast.error({
+                        message: 'Unable to parse url',
+                        description: 'Try copying the url directly from the browser or share button.',
+                      })
+                    }
+
+                    setNewVidUrl('')
+
+                    update('videos', listing.videos.concat([{ url: newVidUrl, id, type }]))
+                  }}
+                >
+                  <TextInput
+                    label="Add Video by URL"
+                    description="Enter a youtube, vimeo, or daily motion video url"
+                    value={newVidUrl}
+                    onChange={(e) => setNewVidUrl(e.target.value)}
+                  />
+                </form>
               </ul>
             </div>
             <hr className="!my-12" />
