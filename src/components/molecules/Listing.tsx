@@ -1,4 +1,4 @@
-import React, { ComponentProps, useMemo, useRef, useState } from 'react'
+import React, { ComponentProps, Fragment, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
@@ -396,8 +396,17 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                         </>
                       ) : (
                         <>
-                          {bl.title && <h4>{bl.title}</h4>}
-                          {bl.description && <div className="text-justify">{bl.description}</div>}
+                          {bl.title && <h4 className="text-center">{bl.title}</h4>}
+                          {bl.description && (
+                            <div className="text-justify">
+                              {bl.description.split('\n').map((text, i) => (
+                                <Fragment key={i}>
+                                  {i !== 0 && <br />}
+                                  {text}
+                                </Fragment>
+                              ))}
+                            </div>
+                          )}
                           {bl.label && (
                             <Button disabled={!bl.href && !bl.shortname} tabIndex={-1} variant="primary">
                               {bl.label}
