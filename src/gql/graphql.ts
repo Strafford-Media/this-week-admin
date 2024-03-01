@@ -4660,6 +4660,7 @@ export type Listing = {
   listing_category_tags_aggregate: Listing_Category_Tag_Aggregate;
   live: Scalars['Boolean'];
   main_category_id?: Maybe<Scalars['Int']>;
+  old_id?: Maybe<Scalars['String']>;
   paid_until?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "permalink_for_listing" */
   permalink?: Maybe<Scalars['String']>;
@@ -4799,6 +4800,7 @@ export type Listing_Bool_Exp = {
   listing_category_tags_aggregate?: InputMaybe<Listing_Category_Tag_Aggregate_Bool_Exp>;
   live?: InputMaybe<Boolean_Comparison_Exp>;
   main_category_id?: InputMaybe<Int_Comparison_Exp>;
+  old_id?: InputMaybe<String_Comparison_Exp>;
   paid_until?: InputMaybe<Timestamptz_Comparison_Exp>;
   permalink?: InputMaybe<String_Comparison_Exp>;
   primary_address?: InputMaybe<String_Comparison_Exp>;
@@ -5244,6 +5246,7 @@ export type Listing_Insert_Input = {
   listing_category_tags?: InputMaybe<Listing_Category_Tag_Arr_Rel_Insert_Input>;
   live?: InputMaybe<Scalars['Boolean']>;
   main_category_id?: InputMaybe<Scalars['Int']>;
+  old_id?: InputMaybe<Scalars['String']>;
   paid_until?: InputMaybe<Scalars['timestamptz']>;
   primary_address?: InputMaybe<Scalars['String']>;
   primary_email?: InputMaybe<Scalars['String']>;
@@ -5268,6 +5271,7 @@ export type Listing_Max_Fields = {
   id?: Maybe<Scalars['Int']>;
   island?: Maybe<Scalars['String']>;
   main_category_id?: Maybe<Scalars['Int']>;
+  old_id?: Maybe<Scalars['String']>;
   paid_until?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "permalink_for_listing" */
   permalink?: Maybe<Scalars['String']>;
@@ -5290,6 +5294,7 @@ export type Listing_Min_Fields = {
   id?: Maybe<Scalars['Int']>;
   island?: Maybe<Scalars['String']>;
   main_category_id?: Maybe<Scalars['Int']>;
+  old_id?: Maybe<Scalars['String']>;
   paid_until?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "permalink_for_listing" */
   permalink?: Maybe<Scalars['String']>;
@@ -5341,6 +5346,7 @@ export type Listing_Order_By = {
   listing_category_tags_aggregate?: InputMaybe<Listing_Category_Tag_Aggregate_Order_By>;
   live?: InputMaybe<Order_By>;
   main_category_id?: InputMaybe<Order_By>;
+  old_id?: InputMaybe<Order_By>;
   paid_until?: InputMaybe<Order_By>;
   permalink?: InputMaybe<Order_By>;
   primary_address?: InputMaybe<Order_By>;
@@ -5399,6 +5405,8 @@ export enum Listing_Select_Column {
   /** column name */
   MainCategoryId = 'main_category_id',
   /** column name */
+  OldId = 'old_id',
+  /** column name */
   PaidUntil = 'paid_until',
   /** column name */
   PrimaryAddress = 'primary_address',
@@ -5440,6 +5448,7 @@ export type Listing_Set_Input = {
   layout_data?: InputMaybe<Scalars['jsonb']>;
   live?: InputMaybe<Scalars['Boolean']>;
   main_category_id?: InputMaybe<Scalars['Int']>;
+  old_id?: InputMaybe<Scalars['String']>;
   paid_until?: InputMaybe<Scalars['timestamptz']>;
   primary_address?: InputMaybe<Scalars['String']>;
   primary_email?: InputMaybe<Scalars['String']>;
@@ -5498,6 +5507,7 @@ export type Listing_Stream_Cursor_Value_Input = {
   layout_data?: InputMaybe<Scalars['jsonb']>;
   live?: InputMaybe<Scalars['Boolean']>;
   main_category_id?: InputMaybe<Scalars['Int']>;
+  old_id?: InputMaybe<Scalars['String']>;
   paid_until?: InputMaybe<Scalars['timestamptz']>;
   primary_address?: InputMaybe<Scalars['String']>;
   primary_email?: InputMaybe<Scalars['String']>;
@@ -5546,6 +5556,8 @@ export enum Listing_Update_Column {
   Live = 'live',
   /** column name */
   MainCategoryId = 'main_category_id',
+  /** column name */
+  OldId = 'old_id',
   /** column name */
   PaidUntil = 'paid_until',
   /** column name */

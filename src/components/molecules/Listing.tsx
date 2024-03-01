@@ -396,11 +396,13 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                         </>
                       ) : (
                         <>
-                          <h4>{bl.title}</h4>
-                          <div className="text-justify">{bl.description}</div>
-                          <Button tabIndex={-1} variant="primary">
-                            {bl.label}
-                          </Button>
+                          {bl.title && <h4>{bl.title}</h4>}
+                          {bl.description && <div className="text-justify">{bl.description}</div>}
+                          {bl.label && (
+                            <Button disabled={!bl.href && !bl.shortname} tabIndex={-1} variant="primary">
+                              {bl.label}
+                            </Button>
+                          )}
                         </>
                       )}
                     </div>

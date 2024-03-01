@@ -1,5 +1,5 @@
 import { useAuthSubscription } from '@nhost/react-apollo'
-import React, { ComponentProps, useMemo, useState } from 'react'
+import React, { ComponentProps, Fragment, useMemo, useState } from 'react'
 import { ALL_LISTINGS_SUB } from '../../graphql/queries'
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button, toast, useInterval, useRememberedState, useTimeout } from '@8thday/react'
@@ -49,10 +49,10 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
             id ? 'col-end-2 bg-secondary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
-          <ul className={clsx('relative grid grid-cols-auto-5 gap-2')}>
+          <ul className={clsx('relative grid grid-cols-auto-6 gap-2')}>
             <li
               className={clsx(
-                'sticky top-0 z-10 col-span-5 flex flex-wrap gap-2 p-2 shadow-md shadow-secondary-50',
+                'sticky top-0 z-10 col-span-6 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
                 id ? 'bg-secondary-50/80' : 'bg-white/80',
               )}
             >
@@ -91,8 +91,8 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
               <li
                 key={listing.id}
                 className={clsx(
-                  'col-span-5 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
-                  { 'border-t border-secondary-100': i !== 0, 'text-primary-500': listing.id === id },
+                  'col-span-6 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
+                  { 'border-t border-secondary-800/50': i !== 0, 'text-primary-500': listing.id === id },
                 )}
                 role="navigation"
                 tabIndex={0}
@@ -125,16 +125,26 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                   }
                 }}
               >
-                <span className="col-span-5 w-full truncate @md:col-span-1 @md:w-auto">{listing.business_name}</span>
-                <span
-                  className={clsx('hidden capitalize @sm:inline', {
-                    'text-rose-600': listing.island === 'hawaii',
-                    'text-pink-600': listing.island === 'maui',
-                    'text-fuchsia-600': listing.island === 'kauai',
-                    'text-yellow-500': listing.island === 'oahu',
-                  })}
-                >
-                  {listing.island}
+                <span className="col-span-6 w-full truncate @md:col-span-1 @md:w-auto">{listing.business_name}</span>
+                <span className={clsx('hidden @sm:inline', listing.live ? 'text-green-600' : 'text-gray-500')}>
+                  {listing.live ? 'Live' : 'Draft'}
+                </span>
+                <span className="hidden capitalize text-gray-500 @sm:inline">
+                  {listing.island?.split('|').map((isle, isleIndex) => (
+                    <Fragment key={isle}>
+                      {isleIndex !== 0 && ' | '}
+                      <span
+                        className={clsx({
+                          'text-rose-600': isle === 'hawaii',
+                          'text-pink-600': isle === 'maui',
+                          'text-fuchsia-600': isle === 'kauai',
+                          'text-yellow-500': isle === 'oahu',
+                        })}
+                      >
+                        {isle}
+                      </span>
+                    </Fragment>
+                  ))}
                 </span>
                 <span
                   className={clsx('hidden capitalize @sm:inline', {
