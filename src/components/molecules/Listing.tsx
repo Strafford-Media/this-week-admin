@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
-import { Button, Modal, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
+import { Button, Checkbox, Modal, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
 import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CameraIcon, StarIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
@@ -48,12 +48,7 @@ const tiers = [
   { value: 'basic', label: 'Basic' },
 ]
 
-const islands = [
-  { value: 'hawaii', label: 'Hawaii (Big Island)' },
-  { value: 'oahu', label: 'Oahu' },
-  { value: 'maui', label: 'Maui' },
-  { value: 'kauai', label: 'Kauai' },
-]
+const islands = ['hawaii', 'maui', 'oahu', 'kauai']
 
 export interface ListingProps extends ComponentProps<'div'> {}
 
@@ -227,7 +222,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             </button>
             {(fetchLoading || saveLoading) && <ArrowPathIcon className="h-5 w-5 animate-spin" />}
           </div>
-          <div className="max-w-3xl space-y-4">
+          <div className="max-w-3xl space-y-4 @container">
             <TextInput
               collapseDescriptionArea
               label="Business Name"
@@ -241,13 +236,22 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               onValueChange={(v) => updateImmediately('tier', v)}
               items={tiers}
             />
-            <Select
-              collapseDescriptionArea
-              label="Island"
-              value={listing.island ?? ''}
-              onValueChange={(v) => updateImmediately('island', v)}
-              items={islands}
-            />
+            <div className="grid grid-cols-2 gap-4 @md:grid-cols-4">
+              <label className="col-span-full">Island(s)</label>
+              {islands.map((isle) => (
+                <Checkbox
+                  checked={(listing.island || '').includes(isle)}
+                  setChecked={(c) => {
+                    updateImmediately(
+                      'island',
+                      islands.filter((is) => (is === isle ? c : listing.island?.includes(is))).join('|'),
+                    )
+                  }}
+                  label={isle}
+                  labelClass="capitalize"
+                />
+              ))}
+            </div>
             <Toggle
               className="!flex"
               checked={listing.live}
