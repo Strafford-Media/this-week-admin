@@ -307,6 +307,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                     placeholder="Add a Category Tag"
                     collapseDescriptionArea
                     items={tagOptions}
+                    value=""
                     onValueChange={async (t) => {
                       const ctId = Number(t)
 
