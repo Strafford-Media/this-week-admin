@@ -23,6 +23,7 @@ import { SocialAccounts } from './SocialAccounts'
 import { CreateBookingLink } from './CreateBookingLink'
 import { BusinessHours } from './BusinessHours'
 import { VideoPlayer } from './VideoPlayer'
+import { createPortal } from 'react-dom'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
@@ -220,7 +221,14 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             >
               <ChevronRightIcon className="h-5 w-5" />
             </button>
-            {(fetchLoading || saveLoading) && <ArrowPathIcon className="h-5 w-5 animate-spin" />}
+            {createPortal(
+              <ArrowPathIcon
+                className={`fixed right-2 top-[4.5rem] z-[9999] h-8 w-8 animate-spin text-green-500 ease-in ${
+                  saveLoading ? 'opacity-100' : 'opacity-0 delay-1000 duration-500'
+                }`}
+              />,
+              document.body,
+            )}
           </div>
           <div className="max-w-3xl space-y-4 @container">
             <TextInput
@@ -498,8 +506,6 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                           )}
                           {bl.type === 'fareharbor-item' && (
                             <>
-                              <hr className="my-8" />
-                              <h3 className="font-normal">Advanced Options</h3>
                               <TextInput
                                 value={bl.shortname}
                                 onChange={(e) =>
@@ -525,6 +531,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                 collapseDescriptionArea
                                 required
                               />
+                              <hr className="my-8" />
+                              <h3 className="font-normal">Advanced Options</h3>
                               <Toggle
                                 rightLabel="Full Item"
                                 rightDescription="Include item description and images"
@@ -557,7 +565,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                     updateBookingLinks(listing.booking_links, i, 'asn', e.target.value),
                                   )
                                 }
-                                collapseDescriptionArea
+                                description="The affiliate to associate with bookings, if you are using the ASN network"
                               />
                               <TextInput
                                 label="asn-ref"
@@ -568,7 +576,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                     updateBookingLinks(listing.booking_links, i, 'asn-ref', e.target.value),
                                   )
                                 }
-                                collapseDescriptionArea
+                                description="The voucher number that should be set for ASN bookings"
                               />
                               <TextInput
                                 value={bl.flow}
