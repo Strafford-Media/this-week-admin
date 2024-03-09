@@ -60,7 +60,7 @@ export const AdPreview = ({ className = '', width, height, imageUrl, onValidate,
         <div style={{ height, width }} className="ad-preview-ad border border-primary-500 text-sm text-white">
           {scale < 1 && (
             <span className="absolute left-0 top-0 bg-gray-500/50" style={{ padding: 4 / scale, fontSize: 14 / scale }}>
-              Scale: {scale.toFixed(2)}
+              Scale: {scale.toFixed(2).replace('0.', '')}%
             </span>
           )}
         </div>

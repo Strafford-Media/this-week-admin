@@ -57,11 +57,11 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
       size === data?.ad_by_pk?.size)
 
   return (
-    <div className="p-2 sm:p-4">
+    <div className="p-2 pb-16 sm:p-4 sm:pb-4">
       <h2 className="my-4 text-center text-primary-900">Ad Designer</h2>
       <div className={`${className} flex flex-col md:flex-row`} {...props}>
         <form
-          className="mx-auto flex w-full max-w-screen-sm flex-col items-stretch"
+          className="mx-auto mb-4 flex w-full max-w-screen-sm flex-col items-stretch"
           onSubmit={async (e) => {
             e.preventDefault()
 
@@ -177,7 +177,7 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
           </div>
         </form>
         <div className="flex-center max-h-content grow flex-col md:ml-4">
-          <h3 className="mb-4 text-primary-900">Preview</h3>
+          <h3 className="mb-2 text-primary-900">Preview</h3>
           <AdPreview height={height} width={width} imageUrl={imageUrl} onValidate={setImageValid} />
         </div>
       </div>

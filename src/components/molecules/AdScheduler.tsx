@@ -339,14 +339,14 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
             <div className="flex-center flex-col gap-2">
               <p>
                 Links to:{' '}
-                <NavLink
+                <a
                   className="text-blue-500 hover:text-blue-400 focus:underline focus:outline-none"
-                  to={ad.link}
+                  href={ad.link}
                   target="_blank"
                   rel="noreferrer noopener"
                 >
                   {ad.link}
-                </NavLink>
+                </a>
               </p>
               <span>{adSizeDisplayMap[ad.size]}</span>
               <AdPreview imageUrl={ad?.image} width={adWidth} height={adHeight} />

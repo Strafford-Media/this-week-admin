@@ -49,7 +49,7 @@ const tiers = [
   { value: 'basic', label: 'Basic' },
 ]
 
-const islands = ['hawaii', 'maui', 'oahu', 'kauai']
+const islands = ['oahu', 'maui', 'hawaii', 'kauai']
 
 export interface ListingProps extends ComponentProps<'div'> {}
 

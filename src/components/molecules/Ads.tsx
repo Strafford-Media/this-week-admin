@@ -18,9 +18,10 @@ export const Ads = ({ className = '', ...props }: AdsProps) => {
   const adId = m.find((m) => m.params.adId)?.params.adId
 
   const goTo = useClickLink()
+
   return (
     <div className={`${className}`} {...props}>
-      <div className="sticky top-0 flex w-full items-center gap-4 p-2 shadow-md sm:px-4">
+      <div className="sticky top-0 z-10 flex w-full items-center justify-between gap-4 bg-white p-2 shadow-md sm:justify-start sm:px-4">
         {!atAdRoot && (
           <NavLink to="/ads" className="flex-center gap-2">
             <ArrowLeft className="h-5 w-5" /> All Ads
