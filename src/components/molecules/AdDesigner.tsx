@@ -14,7 +14,7 @@ export interface AdDesignerProps extends ComponentProps<'div'> {}
 
 export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
   const nhost = useNhostClient()
-  const { id: rawId = '' } = useParams()
+  const { adId: rawId = '' } = useParams()
   const id = Number(rawId)
 
   const goTo = useNavigate()

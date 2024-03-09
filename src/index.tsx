@@ -73,7 +73,7 @@ const router = createBrowserRouter([
             path: 'create',
             element: <AdDesigner key="creating" />,
           },
-          { path: 'manage/:id', element: <AdDesigner key="managing" /> },
+          { path: 'manage/:adId', element: <AdDesigner key="managing" /> },
           { path: '*', element: <Redirect to="" /> },
         ],
       },

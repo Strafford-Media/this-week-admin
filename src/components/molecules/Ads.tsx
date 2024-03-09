@@ -14,6 +14,8 @@ export const Ads = ({ className = '', ...props }: AdsProps) => {
 
   const inScheduler = m.some((m) => m.pathname.includes('scheduler'))
   const inCreate = m.some((m) => m.pathname.includes('ads/create'))
+  const inDesign = m.some((m) => m.pathname.includes('ads/manage'))
+  const adId = m.find((m) => m.params.adId)?.params.adId
 
   const goTo = useClickLink()
   return (
@@ -25,7 +27,11 @@ export const Ads = ({ className = '', ...props }: AdsProps) => {
           </NavLink>
         )}
         {!inScheduler && (
-          <Button variant="primary" PreIcon={CalendarDaysIcon} onClick={(e) => goTo('/ads/scheduler', e)}>
+          <Button
+            variant="primary"
+            PreIcon={CalendarDaysIcon}
+            onClick={(e) => goTo(`/ads/scheduler${inDesign && adId ? `/${adId}` : ''}`, e)}
+          >
             Scheduler
           </Button>
         )}
