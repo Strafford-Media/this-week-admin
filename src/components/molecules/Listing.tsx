@@ -197,7 +197,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   }
 
   return (
-    <div className={`${className} h-full max-h-content overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
+    <div className={`${className} max-h-contentD h-full overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
       {!listing ? (
         <LoadingScreen className="!h-full !min-h-0" />
       ) : (

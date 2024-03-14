@@ -176,7 +176,7 @@ export const AdDesigner = ({ className = '', ...props }: AdDesignerProps) => {
             )}
           </div>
         </form>
-        <div className="flex-center max-h-content grow flex-col md:ml-4">
+        <div className="flex-center max-h-contentD grow flex-col md:ml-4">
           <h3 className="mb-2 text-primary-900">Preview</h3>
           <AdPreview height={height} width={width} imageUrl={imageUrl} onValidate={setImageValid} />
         </div>

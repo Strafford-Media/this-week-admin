@@ -42,10 +42,10 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
 
   return (
     <div className={`${className}`} {...props}>
-      <div className="grid h-content max-h-content grid-cols-[250px,1fr] overflow-hidden transition-all duration-300">
+      <div className="h-contentD max-h-contentD grid grid-cols-[250px,1fr] overflow-hidden transition-all duration-300">
         <div
           className={clsx(
-            'col-start-1 row-start-1 row-end-2 max-h-full overflow-y-auto transition-all duration-300 @container',
+            'col-start-1 row-start-1 row-end-2 max-h-full overflow-y-auto pb-16 transition-all duration-300 @container',
             id ? 'col-end-2 bg-secondary-50' : 'z-10 col-end-3 bg-white',
           )}
         >

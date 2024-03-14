@@ -193,8 +193,8 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
   const stats = cycleStatsData?.ad_cycle_by_pk
 
   return (
-    <div className={`${className} grid h-[calc(100vh-122px)] md:grid-cols-[24rem_auto]`} {...props}>
-      <div className="h-full w-full overflow-y-auto px-2 py-8">
+    <div className={`${className} grid h-[calc(100dvh-122px)] md:grid-cols-[24rem_auto]`} {...props}>
+      <div className="h-full w-full overflow-y-auto px-2 pb-16 pt-8">
         <div className="mx-auto flex max-w-96 flex-col justify-center pb-4">
           <Select items={adSelectList} value={adId} label="Ad" onValueChange={(v) => goTo(`/ads/scheduler/${v}`)} />
           {ad && (

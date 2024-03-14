@@ -24,7 +24,7 @@ export const App = () => {
 
   return (
     <>
-      <main className={`max-w-screen flex h-content flex-col pb-16 sm:pb-0 sm:pt-16`}>
+      <main className={`max-w-screen h-contentD flex flex-col pb-16 sm:pb-0 sm:pt-16`}>
         <Outlet />
         {manageCategories && (
           <Modal onClose={() => setSearchParams((s) => (s.delete('manage-categories'), s))}>
