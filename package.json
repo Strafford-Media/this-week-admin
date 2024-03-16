@@ -47,6 +47,7 @@
   "dependencies": {
     "@8thday/react": "^0.9.2",
     "@apollo/client": "^3.7.3",
+    "@floating-ui/react-dom": "^2.0.8",
     "@formkit/tempo": "^0.0.8",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",

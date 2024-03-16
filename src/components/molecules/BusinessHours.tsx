@@ -40,8 +40,8 @@ export const BusinessHours = ({ className = '', businessHours, onUpdate, ...prop
   return (
     <div className={`${className} flex flex-wrap gap-4`} {...props}>
       <label className="w-full">Business Hours</label>
-      {activeDays.map((day) => (
-        <div className="flex-center flex-col">
+      {activeDays.map((day, i) => (
+        <div className="flex-center flex-col" key={`${day.day}-${i}`}>
           <span className="text-gray-800">{day.day}</span>
           <span className="text-sm text-gray-700">Open: {day.open}</span>
           <span className="text-sm text-gray-700">Close: {day.close}</span>

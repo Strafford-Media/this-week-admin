@@ -24,6 +24,8 @@ export const ImageUploader = ({
   const [url, setUrl] = useState('')
   const [imageUploading, setImageUploading] = useState(false)
 
+  const multiple = ['gallery', 'library'].includes(type)
+
   const uploadURL = async (src: string) => {
     setImageUploading(true)
 
@@ -109,7 +111,7 @@ export const ImageUploader = ({
 
   return (
     <div
-      className={`${className} flex-center rounded bg-primary-100 p-2 shadow`}
+      className={`${className} flex-center min-h-32 min-w-64 rounded bg-primary-100 shadow`}
       {...props}
       role="button"
       onDragOver={(e) => {
@@ -145,14 +147,14 @@ export const ImageUploader = ({
         e.currentTarget.classList.remove('bg-primary-200', 'border', 'border-primary-500', 'border-dashed')
       }}
     >
-      <label className="flex-center h-full w-full cursor-pointer flex-col text-primary-800">
+      <label className="flex-center h-full w-full cursor-pointer flex-col p-2 text-primary-800">
         <span className="flex-center gap-1 text-xs">
           {imageUploading ? (
             <ArrowPathIcon className="inline h-4 w-4 animate-spin align-text-bottom" />
           ) : (
             <PlusIcon className="inline h-4 w-4 align-text-bottom" />
           )}{' '}
-          <span>Drag or Click to Add</span>
+          <span className="whitespace-nowrap">Drag'n'Drop or Click to Add</span>
           <span className="font-bold">{contentLabel}</span>
         </span>
         <input
@@ -170,7 +172,7 @@ export const ImageUploader = ({
 
             setImageUploading(false)
           }}
-          multiple
+          multiple={multiple}
         />
         <span className="mb-2 text-xs">or</span>
         <TextInput

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, forwardRef } from 'react'
 import { IconType } from '../../utils/types'
 
 const sizes = {
@@ -19,32 +19,40 @@ export interface IconButtonProps extends ComponentProps<'button'> {
   size?: keyof typeof sizes
   colorClass?: string
   spin?: boolean
+  refByState?: (elRef: HTMLButtonElement | null) => void
 }
 
-export const IconButton = ({
-  className = '',
-  srLabel,
-  spin = false,
-  icon: Icon,
-  size = 5,
-  iconClass = '',
-  colorClass = 'text-gray-400 enabled:hover:text-primary-500 focus:text-gray-600',
-  ...props
-}: IconButtonProps) => {
-  const sizeClass = sizes[size]
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  (
+    {
+      className = '',
+      srLabel,
+      spin = false,
+      icon: Icon,
+      size = 5,
+      iconClass = '',
+      colorClass = 'text-gray-400 enabled:hover:text-primary-500 focus:text-gray-600',
+      refByState,
+      ...props
+    },
+    ref,
+  ) => {
+    const sizeClass = sizes[size]
 
-  return (
-    <button
-      className={clsx(
-        className,
-        sizeClass.button,
-        colorClass,
-        `inline-flex items-center justify-center rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2`,
-      )}
-      {...props}
-    >
-      <span className="sr-only">{srLabel}</span>
-      <Icon className={clsx(sizeClass.icon, iconClass, { 'animate-spin': spin })} aria-hidden="true" />
-    </button>
-  )
-}
+    return (
+      <button
+        className={clsx(
+          className,
+          sizeClass.button,
+          colorClass,
+          `inline-flex items-center justify-center rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2`,
+        )}
+        {...props}
+        ref={ref || refByState}
+      >
+        <span className="sr-only">{srLabel}</span>
+        <Icon className={clsx(sizeClass.icon, iconClass, { 'animate-spin': spin })} aria-hidden="true" />
+      </button>
+    )
+  },
+)

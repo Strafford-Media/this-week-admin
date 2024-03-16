@@ -34,15 +34,14 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
 
   useInterval(
     () => {
-      console.log('ayo')
       setLastRevalidated((l) => l - 1)
     },
-    canRevalidate ? 0 : 3 * 60 * 1000,
+    canRevalidate ? 0 : 60 * 1000,
   )
 
   return (
     <div className={`${className}`} {...props}>
-      <div className="h-contentD max-h-contentD grid grid-cols-[250px,1fr] overflow-hidden transition-all duration-300">
+      <div className="grid h-contentD max-h-contentD grid-cols-[250px,1fr] overflow-hidden transition-all duration-300">
         <div
           className={clsx(
             'col-start-1 row-start-1 row-end-2 max-h-full overflow-y-auto pb-16 transition-all duration-300 @container',

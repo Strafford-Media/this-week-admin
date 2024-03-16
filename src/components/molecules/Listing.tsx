@@ -5,7 +5,7 @@ import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
 import { Button, Checkbox, Modal, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
 import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { CameraIcon, StarIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { CameraIcon, StarIcon, PlusIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
 import {
   CREATE_CATEGORY_LISTINGS,
@@ -24,6 +24,7 @@ import { CreateBookingLink } from './CreateBookingLink'
 import { BusinessHours } from './BusinessHours'
 import { VideoPlayer } from './VideoPlayer'
 import { createPortal } from 'react-dom'
+import { Menu } from '../atoms/Menu'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
@@ -197,7 +198,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   }
 
   return (
-    <div className={`${className} max-h-contentD h-full overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
+    <div className={`${className} h-full max-h-contentD overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
       {!listing ? (
         <LoadingScreen className="!h-full !min-h-0" />
       ) : (
@@ -248,6 +249,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               <label className="col-span-full">Island(s)</label>
               {islands.map((isle) => (
                 <Checkbox
+                  key={isle}
                   checked={(listing.island || '').includes(isle)}
                   setChecked={(c) => {
                     updateImmediately(
@@ -362,27 +364,35 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 Configure Category Tags
               </Button>
             )}
-            <div className="relative min-h-40 min-w-64">
+            <div>
               <label>Logo</label>
-              {listing.layout_data.logo && (
-                <img src={listing.layout_data.logo} alt="Company Logo" className="absolute inset-0 h-full" />
+              {listing.layout_data.logo ? (
+                <div className="relative h-full w-fit">
+                  <img src={listing.layout_data.logo} alt="Company Logo" className="h-full" />
+                  <button
+                    className="absolute right-0 top-0 flex justify-end hover:opacity-100 sm:inset-0 sm:bg-white/25 sm:opacity-0"
+                    onClick={async () => {
+                      updateLayoutData('logo', '')
+                    }}
+                  >
+                    <TrashIcon className="h-6 w-6 text-red-500" />
+                  </button>
+                </div>
+              ) : (
+                <ImageUploader
+                  contentLabel="Logo"
+                  type="logo"
+                  className="h-full max-w-80"
+                  entityId={id}
+                  onSuccess={() => {
+                    refetch().then(({ data }) => {
+                      if (data.listing_by_pk) {
+                        setListing(data.listing_by_pk)
+                      }
+                    })
+                  }}
+                />
               )}
-              <ImageUploader
-                contentLabel="Logo"
-                type="logo"
-                className={clsx('absolute inset-0 mt-8 h-32 w-64', {
-                  'opacity-100': !listing.layout_data.logo,
-                  'opacity-0 focus-within:opacity-95 hover:opacity-95': listing.layout_data.logo,
-                })}
-                entityId={id}
-                onSuccess={() => {
-                  refetch().then(({ data }) => {
-                    if (data.listing_by_pk) {
-                      setListing(data.listing_by_pk)
-                    }
-                  })
-                }}
-              />
             </div>
             <TextInput
               collapseDescriptionArea
@@ -679,7 +689,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
                 <ImageUploader
                   contentLabel="Images"
-                  className="h-32 w-64"
+                  className="h-full"
                   entityId={id}
                   onSuccess={() => {
                     refetch().then(({ data }) => {
@@ -689,59 +699,105 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                     })
                   }}
                 />
-                {listing.images.map((image) => (
-                  <li
-                    className={clsx('group relative h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
-                    key={image.original_url}
-                  >
-                    <img
-                      className="h-full w-full rounded shadow"
-                      src={image.url}
-                      alt={image.original_url}
-                      onError={async () => {
-                        setErroredImg((e) => ({ ...e, [image.url]: true }))
-                        if (image.original_url) {
-                          const fetchable = await fetch(image.original_url).then((r) => r.ok)
+                {listing.images.map((image) => {
+                  const isMain = listing.layout_data.main_image === image.url
+                  const isAction = listing.layout_data.action_shot1 === image.url
 
-                          if (fetchable) {
-                            setFixable((f) => ({ ...f, [image.url]: true }))
+                  return (
+                    <li
+                      className={clsx('group relative h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
+                      key={image.original_url}
+                    >
+                      <img
+                        className="h-full w-full rounded shadow"
+                        src={image.url}
+                        alt={image.original_url}
+                        onError={async () => {
+                          setErroredImg((e) => ({ ...e, [image.url]: true }))
+                          if (image.original_url) {
+                            const fetchable = await fetch(image.original_url).then((r) => r.ok)
+
+                            if (fetchable) {
+                              setFixable((f) => ({ ...f, [image.url]: true }))
+                            }
                           }
-                        }
-                      }}
-                    />
-                    <div className="flex-center absolute right-0 top-0 gap-2">
-                      {listing.layout_data.main_image === image.url && <StarIcon className="h-6 w-6 text-yellow-400" />}
-                      {listing.layout_data.action_shot1 === image.url && (
-                        <CameraIcon className="h-6 w-6 text-indigo-400" />
-                      )}
-                    </div>
-                    <div className="flex-center invisible absolute inset-0 flex-wrap gap-1 bg-primary-50/25 group-hover:visible">
-                      {!fixable[image.url] && listing.layout_data.main_image !== image.url && (
-                        <Button
-                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                          PreIcon={StarIcon}
-                          onClick={async () => {
-                            updateLayoutData('main_image', image.url)
-                          }}
-                        >
-                          Set as Main
-                        </Button>
-                      )}
-                      {!fixable[image.url] && listing.layout_data.action_shot1 !== image.url && (
-                        <Button
-                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                          PreIcon={CameraIcon}
-                          onClick={async () => {
-                            updateLayoutData('action_shot1', image.url)
-                          }}
-                        >
-                          Set as Action Shot
-                        </Button>
-                      )}
+                        }}
+                      />
+                      <div className="flex-center absolute left-0 top-0 gap-2 rounded-br rounded-tl bg-white/40 p-2">
+                        {isMain && <StarIcon className="h-6 w-6 text-yellow-400" />}
+                        {isAction && <CameraIcon className="h-6 w-6 text-sky-400" />}
+                      </div>
+                      <Menu
+                        className="absolute right-1 top-1 h-8 w-8 bg-white p-1 text-primary-500"
+                        listItems={[
+                          {
+                            label: (
+                              <span className="flex items-center gap-2 text-sm">
+                                <StarIcon
+                                  className={clsx(
+                                    'h-5 w-5 text-gray-400 group-focus-within/menu-item:text-yellow-400',
+                                    {
+                                      'text-yellow-400': isMain,
+                                    },
+                                  )}
+                                />{' '}
+                                {isMain ? 'Unset' : 'Set'} as Hero Image
+                              </span>
+                            ),
+                            onClick: () => {
+                              isMain ? updateLayoutData('main_image', '') : updateLayoutData('main_image', image.url)
+                            },
+                            disabled: !!fixable[image.url],
+                          },
+                          {
+                            label: (
+                              <span className="flex items-center gap-2 text-sm">
+                                <CameraIcon
+                                  className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-sky-500', {
+                                    'text-sky-500': isAction,
+                                  })}
+                                />{' '}
+                                {isAction ? 'Unset' : 'Set'} as Action Shot
+                              </span>
+                            ),
+                            onClick: () =>
+                              isAction
+                                ? updateLayoutData('action_shot1', '')
+                                : updateLayoutData('action_shot1', image.url),
+                            disabled: !!fixable[image.url],
+                          },
+                          {
+                            label: (
+                              <span className="flex items-center gap-2 text-sm">
+                                <TrashIcon
+                                  className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-red-500')}
+                                />{' '}
+                                Remove Image
+                              </span>
+                            ),
+                            onClick: async () => {
+                              if (confirm('Deleting here does not remove from the Duda media manager.')) {
+                                updateImmediately(
+                                  'images',
+                                  listing.images.filter((i) => i.url !== image.url),
+                                )
+
+                                if (listing.layout_data.main_image === image.url) {
+                                  updateLayoutData('main_image', '')
+                                }
+
+                                if (listing.layout_data.action_shot1 === image.url) {
+                                  updateLayoutData('action_shot1', '')
+                                }
+                              }
+                            },
+                          },
+                        ]}
+                      />
                       {fixable[image.url] && (
                         <Button
                           className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                          PreIcon={TrashIcon}
+                          PreIcon={WrenchScrewdriverIcon}
                           onClick={async () => {
                             const res = await nhost.graphql
                               .request(
@@ -789,83 +845,62 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                           Fix Image
                         </Button>
                       )}
-                      <Button
-                        className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                        variant="destructive"
-                        PreIcon={TrashIcon}
-                        onClick={async () => {
-                          if (confirm('Deleting here does not remove from the Duda media manager.')) {
-                            updateImmediately(
-                              'images',
-                              listing.images.filter((i) => i.url !== image.url),
-                            )
-
-                            if (listing.layout_data.main_image === image.url) {
-                              updateLayoutData('main_image', '')
-                            }
-
-                            if (listing.layout_data.action_shot1 === image.url) {
-                              updateLayoutData('action_shot1', '')
-                            }
-                          }
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  )
+                })}
               </ul>
             </div>
             <div>
-              <label>Videos</label>
-              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                {listing.videos.map((video, i) => (
-                  <div className="relative w-fit" key={video.id}>
-                    <VideoPlayer videoDetails={video} />
-                    <Button
-                      className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"
-                      variant="destructive"
-                      PostIcon={TrashIcon}
-                      onClick={() =>
-                        updateImmediately(
-                          'videos',
-                          listing.videos.filter((_, idx) => idx !== i),
-                        )
-                      }
-                    ></Button>
-                  </div>
-                ))}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
+              <form
+                className="mb-2"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
 
-                    if (!newVidUrl) return
+                  if (!newVidUrl) return
 
-                    // parse id and type out of url
-                    const { id, type } = parseVideoUrl(newVidUrl)
+                  // parse id and type out of url
+                  const { id, type } = parseVideoUrl(newVidUrl)
 
-                    if (!id || !type) {
-                      return toast.error({
-                        message: 'Unable to parse url',
-                        description: 'Try copying the url directly from the browser or share button.',
-                      })
-                    }
+                  if (!id || !type) {
+                    return toast.error({
+                      message: 'Unable to parse url',
+                      description: 'Try copying the url directly from the browser or share button.',
+                    })
+                  }
 
-                    setNewVidUrl('')
+                  setNewVidUrl('')
 
-                    update('videos', listing.videos.concat([{ url: newVidUrl, id, type }]))
-                  }}
-                >
-                  <TextInput
-                    label="Add Video by URL"
-                    description="Enter a youtube, vimeo, or daily motion video url"
-                    value={newVidUrl}
-                    onChange={(e) => setNewVidUrl(e.target.value)}
-                  />
-                </form>
-              </ul>
+                  update('videos', listing.videos.concat([{ url: newVidUrl, id, type }]))
+                }}
+              >
+                <TextInput
+                  label="Add Video(s) by URL"
+                  description='Paste a youtube, vimeo, or daily motion video url and hit "enter"'
+                  value={newVidUrl}
+                  onChange={(e) => setNewVidUrl(e.target.value)}
+                />
+              </form>
+              {!!listing.videos.length && (
+                <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
+                  {listing.videos.map((video, i) => (
+                    <div className="relative w-fit" key={video.id}>
+                      <VideoPlayer videoDetails={video} />
+                      <Button
+                        className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"
+                        variant="destructive"
+                        PostIcon={TrashIcon}
+                        onClick={() =>
+                          updateImmediately(
+                            'videos',
+                            listing.videos.filter((_, idx) => idx !== i),
+                          )
+                        }
+                      ></Button>
+                    </div>
+                  ))}
+                </ul>
+              )}
             </div>
             <hr className="!my-12" />
             <Button
