@@ -194,7 +194,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   const [openBookingLink, setOpenBookingLink] = useState(-1)
 
   if (called && !fetchLoading && !error && !data?.listing_by_pk) {
-    goTo('..')
+    setTimeout(() => goTo('..'), 0)
+    return null
   }
 
   return (
@@ -723,10 +724,12 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                           }
                         }}
                       />
-                      <div className="flex-center absolute left-0 top-0 gap-2 rounded-br rounded-tl bg-white/40 p-2">
-                        {isMain && <StarIcon className="h-6 w-6 text-yellow-400" />}
-                        {isAction && <CameraIcon className="h-6 w-6 text-sky-400" />}
-                      </div>
+                      {(isMain || isAction) && (
+                        <div className="flex-center absolute left-0 top-0 gap-2 rounded-br rounded-tl bg-white/40 p-2">
+                          {isMain && <StarIcon className="h-6 w-6 text-yellow-400" />}
+                          {isAction && <CameraIcon className="h-6 w-6 text-sky-400" />}
+                        </div>
+                      )}
                       <Menu
                         className="absolute right-1 top-1 h-8 w-8 bg-white p-1 text-primary-500"
                         listItems={[
