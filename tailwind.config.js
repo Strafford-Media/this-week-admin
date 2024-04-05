@@ -10,6 +10,9 @@ module.exports = {
         primary: colors.sky,
         secondary: colors.yellow,
       },
+      content: {
+        x: "'\\2715'",
+      },
       minHeight: (theme) => ({
         ...theme('spacing'),
       }),

@@ -285,32 +285,36 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               <div>
                 <label className="block w-full">Category Tags</label>
                 <ul className="flex flex-wrap gap-2 py-2">
-                  {listing.listing_category_tags.map(
-                    (lct) =>
-                      tagMap[lct.category_tag_id] && (
+                  {listing.listing_category_tags.map((lct) => {
+                    if (tagMap[lct.category_tag_id]) {
+                      const deleteOnClick = async () => {
+                        const res = await nhost.graphql
+                          .request(DELETE_CATEGORY_LISTING_BY_ID, { id: lct.id })
+                          .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                        if (res instanceof Error || res.error) {
+                          return toast.error({ message: 'Unable to remove this tag' })
+                        }
+
+                        refetch().then(({ data }) => {
+                          if (data.listing_by_pk) {
+                            setListing(data.listing_by_pk)
+                          }
+                        })
+                      }
+                      return (
                         <li
-                          className="cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white"
+                          className="after:content-x relative cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white before:absolute before:inset-0 before:z-10 before:rounded-full before:bg-gray-700 before:opacity-0 after:absolute after:inset-0 after:z-20 after:mx-auto after:py-0.5 after:text-center after:font-bold after:opacity-0 hover:before:opacity-50 hover:after:opacity-100 focus:outline-none focus:ring-2 focus:before:opacity-50 focus:after:opacity-100"
                           key={lct.id}
-                          onClick={async () => {
-                            const res = await nhost.graphql
-                              .request(DELETE_CATEGORY_LISTING_BY_ID, { id: lct.id })
-                              .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
-
-                            if (res instanceof Error || res.error) {
-                              return toast.error({ message: 'Unable to remove this tag' })
-                            }
-
-                            refetch().then(({ data }) => {
-                              if (data.listing_by_pk) {
-                                setListing(data.listing_by_pk)
-                              }
-                            })
-                          }}
+                          onClick={deleteOnClick}
+                          tabIndex={0}
+                          onKeyDown={(e) => e.key === 'Enter' && deleteOnClick()}
                         >
                           {tagMap[lct.category_tag_id].label}
                         </li>
-                      ),
-                  )}
+                      )
+                    }
+                  })}
                 </ul>
                 <div className="flex items-center">
                   <Select
@@ -797,59 +801,62 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                               }
                             },
                           },
+                          {
+                            label: (
+                              <span className="flex items-center gap-2 text-sm">
+                                <WrenchScrewdriverIcon
+                                  className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-red-500')}
+                                />{' '}
+                                Fix Image
+                              </span>
+                            ),
+                            onClick: async () => {
+                              const res = await nhost.graphql
+                                .request(
+                                  graphql(`
+                                    mutation fixImage($entityId: Int!, $src: String!) {
+                                      uploadImage(entityId: $entityId, src: $src, fix: true) {
+                                        success
+                                        error
+                                        fixed_url
+                                      }
+                                    }
+                                  `),
+                                  {
+                                    entityId: id,
+                                    src: image.original_url,
+                                  },
+                                )
+                                .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                              if (res instanceof Error || res.data?.uploadImage.error) {
+                                toast.error({
+                                  message: 'Fixing Image Failed',
+                                  description: res instanceof Error ? res.message : res.data?.uploadImage.error,
+                                })
+                                return console.error(res)
+                              }
+
+                              if (res.data?.uploadImage.fixed_url) {
+                                toast.success({
+                                  message: 'Image Restored!',
+                                })
+
+                                updateImmediately(
+                                  'images',
+                                  listing.images.map((i) =>
+                                    i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
+                                  ),
+                                ).then(() => {
+                                  setErroredImg((e) => ({ ...e, [image.url]: false }))
+                                  setFixable((f) => ({ ...f, [image.url]: false }))
+                                })
+                              }
+                            },
+                            disabled: !fixable[image.url],
+                          },
                         ]}
                       />
-                      {fixable[image.url] && (
-                        <Button
-                          className="text-xs [&>svg]:h-4 [&>svg]:w-4"
-                          PreIcon={WrenchScrewdriverIcon}
-                          onClick={async () => {
-                            const res = await nhost.graphql
-                              .request(
-                                graphql(`
-                                  mutation fixImage($entityId: Int!, $src: String!) {
-                                    uploadImage(entityId: $entityId, src: $src, fix: true) {
-                                      success
-                                      error
-                                      fixed_url
-                                    }
-                                  }
-                                `),
-                                {
-                                  entityId: id,
-                                  src: image.original_url,
-                                },
-                              )
-                              .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
-
-                            if (res instanceof Error || res.data?.uploadImage.error) {
-                              toast.error({
-                                message: 'Fixing Image Failed',
-                                description: res instanceof Error ? res.message : res.data?.uploadImage.error,
-                              })
-                              return console.error(res)
-                            }
-
-                            if (res.data?.uploadImage.fixed_url) {
-                              toast.success({
-                                message: 'Image Restored!',
-                              })
-
-                              updateImmediately(
-                                'images',
-                                listing.images.map((i) =>
-                                  i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
-                                ),
-                              ).then(() => {
-                                setErroredImg((e) => ({ ...e, [image.url]: false }))
-                                setFixable((f) => ({ ...f, [image.url]: false }))
-                              })
-                            }
-                          }}
-                        >
-                          Fix Image
-                        </Button>
-                      )}
                     </li>
                   )
                 })}
