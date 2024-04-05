@@ -23,15 +23,20 @@ export const ChangePassword = ({ className = '', ...props }: ChangePasswordProps
   }, [])
 
   return (
-    <div className={`${className} p-4 fixed inset-0 z-50 bg-white/80 flex-center`} {...props}>
+    <div className={`${className} flex-center fixed inset-0 z-50 bg-white/80 p-4`} {...props}>
       <form
-        className="max-w-full min-w-md p-4 space-y-4 shadow-xl rounded-md"
+        className="min-w-md max-w-full space-y-4 rounded-md p-4 shadow-xl"
         onSubmit={async (e) => {
           e.preventDefault()
           e.stopPropagation()
 
           if (newPassword) {
-            await changePassword(newPassword)
+            const changed = await changePassword(newPassword)
+            if (changed.isSuccess) {
+              setTimeout(() => {
+                goTo('..')
+              }, 300)
+            }
           }
         }}
       >
