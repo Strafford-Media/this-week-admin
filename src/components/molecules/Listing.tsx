@@ -373,7 +373,9 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                   <button
                     className="absolute right-0 top-0 flex justify-end hover:opacity-100 sm:inset-0 sm:bg-white/25 sm:opacity-0"
                     onClick={async () => {
-                      updateLayoutData('logo', '')
+                      if (confirm('Remove this logo?')) {
+                        updateLayoutData('logo', '')
+                      }
                     }}
                   >
                     <TrashIcon className="h-6 w-6 text-red-500" />
