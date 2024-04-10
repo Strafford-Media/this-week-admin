@@ -33,7 +33,6 @@ interface BookingLink {
   title: string
   shortname: string
   item: string
-  items?: string // legacy field
   sheet: string
   asn: string
   'asn-ref': string
@@ -537,7 +536,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                 required
                               />
                               <TextInput
-                                value={(bl.item || bl.items) ?? ''}
+                                value={bl.item}
                                 onChange={(e) =>
                                   setAndDebounceUpdate(
                                     'booking_links',
