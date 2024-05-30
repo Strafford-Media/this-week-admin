@@ -29,7 +29,7 @@ export const ALL_LISTINGS_WITH_CATEGORIES = graphql(`
 `)
 
 export const LISTING_BY_ID = graphql(`
-  query ListingByIDSub($id: Int!) {
+  query ListingByID($id: Int!) {
     listing_by_pk(id: $id) {
       id
       business_name
@@ -39,6 +39,7 @@ export const LISTING_BY_ID = graphql(`
       created_at
       updated_at
       tier
+      promoted
       live
       primary_address
       primary_phone

@@ -13,7 +13,7 @@ import {
   DELETE_LISTING,
   UPDATE_LISTING,
 } from '../../graphql/mutations'
-import { ListingByIdSubQuery } from '../../gql/graphql'
+import { ListingByIdQuery } from '../../gql/graphql'
 import { useMutation } from '@apollo/client'
 import { ImageUploader } from './ImageUploader'
 import { graphql } from '../../gql'
@@ -72,12 +72,13 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   const [openCreateBookingModal, setOpenCreateBookingModal] = useState(false)
 
   const [newVidUrl, setNewVidUrl] = useState('')
-  const [listing, setListing] = useState<NonNullable<ListingByIdSubQuery['listing_by_pk']>>({
+  const [listing, setListing] = useState<NonNullable<ListingByIdQuery['listing_by_pk']>>({
     slogan: '',
     description: '',
     business_name: '',
     live: false,
     tier: 'basic',
+    promoted: false,
     island: '',
     id,
     created_at: '',
@@ -246,6 +247,13 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               onValueChange={(v) => updateImmediately('tier', v)}
               items={tiers}
             />
+            <Toggle
+              className="!flex"
+              checked={listing.promoted}
+              setChecked={(c) => updateImmediately('promoted', c)}
+              rightLabel="Promoted"
+              rightDescription=""
+            />
             <div className="grid grid-cols-2 gap-4 @md:grid-cols-4">
               <label className="col-span-full">Island(s)</label>
               {islands.map((isle) => (
@@ -304,7 +312,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                       }
                       return (
                         <li
-                          className="after:content-x relative cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white before:absolute before:inset-0 before:z-10 before:rounded-full before:bg-gray-700 before:opacity-0 after:absolute after:inset-0 after:z-20 after:mx-auto after:py-0.5 after:text-center after:font-bold after:opacity-0 hover:before:opacity-50 hover:after:opacity-100 focus:outline-none focus:ring-2 focus:before:opacity-50 focus:after:opacity-100"
+                          className="relative cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white before:absolute before:inset-0 before:z-10 before:rounded-full before:bg-gray-700 before:opacity-0 after:absolute after:inset-0 after:z-20 after:mx-auto after:py-0.5 after:text-center after:font-bold after:opacity-0 after:content-x hover:before:opacity-50 hover:after:opacity-100 focus:outline-none focus:ring-2 focus:before:opacity-50 focus:after:opacity-100"
                           key={lct.id}
                           onClick={deleteOnClick}
                           tabIndex={0}
