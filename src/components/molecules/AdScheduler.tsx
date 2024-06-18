@@ -267,6 +267,13 @@ export const AdScheduler = ({ className = '', ...props }: AdSchedulerProps) => {
                             return toast.error({ message: 'An unexpected Error occurred' })
                           }
 
+                          if (res.data.delete_ad_cycle_by_pk === null) {
+                            return toast.warn({
+                              message: 'Cannot delete a cycle with view/click data',
+                              description: 'Consider altering the period to terminate it early if it is still running.',
+                            })
+                          }
+
                           toast.success({ message: 'Advertising Cycle Removed' })
                           refetch()
                         }
