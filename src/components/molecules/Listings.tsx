@@ -25,8 +25,8 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
   const [includeNonLive, setIncludeNonLive] = useState(false)
 
   const { data: searchData } = useAuthQuery(SEARCH_LISTINGS, {
-    variables: { searchTerm, limit: 100, includeNonLive },
-    skip: !searchTerm,
+    variables: { searchTerm, limit: 20, includeNonLive },
+    skip: searchTerm.length < 6,
   })
 
   const goTo = useNavigate()
