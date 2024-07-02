@@ -325,6 +325,7 @@ const CategoryListingList = ({ tag, onUpdate }: CategoryListingListProps) => {
               {listing.business_name}
               <IconButton
                 className="invisible group-hover:visible"
+                colorClass="text-gray-400 enabled:hover:text-red-400 focus:text-red-600"
                 icon={MinusCircleIcon}
                 srLabel="Remove Listing from Category"
                 onClick={async () => {
