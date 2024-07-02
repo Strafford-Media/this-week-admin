@@ -1,8 +1,8 @@
-import { useAuthSubscription } from '@nhost/react-apollo'
+import { useAuthQuery, useAuthSubscription } from '@nhost/react-apollo'
 import React, { ComponentProps, Fragment, useMemo, useState } from 'react'
-import { ALL_LISTINGS_SUB } from '../../graphql/queries'
+import { ALL_LISTINGS_SUB, SEARCH_LISTINGS } from '../../graphql/queries'
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Button, toast, useInterval, useRememberedState, useTimeout } from '@8thday/react'
+import { Button, TextInput, Toggle, toast, useInterval, useRememberedState, useTimeout } from '@8thday/react'
 import clsx from 'clsx'
 import { NewListingModal } from './NewListingModal'
 import { DocumentPlusIcon, TagIcon } from '@heroicons/react/24/outline'
@@ -20,6 +20,14 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
   const setSearchParams = useSearchParams()[1]
 
   const { data } = useAuthSubscription(ALL_LISTINGS_SUB)
+
+  const [searchTerm, setSearchTerm] = useState('')
+  const [includeNonLive, setIncludeNonLive] = useState(false)
+
+  const { data: searchData } = useAuthQuery(SEARCH_LISTINGS, {
+    variables: { searchTerm, limit: 100, includeNonLive },
+    skip: !searchTerm,
+  })
 
   const goTo = useNavigate()
 
@@ -39,6 +47,20 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
     canRevalidate ? 0 : 60 * 1000,
   )
 
+  const filteredListings = useMemo(() => {
+    if (!searchTerm) return data?.listing ?? []
+
+    if (searchTerm.length < 3 || !searchData?.fuzzy_search_listings.length) {
+      const lowSearch = searchTerm.toLowerCase()
+
+      return (data?.listing ?? []).filter((l) => l.business_name.toLowerCase().includes(lowSearch))
+    }
+
+    const listingMap = (data?.listing ?? []).reduce((map, item) => ({ ...map, [item.id]: item }), {})
+
+    return searchData.fuzzy_search_listings.map((f) => listingMap[f.id])
+  }, [searchData, data, searchTerm])
+
   return (
     <div className={`${className}`} {...props}>
       <div className="grid h-contentD max-h-contentD grid-cols-[250px,1fr] overflow-hidden transition-all duration-300">
@@ -48,10 +70,10 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
             id ? 'col-end-2 bg-secondary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
-          <ul className={clsx('relative grid grid-cols-auto-6 gap-2')}>
+          <ul className={clsx('relative grid grid-cols-auto-7 gap-2')}>
             <li
               className={clsx(
-                'sticky top-0 z-10 col-span-6 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
+                'sticky top-0 z-10 col-span-7 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
                 id ? 'bg-secondary-50/80' : 'bg-white/80',
               )}
             >
@@ -67,6 +89,18 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
               <Button PreIcon={DocumentPlusIcon} variant="primary" onClick={() => setOpenNewListingForm(true)}>
                 New Listing
               </Button>
+              <TextInput
+                placeholder="Search Listings"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                collapseDescriptionArea
+              />
+              <Toggle
+                className="m-1"
+                rightLabel="Include Drafts"
+                checked={includeNonLive}
+                setChecked={setIncludeNonLive}
+              />
               {canRevalidate && (
                 <Button
                   variant="dismissive"
@@ -86,11 +120,11 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 </Button>
               )}
             </li>
-            {data?.listing.map((listing, i, wholeList) => (
+            {filteredListings.map((listing, i, wholeList) => (
               <li
                 key={listing.id}
                 className={clsx(
-                  'col-span-6 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
+                  'col-span-7 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
                   { 'border-t border-secondary-800/50': i !== 0, 'text-primary-500': listing.id === id },
                 )}
                 role="navigation"

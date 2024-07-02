@@ -35,6 +35,7 @@ const documents = {
     "\n  mutation DeleteAd($id: Int!) {\n    delete_ad_by_pk(id: $id) {\n      id\n    }\n  }\n": types.DeleteAdDocument,
     "\n  subscription AllListings {\n    listing(order_by: { business_name: asc }) {\n      business_name\n      island\n      created_at\n      updated_at\n      id\n      tier\n      live\n    }\n  }\n": types.AllListingsDocument,
     "\n  query AllListingsWithCategories {\n    listing(order_by: { business_name: asc }) {\n      id\n      business_name\n      live\n      listing_category_tags {\n        id\n        category_tag_id\n      }\n    }\n  }\n": types.AllListingsWithCategoriesDocument,
+    "\n  query FuzzySearchListings($searchTerm: String!, $includeNonLive: Boolean, $limit: Int!) {\n    fuzzy_search_listings(args: { search: $searchTerm, include_non_live: $includeNonLive }, limit: $limit) {\n      id\n    }\n  }\n": types.FuzzySearchListingsDocument,
     "\n  query ListingByID($id: Int!) {\n    listing_by_pk(id: $id) {\n      id\n      business_name\n      slogan\n      description\n      island\n      created_at\n      updated_at\n      tier\n      promoted\n      live\n      primary_address\n      primary_phone\n      primary_email\n      primary_web_url\n      this_week_recommended\n      booking_links\n      business_hours\n      social_media\n      images\n      videos\n      layout_data\n      lat_lng\n      listing_category_tags {\n        id\n        category_tag_id\n      }\n    }\n  }\n": types.ListingByIdDocument,
     "\n  query ListingsByCategory($categoryId: Int!) {\n    listing(where: { listing_category_tags: { category_tag_id: { _eq: $categoryId } } }) {\n      id\n      business_name\n      listing_category_tags(where: { category_tag_id: { _eq: $categoryId } }) {\n        id\n      }\n    }\n  }\n": types.ListingsByCategoryDocument,
     "\n  query getAdById($id: Int!) {\n    ad_by_pk(id: $id) {\n      id\n      created_at\n      name\n      link\n      image\n      size\n    }\n  }\n": types.GetAdByIdDocument,
@@ -147,6 +148,10 @@ export function graphql(source: "\n  subscription AllListings {\n    listing(ord
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query AllListingsWithCategories {\n    listing(order_by: { business_name: asc }) {\n      id\n      business_name\n      live\n      listing_category_tags {\n        id\n        category_tag_id\n      }\n    }\n  }\n"): (typeof documents)["\n  query AllListingsWithCategories {\n    listing(order_by: { business_name: asc }) {\n      id\n      business_name\n      live\n      listing_category_tags {\n        id\n        category_tag_id\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query FuzzySearchListings($searchTerm: String!, $includeNonLive: Boolean, $limit: Int!) {\n    fuzzy_search_listings(args: { search: $searchTerm, include_non_live: $includeNonLive }, limit: $limit) {\n      id\n    }\n  }\n"): (typeof documents)["\n  query FuzzySearchListings($searchTerm: String!, $includeNonLive: Boolean, $limit: Int!) {\n    fuzzy_search_listings(args: { search: $searchTerm, include_non_live: $includeNonLive }, limit: $limit) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

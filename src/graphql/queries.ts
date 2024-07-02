@@ -28,6 +28,14 @@ export const ALL_LISTINGS_WITH_CATEGORIES = graphql(`
   }
 `)
 
+export const SEARCH_LISTINGS = graphql(`
+  query FuzzySearchListings($searchTerm: String!, $includeNonLive: Boolean, $limit: Int!) {
+    fuzzy_search_listings(args: { search: $searchTerm, include_non_live: $includeNonLive }, limit: $limit) {
+      id
+    }
+  }
+`)
+
 export const LISTING_BY_ID = graphql(`
   query ListingByID($id: Int!) {
     listing_by_pk(id: $id) {
