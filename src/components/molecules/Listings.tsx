@@ -50,15 +50,17 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
   const filteredListings = useMemo(() => {
     if (!searchTerm) return data?.listing ?? []
 
-    if (searchTerm.length < 3 || !searchData?.fuzzy_search_listings.length) {
-      const lowSearch = searchTerm.toLowerCase()
+    const lowSearch = searchTerm.toLowerCase()
 
-      return (data?.listing ?? []).filter((l) => l.business_name.toLowerCase().includes(lowSearch))
+    const basicSearchResults = (data?.listing ?? []).filter((l) => l.business_name.toLowerCase().includes(lowSearch))
+
+    if (!basicSearchResults.length && searchData?.fuzzy_search_listings.length) {
+      const listingMap = (data?.listing ?? []).reduce((map, item) => ({ ...map, [item.id]: item }), {})
+
+      return searchData.fuzzy_search_listings.map((f) => listingMap[f.id])
     }
 
-    const listingMap = (data?.listing ?? []).reduce((map, item) => ({ ...map, [item.id]: item }), {})
-
-    return searchData.fuzzy_search_listings.map((f) => listingMap[f.id])
+    return basicSearchResults
   }, [searchData, data, searchTerm])
 
   return (
