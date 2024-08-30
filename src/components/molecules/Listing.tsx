@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
-import { Button, Checkbox, Modal, Select, TextArea, TextInput, Toggle, toast } from '@8thday/react'
+import { Button, Checkbox, Modal, Select, TextArea, TextInput, Toggle, copyText, toast } from '@8thday/react'
 import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CameraIcon, StarIcon, PlusIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
@@ -74,6 +74,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   const [newVidUrl, setNewVidUrl] = useState('')
   const [listing, setListing] = useState<NonNullable<ListingByIdQuery['listing_by_pk']>>({
     slogan: '',
+    slug: '',
     description: '',
     business_name: '',
     live: false,
@@ -234,6 +235,29 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             )}
           </div>
           <div className="max-w-3xl space-y-4 @container">
+            <div className="flex items-center justify-between text-gray-500">
+              <a
+                href={`https://www.thisweekhawaii.com/listing/${listing.slug}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="hover:text-blue-500 focus:text-blue-500 focus:underline focus:outline-none"
+              >
+                https://www.thisweekhawaii.com/listing/{listing.slug}
+              </a>
+              <button
+                className="focus:text-blue-500 focus:outline-none"
+                onClick={async () => {
+                  copyText(`${listing.id}`).then(() => {
+                    toast.success({
+                      message: 'Copied Listing ID to clipboard',
+                      description: `Listing ID: ${listing.id}`,
+                    })
+                  })
+                }}
+              >
+                ID: {listing.id}
+              </button>
+            </div>
             <TextInput
               collapseDescriptionArea
               label="Business Name"
@@ -927,6 +951,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               PreIcon={TrashIcon}
               variant="destructive"
               onClick={async (e) => {
+                if (!confirm('Are you sure? Deleting a Listing cannot be undone.')) return
+
                 const res = await nhost.graphql
                   .request(DELETE_LISTING, { id: listing.id })
                   .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))

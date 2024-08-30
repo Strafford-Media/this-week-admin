@@ -40,6 +40,7 @@ export const LISTING_BY_ID = graphql(`
   query ListingByID($id: Int!) {
     listing_by_pk(id: $id) {
       id
+      slug
       business_name
       slogan
       description

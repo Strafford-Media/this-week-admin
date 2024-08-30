@@ -9,8 +9,8 @@ export const UPDATE_USER_METADATA = graphql(`
 `)
 
 export const CREATE_LISTING_SHELL = graphql(`
-  mutation CreateListingShell($businessName: String!) {
-    insert_listing_one(object: { business_name: $businessName }) {
+  mutation CreateListingShell($businessName: String!, $slug: String!) {
+    insert_listing_one(object: { business_name: $businessName, slug: $slug }) {
       id
     }
   }
