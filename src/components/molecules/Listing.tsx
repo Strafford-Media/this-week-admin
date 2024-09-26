@@ -1,4 +1,4 @@
-import React, { ComponentProps, Fragment, useMemo, useRef, useState } from 'react'
+import React, { ComponentProps, Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
@@ -25,6 +25,11 @@ import { BusinessHours } from './BusinessHours'
 import { VideoPlayer } from './VideoPlayer'
 import { createPortal } from 'react-dom'
 import { Menu } from '../atoms/Menu'
+import { Editor, EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Link from '@tiptap/extension-link'
+import TextAlign from '@tiptap/extension-text-align'
+import { RichTextEditor } from '../atoms/RichTextEditor'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
@@ -171,14 +176,14 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     update(key, value)
   }
 
-  const timeoutIdRef = useRef(0)
+  const timeoutIdRef = useRef({})
   const setAndDebounceUpdate = (key: string, value: any) => {
     if (!key || typeof value === 'undefined') return
 
     setListing((l) => ({ ...l, [key]: value }))
 
-    clearTimeout(timeoutIdRef.current)
-    timeoutIdRef.current = window.setTimeout(() => {
+    clearTimeout(timeoutIdRef.current[key])
+    timeoutIdRef.current[key] = window.setTimeout(() => {
       update(key, value, false)
     }, 400)
   }
@@ -439,11 +444,15 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               value={listing.slogan ?? ''}
               onChange={(e) => setAndDebounceUpdate('slogan', e.target.value)}
             />
-            <TextArea
-              collapseDescriptionArea
-              label="Description"
-              value={listing.description ?? ''}
-              onChange={(e) => setAndDebounceUpdate('description', e.target.value)}
+            <RichTextEditor
+              key={id}
+              label="Description / Content Body"
+              html={listing.rich_description || listing.description || ''}
+              text={listing.description || ''}
+              onValueChange={(e) => {
+                setAndDebounceUpdate('description', e.text)
+                setAndDebounceUpdate('rich_description', e.html)
+              }}
             />
             <div className="mb-6">
               <label className="mb-4">Booking Links</label>

@@ -44,6 +44,7 @@ export const LISTING_BY_ID = graphql(`
       business_name
       slogan
       description
+      rich_description
       island
       created_at
       updated_at
