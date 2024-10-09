@@ -206,7 +206,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
             '[view-transition-name:listing-view]',
           )}
         >
-          <Outlet />
+          <Outlet key={id} />
         </div>
       </div>
       {openNewListingForm && <NewListingModal onClose={() => setOpenNewListingForm(false)} />}
