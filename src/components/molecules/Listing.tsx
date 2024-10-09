@@ -4,7 +4,7 @@ import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
 import { Button, Checkbox, Modal, Select, TextArea, TextInput, Toggle, copyText, toast } from '@8thday/react'
-import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { CameraIcon, StarIcon, PlusIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
 import {
@@ -487,8 +487,15 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                       )}
                     </div>
                     {openBookingLink === i && (
-                      <Modal portal onClose={() => setOpenBookingLink(-1)} className="w-2xl">
-                        <div className="flex w-2xl max-w-full flex-col gap-y-3">
+                      <Modal onClose={() => {}} portal className="relative w-2xl">
+                        <div className="relative flex w-2xl max-w-full flex-col gap-y-3">
+                          <Button
+                            onClick={() => setOpenBookingLink(-1)}
+                            className="!absolute right-0 top-0 z-10 w-fit"
+                            variant="dismissive"
+                          >
+                            <XMarkIcon className="h-5 w-5" />
+                          </Button>
                           <h3 className="mb-4">
                             {bl.type === 'external'
                               ? 'External Booking Link'

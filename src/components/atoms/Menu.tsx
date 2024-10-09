@@ -24,9 +24,9 @@ export const Menu = ({ className = '', placement, listItems, showAlways = false,
   const menuId = useId()
   const [show, setShow] = useState(false)
   const { refs, floatingStyles } = useFloating<HTMLButtonElement>({
-    strategy: 'fixed',
+    strategy: 'absolute',
     placement: placement || 'bottom-end',
-    middleware: [offset(8), flip(), shift({ padding: 8 })],
+    middleware: [offset(1), flip(), shift({ padding: 8 })],
     whileElementsMounted: autoUpdate,
   })
 
@@ -41,7 +41,7 @@ export const Menu = ({ className = '', placement, listItems, showAlways = false,
   return (
     <>
       <IconButton
-        refByState={refs.setReference}
+        ref={refs.setReference}
         icon={EllipsisVerticalIcon}
         srLabel="Image Options"
         className={clsx(className, {
@@ -49,9 +49,7 @@ export const Menu = ({ className = '', placement, listItems, showAlways = false,
           'sm:opacity-100': show,
         })}
         {...props}
-        onClick={() => {
-          setShow((s) => !s)
-        }}
+        onClick={() => setShow((s) => !s)}
         onKeyDown={(e) => {
           switch (e.key) {
             case 'ArrowDown':

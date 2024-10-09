@@ -19,7 +19,6 @@ export interface IconButtonProps extends ComponentProps<'button'> {
   size?: keyof typeof sizes
   colorClass?: string
   spin?: boolean
-  refByState?: (elRef: HTMLButtonElement | null) => void
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
@@ -32,7 +31,6 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       size = 5,
       iconClass = '',
       colorClass = 'text-gray-400 enabled:hover:text-primary-500 focus:text-gray-600',
-      refByState,
       ...props
     },
     ref,
@@ -48,7 +46,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
           `inline-flex items-center justify-center rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2`,
         )}
         {...props}
-        ref={ref || refByState}
+        ref={ref}
       >
         <span className="sr-only">{srLabel}</span>
         <Icon className={clsx(sizeClass.icon, iconClass, { 'animate-spin': spin })} aria-hidden="true" />
