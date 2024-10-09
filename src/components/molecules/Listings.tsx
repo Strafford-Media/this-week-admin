@@ -73,55 +73,6 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
           )}
         >
           <ul className={clsx('relative grid grid-cols-auto-7 gap-2')}>
-            <li
-              className={clsx(
-                'sticky top-0 z-10 col-span-7 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
-                id ? 'bg-secondary-50/80' : 'bg-white/80',
-              )}
-            >
-              <Button
-                PreIcon={TagIcon}
-                variant="secondary"
-                onClick={() => {
-                  setSearchParams((s) => (s.set('manage-categories', '1'), s))
-                }}
-              >
-                Manage Categories
-              </Button>
-              <Button PreIcon={DocumentPlusIcon} variant="primary" onClick={() => setOpenNewListingForm(true)}>
-                New Listing
-              </Button>
-              <TextInput
-                placeholder="Search Listings"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                collapseDescriptionArea
-              />
-              <Toggle
-                className="m-1"
-                rightLabel="Include Drafts"
-                checked={includeNonLive}
-                setChecked={setIncludeNonLive}
-              />
-              {canRevalidate && (
-                <Button
-                  variant="dismissive"
-                  onClick={async () => {
-                    const res = await nhost.functions.call('duda-revalidate')
-                    if (res.error) {
-                      return toast.error({ message: 'Unable to Refresh Web Cache', description: res.error.message })
-                    }
-                    toast.success({
-                      message: 'Web Cache Refreshed!',
-                      description: 'All listing updates will be live within 3 minutes.',
-                    })
-                    setLastRevalidated(new Date().valueOf())
-                  }}
-                >
-                  Refresh Web Cache
-                </Button>
-              )}
-            </li>
             {filteredListings.map((listing, i, wholeList) => (
               <li
                 key={listing.id}
@@ -198,6 +149,55 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 </span>
               </li>
             ))}
+            <li
+              className={clsx(
+                'sticky top-0 col-span-7 row-start-1 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
+                id ? 'bg-secondary-50/80' : 'bg-white/80',
+              )}
+            >
+              <Button
+                PreIcon={TagIcon}
+                variant="secondary"
+                onClick={() => {
+                  setSearchParams((s) => (s.set('manage-categories', '1'), s))
+                }}
+              >
+                Manage Categories
+              </Button>
+              <Button PreIcon={DocumentPlusIcon} variant="primary" onClick={() => setOpenNewListingForm(true)}>
+                New Listing
+              </Button>
+              <TextInput
+                placeholder="Search Listings"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                collapseDescriptionArea
+              />
+              <Toggle
+                className="m-1"
+                rightLabel="Include Drafts"
+                checked={includeNonLive}
+                setChecked={setIncludeNonLive}
+              />
+              {canRevalidate && (
+                <Button
+                  variant="dismissive"
+                  onClick={async () => {
+                    const res = await nhost.functions.call('duda-revalidate')
+                    if (res.error) {
+                      return toast.error({ message: 'Unable to Refresh Web Cache', description: res.error.message })
+                    }
+                    toast.success({
+                      message: 'Web Cache Refreshed!',
+                      description: 'All listing updates will be live within 3 minutes.',
+                    })
+                    setLastRevalidated(new Date().valueOf())
+                  }}
+                >
+                  Refresh Web Cache
+                </Button>
+              )}
+            </li>
           </ul>
         </div>
         <div
