@@ -516,7 +516,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                 collapseDescriptionArea
                               />
                               {bl.imageUrl && (
-                                <div className="w-full">
+                                <div className="mx-auto w-full max-w-80">
                                   <img src={bl.imageUrl} alt="Booking Link Image" />
                                 </div>
                               )}
