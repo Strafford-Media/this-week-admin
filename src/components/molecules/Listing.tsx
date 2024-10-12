@@ -25,16 +25,14 @@ import { BusinessHours } from './BusinessHours'
 import { VideoPlayer } from './VideoPlayer'
 import { createPortal } from 'react-dom'
 import { Menu } from '../atoms/Menu'
-import { Editor, EditorContent, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Link from '@tiptap/extension-link'
-import TextAlign from '@tiptap/extension-text-align'
 import { RichTextEditor } from '../atoms/RichTextEditor'
+import { onlyDigitsRegex } from '../../utils/general'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
   label: string
   description: string
+  imageUrl?: string
   title: string
   shortname: string
   item: string
@@ -468,6 +466,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                       ) : (
                         <>
                           {bl.title && <h4 className="text-center">{bl.title}</h4>}
+                          {bl.imageUrl && <img src={bl.imageUrl} alt="Booking Link Image" />}
                           {bl.description && (
                             <div className="text-justify">
                               {bl.description.split('\n').map((text, i) => (
@@ -515,6 +514,22 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                                 }
                                 label="Link Heading"
                                 collapseDescriptionArea
+                              />
+                              {bl.imageUrl && (
+                                <div className="w-full">
+                                  <img src={bl.imageUrl} alt="Booking Link Image" />
+                                </div>
+                              )}
+                              <TextInput
+                                label="Image URL"
+                                description="Optional"
+                                value={bl.imageUrl ?? ''}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'imageUrl', e.target.value),
+                                  )
+                                }
                               />
                               <TextArea
                                 value={bl.description}
@@ -571,6 +586,113 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                           )}
                           {bl.type === 'fareharbor-item' && (
                             <>
+                              <hr className="my-4" />
+                              <TextArea
+                                label="Paste an Existing Link"
+                                placeholder="Paste a fareharbor link here and Hit Enter/Return"
+                                description="Using this shortcut will overwrite any previous data about this link."
+                                onKeyDown={(e) => {
+                                  if (e.key !== 'Enter') return
+
+                                  e.preventDefault()
+                                  e.stopPropagation()
+
+                                  const value = e.currentTarget.value
+
+                                  if (!value || !value.includes('https://fareharbor.com/embeds/book/'))
+                                    return toast.warn({
+                                      message: 'Paste a real fareharbor link and try again.',
+                                      duration: 3000,
+                                    })
+
+                                  let url: URL
+                                  try {
+                                    url = new URL(value)
+                                  } catch (e) {
+                                    return toast.error({
+                                      message: 'Bad Link',
+                                      description:
+                                        'Links should be in the format "https://fareharbor.com/embeds/book/{IMPORTANT NAME HERE}/items/{IMPORTANT ID HERE}/maybe/other/paths?several=query&params=here"',
+                                      duration: 20000,
+                                    })
+                                  }
+
+                                  const item = url.pathname.split('/').find((d) => d.match(onlyDigitsRegex))
+
+                                  const shortname = url.pathname
+                                    .replace('embeds/book', '')
+                                    .split('/')
+                                    .filter(Boolean)[0]
+
+                                  if (!item || !shortname)
+                                    return toast.error({
+                                      message: 'Bad Link',
+                                      description: 'No company shortname or item ID found in this link',
+                                    })
+
+                                  const linksWithShortName = updateBookingLinks(
+                                    listing.booking_links,
+                                    i,
+                                    'shortname',
+                                    shortname,
+                                  )
+                                  const linksWithItem = updateBookingLinks(linksWithShortName, i, 'item', item)
+
+                                  const finalizedLinks = [...url.searchParams.keys()].reduce((updatedLinks, key) => {
+                                    switch (key) {
+                                      case 'asn': {
+                                        const paramValue = url.searchParams.get(key)
+                                        if (!paramValue) return updatedLinks
+                                        return updateBookingLinks(updatedLinks, i, 'asn', paramValue)
+                                      }
+                                      case 'asn-ref': {
+                                        const paramValue = url.searchParams.get(key)
+                                        if (!paramValue) return updatedLinks
+                                        return updateBookingLinks(updatedLinks, i, 'asn-ref', paramValue)
+                                      }
+                                      case 'full-items':
+                                      case 'full-item': {
+                                        const paramValue = url.searchParams.get(key)
+                                        return updateBookingLinks(
+                                          updatedLinks,
+                                          i,
+                                          'full-item',
+                                          ['yes', 'true', '1', 'on'].includes(paramValue!),
+                                        )
+                                      }
+                                      case 'flow': {
+                                        const paramValue = url.searchParams.get(key)
+                                        return updateBookingLinks(updatedLinks, i, 'flow', paramValue ?? '')
+                                      }
+                                      case 'branding': {
+                                        const paramValue = url.searchParams.get(key)
+                                        return updateBookingLinks(
+                                          updatedLinks,
+                                          i,
+                                          'branding',
+                                          ['yes', 'true', '1', 'on'].includes(paramValue!),
+                                        )
+                                      }
+                                      case 'bookable-only': {
+                                        const paramValue = url.searchParams.get(key)
+                                        return updateBookingLinks(
+                                          updatedLinks,
+                                          i,
+                                          'bookable-only',
+                                          ['yes', 'true', '1', 'on'].includes(paramValue!),
+                                        )
+                                      }
+                                    }
+                                    return updatedLinks
+                                  }, linksWithItem)
+
+                                  update('booking_links', finalizedLinks, true)
+                                  e.currentTarget.value = ''
+                                  toast.success({ message: 'Link Populated!' })
+                                }}
+                              />
+                              <hr className="my-4" />
+                              <h4>Link Data</h4>
                               <TextInput
                                 value={bl.shortname}
                                 onChange={(e) =>
@@ -699,7 +821,12 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                     )}
                   </li>
                 ))}
-                <Button PreIcon={PlusIcon} className="self-center" onClick={() => setOpenCreateBookingModal(true)}>
+                <Button
+                  variant={!listing.booking_links?.length ? 'primary' : 'secondary'}
+                  PreIcon={PlusIcon}
+                  className="self-center"
+                  onClick={() => setOpenCreateBookingModal(true)}
+                >
                   Add a Booking Link
                 </Button>
               </ul>
@@ -993,6 +1120,11 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                 if (res instanceof Error || res.error) {
                   return console.error(res)
                 }
+
+
+                https://fareharbor.com/embeds/book/hawaiiglassbottomboats-slt/items/238856/calendar/2024/09/?flow=no&asn=fhdn&asn-ref=thisweekhawaii&full-items=yes&ref=thisweekhawaii&branding=yes
+
+                https://cdn.filestackcontent.com/5EGvYT0cQBeDOM3cZyFY
 
                 console.log(res)
               }}

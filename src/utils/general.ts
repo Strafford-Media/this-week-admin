@@ -62,3 +62,5 @@ export const prevDefAndNoProp = (callback?: (e: MouseEvent) => any) => (e: Mouse
 
   callback?.(e)
 }
+
+export const onlyDigitsRegex = /^\d+$/

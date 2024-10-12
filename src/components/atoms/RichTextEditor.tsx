@@ -70,7 +70,7 @@ export const RichTextEditor = ({
 }
 
 const buttonClasses =
-  'whitespace-nowrap px-1 border border-black rounded bg-white text-sm hover:bg-gray-100 focus:bg-gray-200 focus:outline-none'
+  'whitespace-nowrap px-1 border border-black rounded bg-white text-sm hover:bg-gray-100 focus:bg-gray-200 focus:outline-none disabled:hidden'
 
 const activeClasses = '!bg-black hover:!bg-gray-800 focus:bg-gray-700 !text-white'
 
