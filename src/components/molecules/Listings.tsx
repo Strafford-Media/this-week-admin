@@ -1,13 +1,18 @@
-import { useAuthQuery, useAuthSubscription } from '@nhost/react-apollo'
+import { useAuthQuery } from '@nhost/react-apollo'
 import React, { ComponentProps, Fragment, useMemo, useState } from 'react'
 import { ALL_LISTINGS_SUB, SEARCH_LISTINGS } from '../../graphql/queries'
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button, TextInput, Toggle, toast, useInterval, useRememberedState } from '@8thday/react'
 import clsx from 'clsx'
 import { NewListingModal } from './NewListingModal'
-import { DocumentPlusIcon, TagIcon } from '@heroicons/react/24/outline'
+import { CheckBadgeIcon, CheckCircleIcon, DocumentPlusIcon, TagIcon } from '@heroicons/react/24/outline'
+import { ArrowDownIcon } from '@heroicons/react/16/solid'
 import { addHour, addMinute } from '@formkit/tempo'
 import { useNhostClient } from '@nhost/react'
+import { AllListingsSubscription, Listing_Order_By, Order_By } from '../../gql/graphql'
+import { useNoFlickerSub } from '../../hooks/useNoFlickerSub'
+
+const sortOrderClasses = ['opacity-100', 'opacity-80', 'opacity-60', 'opacity-40', 'opacity-20']
 
 export interface ListingsProps extends ComponentProps<'div'> {}
 
@@ -19,14 +24,45 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
   const [openNewListingForm, setOpenNewListingForm] = useState(false)
   const setSearchParams = useSearchParams()[1]
 
-  const { data } = useAuthSubscription(ALL_LISTINGS_SUB)
-
   const [searchTerm, setSearchTerm] = useState('')
   const [includeNonLive, setIncludeNonLive] = useState(false)
 
+  const [orderBy, setOrderBy] = useState<Listing_Order_By[]>([{ business_name: Order_By.Asc }])
+  const { data } = useNoFlickerSub(ALL_LISTINGS_SUB, {
+    variables: {
+      orderBy,
+      where: { live: includeNonLive ? { _is_null: false } : { _eq: true } },
+    },
+  })
+
+  const sortedFields = orderBy.reduce((map, item) => ({ ...map, ...item }), {})
+  const sortedFieldOrder = orderBy.reduce<Record<string, number>>(
+    (map, item, index) => ({ ...map, ...Object.keys(item).reduce((m, k) => ({ [k]: index }), {}) }),
+    {},
+  )
+
+  const sort = (field: keyof Listing_Order_By, dir: Order_By | null) => {
+    setOrderBy((obs) => {
+      const oldObs = obs.filter((ob) => !ob[field])
+
+      return dir ? [{ [field]: dir }, ...oldObs] : oldObs
+    })
+  }
+
+  const onSortClick = (field: keyof Listing_Order_By) => {
+    switch (sortedFields[field]) {
+      case Order_By.Asc:
+        return sort(field, Order_By.Desc)
+      case Order_By.Desc:
+        return sort(field, null)
+      default:
+        return sort(field, Order_By.Asc)
+    }
+  }
+
   const { data: searchData } = useAuthQuery(SEARCH_LISTINGS, {
     variables: { searchTerm, limit: 20, includeNonLive },
-    skip: searchTerm.length < 6,
+    skip: searchTerm.length < 4,
   })
 
   const goTo = useNavigate()
@@ -55,9 +91,12 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
     const basicSearchResults = (data?.listing ?? []).filter((l) => l.business_name.toLowerCase().includes(lowSearch))
 
     if (!basicSearchResults.length && searchData?.fuzzy_search_listings.length) {
-      const listingMap = (data?.listing ?? []).reduce((map, item) => ({ ...map, [item.id]: item }), {})
+      const listingMap = (data?.listing ?? []).reduce<Record<number, AllListingsSubscription['listing'][number]>>(
+        (map, item) => ({ ...map, [item.id]: item }),
+        {},
+      )
 
-      return searchData.fuzzy_search_listings.map((f) => listingMap[f.id])
+      return searchData.fuzzy_search_listings.map((f) => listingMap[f.id]).filter(Boolean)
     }
 
     return basicSearchResults
@@ -72,12 +111,12 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
             id ? 'col-end-2 bg-secondary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
-          <ul className={clsx('relative grid grid-cols-auto-7 gap-2')}>
+          <ul className={clsx('relative grid grid-cols-auto-8 gap-x-2')}>
             {filteredListings.map((listing, i, wholeList) => (
               <li
                 key={listing.id}
                 className={clsx(
-                  'col-span-7 grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
+                  'col-span-full grid cursor-pointer grid-cols-sub items-center p-2 text-left hover:opacity-70',
                   { 'border-t border-secondary-800/50': i !== 0, 'text-primary-500': listing.id === id },
                 )}
                 role="navigation"
@@ -141,17 +180,19 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 >
                   {listing.tier}
                 </span>
-                <span className="hidden text-gray-500 @md:inline">
-                  <span className="text-xs text-gray-400">Created:</span> {displayDate(listing.created_at)}
+                <span className="flex-center">
+                  {listing.this_week_recommended && <CheckBadgeIcon className="h-5 w-5 text-green-500" />}
                 </span>
-                <span className="hidden text-gray-500 @md:inline">
-                  <span className="text-xs text-gray-400">Last Updated:</span> {displayDate(listing.updated_at)}
+                <span className="flex-center">
+                  {listing.promoted && <CheckCircleIcon className="h-5 w-5 text-green-500" />}
                 </span>
+                <span className="hidden text-gray-500 @md:inline">{displayDate(listing.created_at)}</span>
+                <span className="hidden text-gray-500 @md:inline">{displayDate(listing.updated_at)}</span>
               </li>
             ))}
             <li
               className={clsx(
-                'sticky top-0 col-span-7 row-start-1 flex flex-wrap gap-2 p-2 shadow-md shadow-primary-50',
+                'sticky top-0 col-span-full row-start-1 flex flex-wrap gap-2 p-2',
                 id ? 'bg-secondary-50/80' : 'bg-white/80',
               )}
             >
@@ -198,6 +239,93 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 </Button>
               )}
             </li>
+            <li
+              className={clsx(
+                'sticky top-14 col-span-full row-start-2 grid grid-cols-sub items-center bg-white/80 p-2 text-gray-600 shadow-md shadow-primary-50',
+                id ? 'invisible max-h-0' : 'visible max-h-8',
+              )}
+            >
+              <button className="flex items-center" onClick={() => onSortClick('business_name')}>
+                Business Name
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['business_name'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['business_name']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('live')}>
+                Status
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['live'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['live']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('island')}>
+                Islands
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['island'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['island']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('tier')}>
+                Plan Tier
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['tier'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['tier']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('promoted')}>
+                Promoted
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['promoted'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['promoted']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('this_week_recommended')}>
+                Recommended
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['this_week_recommended'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['this_week_recommended']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('created_at')}>
+                Created
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['created_at'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['created_at']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('updated_at')}>
+                Updated
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['updated_at'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['updated_at']],
+                  )}
+                />
+              </button>
+            </li>
           </ul>
         </div>
         <div
@@ -215,10 +343,11 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
 }
 
 const today = new Date()
+const yesterday = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24)
+const yesterdayDate = yesterday.toISOString().split('T')[0]
 const thisYear = today.getFullYear()
 const thisMonth = today.getMonth()
 const thisDay = today.getDate()
-const thisWeekDay = today.getDay()
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 function displayDate(date: string) {
@@ -233,14 +362,14 @@ function displayDate(date: string) {
   const day = d.getDate()
   const isToday = isThisMonth && thisDay === day
 
-  const isYesterday = !isToday && (d.getDay() + 1) % 7 === thisWeekDay
+  const isYesterday = d.toISOString().startsWith(yesterdayDate)
 
   if (isToday) {
-    return `Today at ${d.toLocaleTimeString()}`
+    return `Today at ${d.toLocaleTimeString(undefined, { timeStyle: 'medium' })}`
   }
 
   if (isYesterday) {
-    return `Yesterday at ${d.toLocaleTimeString()}`
+    return `Yesterday at ${d.toLocaleTimeString(undefined, { timeStyle: 'medium' })}`
   }
 
   return `${months[month]} ${day}${isThisYear ? '' : `, ${year}`}`

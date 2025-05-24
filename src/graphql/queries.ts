@@ -1,8 +1,8 @@
 import { graphql } from '../gql'
 
 export const ALL_LISTINGS_SUB = graphql(`
-  subscription AllListings {
-    listing(order_by: { business_name: asc }) {
+  subscription AllListings($orderBy: [listing_order_by!], $where: listing_bool_exp) {
+    listing(order_by: $orderBy, where: $where) {
       business_name
       island
       created_at
@@ -10,6 +10,8 @@ export const ALL_LISTINGS_SUB = graphql(`
       id
       tier
       live
+      this_week_recommended
+      promoted
     }
   }
 `)
@@ -29,8 +31,17 @@ export const ALL_LISTINGS_WITH_CATEGORIES = graphql(`
 `)
 
 export const SEARCH_LISTINGS = graphql(`
-  query FuzzySearchListings($searchTerm: String!, $includeNonLive: Boolean, $limit: Int!) {
-    fuzzy_search_listings(args: { search: $searchTerm, include_non_live: $includeNonLive }, limit: $limit) {
+  query FuzzySearchListings(
+    $searchTerm: String!
+    $includeNonLive: Boolean
+    $limit: Int!
+    $orderBy: [fuzzy_listing_order_by!]
+  ) {
+    fuzzy_search_listings(
+      args: { search: $searchTerm, include_non_live: $includeNonLive }
+      limit: $limit
+      order_by: $orderBy
+    ) {
       id
     }
   }
