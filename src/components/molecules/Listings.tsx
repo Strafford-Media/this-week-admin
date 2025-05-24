@@ -5,7 +5,13 @@ import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-do
 import { Button, TextInput, Toggle, toast, useInterval, useRememberedState } from '@8thday/react'
 import clsx from 'clsx'
 import { NewListingModal } from './NewListingModal'
-import { CheckBadgeIcon, CheckCircleIcon, DocumentPlusIcon, TagIcon } from '@heroicons/react/24/outline'
+import {
+  CheckBadgeIcon,
+  CheckCircleIcon,
+  DocumentPlusIcon,
+  ShieldCheckIcon,
+  TagIcon,
+} from '@heroicons/react/24/outline'
 import { ArrowDownIcon } from '@heroicons/react/16/solid'
 import { addHour, addMinute } from '@formkit/tempo'
 import { useNhostClient } from '@nhost/react'
@@ -181,10 +187,10 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                   {listing.tier}
                 </span>
                 <span className="flex-center">
-                  {listing.this_week_recommended && <CheckBadgeIcon className="h-5 w-5 text-green-500" />}
+                  {listing.promoted && <CheckBadgeIcon className="h-5 w-5 text-green-500" />}
                 </span>
                 <span className="flex-center">
-                  {listing.promoted && <CheckCircleIcon className="h-5 w-5 text-green-500" />}
+                  {listing.this_week_recommended && <ShieldCheckIcon className="h-5 w-5 text-green-500" />}
                 </span>
                 <span className="hidden text-gray-500 @md:inline">{displayDate(listing.created_at)}</span>
                 <span className="hidden text-gray-500 @md:inline">{displayDate(listing.updated_at)}</span>
