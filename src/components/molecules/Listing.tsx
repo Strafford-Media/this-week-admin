@@ -1,4 +1,4 @@
-import React, { ComponentProps, Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import React, { ComponentProps, Fragment, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
@@ -27,6 +27,7 @@ import { createPortal } from 'react-dom'
 import { Menu } from '../atoms/Menu'
 import { RichTextEditor } from '../atoms/RichTextEditor'
 import { onlyDigitsRegex } from '../../utils/general'
+import { BreadcrumbsEditor } from './BreadcrumbsEditor'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
@@ -266,6 +267,12 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               label="Business Name"
               value={listing.business_name}
               onChange={(e) => setAndDebounceUpdate('business_name', e.target.value)}
+            />
+            <BreadcrumbsEditor
+              breadcrumbs={listing.breadcrumbs}
+              businessName={listing.business_name}
+              slug={listing.slug}
+              onSave={(bcs) => updateImmediately('breadcrumbs', bcs)}
             />
             <Select
               collapseDescriptionArea
