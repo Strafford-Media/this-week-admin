@@ -115,7 +115,7 @@ const AddBreadCrumbButton = ({ className = '', onCreate, ...props }: AddBreadCru
             }}
           >
             <h3>New Breadcrumb</h3>
-            <TextInput label="Label" value={label} onChange={(e) => setLabel(e.target.value)} required />
+            <TextInput label="Label" value={label} onChange={(e) => setLabel(e.target.value)} autoFocus required />
             <TextInput
               label="HREF"
               value={href}
