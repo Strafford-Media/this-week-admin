@@ -1,7 +1,9 @@
-import { Button, Modal, TextInput } from '@8thday/react'
-import { ChevronRightIcon, PlusCircleIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { Button, ButtonProps, Modal, Select, TextInput } from '@8thday/react'
+import { ChevronRightIcon, PencilIcon, PlusCircleIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { useAuthQuery } from '@nhost/react-apollo'
 import clsx from 'clsx'
 import React, { ComponentProps, useState } from 'react'
+import { BREADCRUMBS } from '../../graphql'
 
 export interface BreadcrumbsEditorProps extends ComponentProps<'div'> {
   breadcrumbs: { href?: string; label: string }[]
@@ -17,6 +19,10 @@ export const BreadcrumbsEditor = ({
   onSave,
   ...props
 }: BreadcrumbsEditorProps) => {
+  const [editingIndex, setEditingIndex] = useState(-1)
+  const [href, setHref] = useState('')
+  const [label, setLabel] = useState('')
+
   const onCreate = (bc: { href?: string; label: string }, i: number) => {
     const newBCs = [...breadcrumbs.slice(0, i), bc, ...breadcrumbs.slice(i)]
 
@@ -25,6 +31,12 @@ export const BreadcrumbsEditor = ({
 
   const onDelete = (i: number) => {
     const newBCs = [...breadcrumbs.slice(0, i), ...breadcrumbs.slice(i + 1)]
+
+    onSave(newBCs)
+  }
+
+  const onUpdate = (bc: { href?: string; label: string }, i: number) => {
+    const newBCs = [...breadcrumbs.slice(0, i), bc, ...breadcrumbs.slice(i + 1)]
 
     onSave(newBCs)
   }
@@ -43,11 +55,13 @@ export const BreadcrumbsEditor = ({
           </div>
         </li>
         {breadcrumbs?.map(({ href, label }, i) => (
-          <li className="flex">
+          <li key={label + i} className="flex">
             <div
               className="cursor-pointer"
               onClick={() => {
-                console.log('ayo')
+                setHref(href ?? '')
+                setLabel(label ?? '')
+                setEditingIndex(i)
               }}
             >
               <div className={clsx('flex items-center font-semibold', href && 'text-red-500')}>
@@ -78,6 +92,45 @@ export const BreadcrumbsEditor = ({
           </li>
         )}
       </ol>
+      {editingIndex > -1 && (
+        <Modal portal onClose={() => setEditingIndex(-1)}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+
+              if (!label) return
+
+              onUpdate({ href, label }, editingIndex)
+              setEditingIndex(-1)
+              setHref('')
+              setLabel('')
+            }}
+          >
+            <h3>Edit Breadcrumb</h3>
+            <TextInput label="Label" value={label} onChange={(e) => setLabel(e.target.value)} autoFocus required />
+            <TextInput
+              label="HREF"
+              value={href}
+              onChange={(e) => setHref(e.target.value)}
+              PreText="https://thisweekhawaii.com"
+              placeholder=" (none)"
+              description="Optional"
+            />
+            <div className="mt-4 flex gap-2">
+              <SelectPresetBreadcrumb
+                onSelected={(bc) => {
+                  setHref(bc.href ?? '')
+                  setLabel(bc.label ?? '')
+                }}
+              />
+              <Button type="submit" variant="primary" PreIcon={PencilIcon}>
+                Update
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   )
 }
@@ -124,12 +177,85 @@ const AddBreadCrumbButton = ({ className = '', onCreate, ...props }: AddBreadCru
               placeholder=" (none)"
               description="Optional"
             />
-            <Button type="submit" variant="primary" className="mt-4" PreIcon={PlusIcon}>
-              Create
-            </Button>
+            <div className="mt-4 flex gap-2">
+              <SelectPresetBreadcrumb
+                onSelected={(bc) => {
+                  setHref(bc.href ?? '')
+                  setLabel(bc.label ?? '')
+                }}
+              />
+              <Button type="submit" variant="primary" PreIcon={PlusIcon}>
+                Create
+              </Button>
+            </div>
           </form>
         </Modal>
       )}
     </button>
   )
+}
+
+interface SelectPresetBreadcrumbProps extends Omit<ButtonProps, 'ref'> {
+  onSelected(bc: { href?: string; label: string }): void
+}
+
+const SelectPresetBreadcrumb = ({ onSelected, children, onClick, ...props }: SelectPresetBreadcrumbProps) => {
+  const [open, setOpen] = useState(false)
+
+  const { data } = useAuthQuery(BREADCRUMBS, { fetchPolicy: 'cache-and-network' })
+
+  const availableBreadcrumbs =
+    data?.listing
+      .flatMap((l) => (Array.isArray(l.breadcrumbs) ? l.breadcrumbs : []))
+      .filter(removeDupedBreadcrumbs()) ?? []
+
+  return (
+    <>
+      <Button
+        {...props}
+        onClick={(e) => {
+          onClick?.(e)
+          setOpen(true)
+        }}
+      >
+        {children || 'Copy Existing Breadcrumb'}
+      </Button>
+      {open && (
+        <Modal
+          portal
+          onClose={() => {
+            setOpen(false)
+          }}
+        >
+          <h4>Choose Existing Breadcrumb</h4>
+          <ul className="mt-4 min-w-96 overflow-y-auto">
+            {availableBreadcrumbs.map(({ href, label }) => (
+              <li
+                key={href + label}
+                role="button"
+                className="flex flex-col gap-y-1 p-2 hover:bg-gray-100"
+                onClick={() => {
+                  onSelected({ href, label })
+                  setOpen(false)
+                }}
+              >
+                <p className={href ? 'text-red-500' : ''}>{label}</p>
+                <em className="text-xs text-gray-500">{href || '(none)'}</em>
+              </li>
+            ))}
+          </ul>
+        </Modal>
+      )}
+    </>
+  )
+}
+
+const removeDupedBreadcrumbs = () => {
+  const cache = {}
+
+  return ({ href, label }) => {
+    if (cache[href + label]) return false
+    cache[href + label] = 1
+    return true
+  }
 }

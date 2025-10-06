@@ -44,6 +44,7 @@ const documents = {
     "\n  query AdCycleStatsById($id: Int!) {\n    ad_cycle_by_pk(id: $id) {\n      ad_events_aggregate {\n        aggregate {\n          variance {\n            id\n            ad_cycle_id\n          }\n        }\n      }\n    }\n  }\n": types.AdCycleStatsByIdDocument,
     "\n  query cycleAnalytics($id: Int!) {\n    ad_cycle_by_pk(id: $id) {\n      id\n      loads\n      clicks: ad_events_aggregate(where: { event_type: { _eq: \"click\" } }) {\n        aggregate {\n          count\n        }\n      }\n      unique_clicks: ad_events_aggregate(where: { unique: { _eq: true }, event_type: { _eq: \"click\" } }) {\n        aggregate {\n          count\n        }\n      }\n      views: ad_events_aggregate(where: { event_type: { _eq: \"view\" } }) {\n        aggregate {\n          count\n        }\n      }\n      unique_views: ad_events_aggregate(where: { unique: { _eq: true }, event_type: { _eq: \"view\" } }) {\n        aggregate {\n          count\n        }\n      }\n    }\n  }\n": types.CycleAnalyticsDocument,
     "\n  query GetCategoryTags {\n    category_tag(order_by: [{ is_primary: desc }, { label: asc }]) {\n      id\n      label\n      is_primary\n      listing_category_tags_aggregate {\n        aggregate {\n          count\n        }\n      }\n    }\n  }\n": types.GetCategoryTagsDocument,
+    "\n  query Breadcrumbs {\n    listing(where: { breadcrumbs: { _neq: [] } }) {\n      breadcrumbs\n    }\n  }\n": types.BreadcrumbsDocument,
 };
 
 /**
@@ -184,6 +185,10 @@ export function graphql(source: "\n  query cycleAnalytics($id: Int!) {\n    ad_c
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetCategoryTags {\n    category_tag(order_by: [{ is_primary: desc }, { label: asc }]) {\n      id\n      label\n      is_primary\n      listing_category_tags_aggregate {\n        aggregate {\n          count\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetCategoryTags {\n    category_tag(order_by: [{ is_primary: desc }, { label: asc }]) {\n      id\n      label\n      is_primary\n      listing_category_tags_aggregate {\n        aggregate {\n          count\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Breadcrumbs {\n    listing(where: { breadcrumbs: { _neq: [] } }) {\n      breadcrumbs\n    }\n  }\n"): (typeof documents)["\n  query Breadcrumbs {\n    listing(where: { breadcrumbs: { _neq: [] } }) {\n      breadcrumbs\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

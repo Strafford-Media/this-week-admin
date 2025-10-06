@@ -198,3 +198,11 @@ export const GET_CATEGORY_TAGS = graphql(`
     }
   }
 `)
+
+export const BREADCRUMBS = graphql(`
+  query Breadcrumbs {
+    listing(where: { breadcrumbs: { _neq: [] } }) {
+      breadcrumbs
+    }
+  }
+`)
