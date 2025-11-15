@@ -70,8 +70,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
   const goTo = useNavigate()
 
-  const [fixable, setFixable] = useState({})
-  const [erroredImg, setErroredImg] = useState({})
+  const [fixable, setFixable] = useState<Record<string, boolean>>({})
+  const [erroredImg, setErroredImg] = useState<Record<string, boolean>>({})
 
   const [openCreateBookingModal, setOpenCreateBookingModal] = useState(false)
 
@@ -90,6 +90,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     listing_category_tags: [],
     updated_at: '',
     this_week_recommended: false,
+    is_island_original: false,
     social_media: {},
     business_hours: {},
     images: [],
@@ -126,7 +127,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   const [updateListing, { loading: saveLoading }] = useMutation(UPDATE_LISTING)
 
   const update = async (key: string, value: any, shouldRefresh = true) => {
-    if (data?.listing_by_pk?.[key] === value) return
+    if ((data?.listing_by_pk as any)?.[key] === value) return
 
     const res = await updateListing({ variables: { id, set: { [key]: value } } }).catch((err) =>
       err instanceof Error ? err : new Error(JSON.stringify(err)),
@@ -175,7 +176,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     update(key, value)
   }
 
-  const timeoutIdRef = useRef({})
+  const timeoutIdRef = useRef<Record<string, number>>({})
   const setAndDebounceUpdate = (key: string, value: any) => {
     if (!key || typeof value === 'undefined') return
 
@@ -311,6 +312,13 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               setChecked={(c) => updateImmediately('live', c)}
               rightLabel="Live"
               rightDescription="Show this listing to the public"
+            />
+            <Toggle
+              className="!flex"
+              checked={listing.is_island_original}
+              setChecked={(c) => updateImmediately('is_island_original', c)}
+              rightLabel="Island Original"
+              rightDescription="This business creates local hawaiian goods"
             />
             <Toggle
               className="!flex"
@@ -815,7 +823,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                               if (confirm('Deleting a booking link is irrevocable. Continue?')) {
                                 updateImmediately(
                                   'booking_links',
-                                  listing.booking_links.filter((_, ix) => ix !== i),
+                                  listing.booking_links.filter((_: any, ix: number) => ix !== i),
                                 )
                                 setOpenBookingLink(-1)
                               }
@@ -888,7 +896,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                     })
                   }}
                 />
-                {listing.images.map((image) => {
+                {listing.images.map((image: any) => {
                   const isMain = listing.layout_data.main_image === image.url
                   const isAction = listing.layout_data.action_shot1 === image.url
 
@@ -938,7 +946,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                             onClick: () => {
                               isMain ? updateLayoutData('main_image', '') : updateLayoutData('main_image', image.url)
                             },
-                            disabled: !!fixable[image.url],
+                            disabled: !!fixable[image.url as string],
                           },
                           {
                             label: (
@@ -970,7 +978,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                               if (confirm('Deleting here does not remove from the Duda media manager.')) {
                                 updateImmediately(
                                   'images',
-                                  listing.images.filter((i) => i.url !== image.url),
+                                  listing.images.filter((i: any) => i.url !== image.url),
                                 )
 
                                 if (listing.layout_data.main_image === image.url) {
@@ -1026,7 +1034,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
                                 updateImmediately(
                                   'images',
-                                  listing.images.map((i) =>
+                                  listing.images.map((i: any) =>
                                     i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
                                   ),
                                 ).then(() => {
@@ -1077,7 +1085,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               </form>
               {!!listing.videos.length && (
                 <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                  {listing.videos.map((video, i) => (
+                  {listing.videos.map((video: any, i: number) => (
                     <div className="relative w-fit" key={video.id}>
                       <VideoPlayer videoDetails={video} />
                       <Button
@@ -1087,7 +1095,7 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                         onClick={() =>
                           updateImmediately(
                             'videos',
-                            listing.videos.filter((_, idx) => idx !== i),
+                            listing.videos.filter((_: any, idx: number) => idx !== i),
                           )
                         }
                       ></Button>

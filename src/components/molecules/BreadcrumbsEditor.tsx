@@ -251,9 +251,9 @@ const SelectPresetBreadcrumb = ({ onSelected, children, onClick, ...props }: Sel
 }
 
 const removeDupedBreadcrumbs = () => {
-  const cache = {}
+  const cache: Record<string, 1> = {}
 
-  return ({ href, label }) => {
+  return ({ href, label }: { href: string; label: string }) => {
     if (cache[href + label]) return false
     cache[href + label] = 1
     return true

@@ -110,14 +110,14 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
 
   return (
     <div className={`${className}`} {...props}>
-      <div className="grid h-contentD max-h-contentD grid-cols-[250px,1fr] overflow-hidden transition-all duration-300">
+      <div className="grid h-contentD max-h-contentD grid-cols-[300px,1fr] overflow-hidden transition-all duration-300">
         <div
           className={clsx(
             'col-start-1 row-start-1 row-end-2 max-h-full overflow-y-auto pb-16 transition-all duration-300 @container',
             id ? 'col-end-2 bg-secondary-50' : 'z-10 col-end-3 bg-white',
           )}
         >
-          <ul className={clsx('relative grid grid-cols-auto-8 gap-x-2')}>
+          <ul className={clsx('relative grid grid-cols-auto-9 gap-x-2')}>
             {filteredListings.map((listing, i, wholeList) => (
               <li
                 key={listing.id}
@@ -189,6 +189,7 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                 <span className="flex-center">
                   {listing.promoted && <CheckBadgeIcon className="h-5 w-5 text-green-500" />}
                 </span>
+                <span className="flex-center text-lg">{listing.is_island_original && '✨'}</span>
                 <span className="flex-center">
                   {listing.this_week_recommended && <ShieldCheckIcon className="h-5 w-5 text-green-500" />}
                 </span>
@@ -298,6 +299,16 @@ export const Listings = ({ className = '', ...props }: ListingsProps) => {
                     'ml-2 inline-block h-4 w-4 opacity-0',
                     sortedFields['promoted'] === Order_By.Asc && 'rotate-180',
                     sortOrderClasses[sortedFieldOrder['promoted']],
+                  )}
+                />
+              </button>
+              <button className="flex items-center" onClick={() => onSortClick('is_island_original')}>
+                Original
+                <ArrowDownIcon
+                  className={clsx(
+                    'ml-2 inline-block h-4 w-4 opacity-0',
+                    sortedFields['is_island_original'] === Order_By.Asc && 'rotate-180',
+                    sortOrderClasses[sortedFieldOrder['is_island_original']],
                   )}
                 />
               </button>

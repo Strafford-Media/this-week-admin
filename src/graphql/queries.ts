@@ -11,6 +11,7 @@ export const ALL_LISTINGS_SUB = graphql(`
       tier
       live
       this_week_recommended
+      is_island_original
       promoted
     }
   }
@@ -67,6 +68,7 @@ export const LISTING_BY_ID = graphql(`
       primary_email
       primary_web_url
       this_week_recommended
+      is_island_original
       booking_links
       business_hours
       breadcrumbs

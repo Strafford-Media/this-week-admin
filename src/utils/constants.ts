@@ -11,4 +11,7 @@ export const adSizes = [
   { label: '728w x 90h', value: '728x90' },
 ]
 
-export const adSizeDisplayMap = adSizes.reduce((map, item) => ({ ...map, [item.value]: item.label }), {})
+export const adSizeDisplayMap = adSizes.reduce<Record<string, string>>(
+  (map, item) => ({ ...map, [item.value]: item.label }),
+  {},
+)
