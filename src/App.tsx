@@ -1,15 +1,17 @@
 import React, { ReactNode } from 'react'
-import { BuildingStorefrontIcon, MegaphoneIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { BuildingStorefrontIcon, MegaphoneIcon, UserCircleIcon, UsersIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { NavLink, Outlet, useSearchParams } from 'react-router-dom'
-import { useAuthenticationStatus } from '@nhost/react'
+import { useAuthenticationStatus, useNhostClient, useUserDefaultRole } from '@nhost/react'
 import { LoginScreen } from './components/molecules/LoginScreen'
 import { LoadingScreen } from './components/molecules/LoadingScreen'
-import { IconType, Modal } from '@8thday/react'
+import { Button, IconType, Modal } from '@8thday/react'
 import { CategoryManager } from './components/molecules/CategoryManager'
 
 export const App = () => {
+  const nhost = useNhostClient()
   const { isAuthenticated, isLoading } = useAuthenticationStatus()
+  const isSubscriber = useUserDefaultRole() === 'subscriber'
   const [searchParams, setSearchParams] = useSearchParams()
 
   const manageCategories = !!searchParams.get('manage-categories')
@@ -22,9 +24,26 @@ export const App = () => {
     return <LoginScreen />
   }
 
+  if (isSubscriber) {
+    return (
+      <main className="max-w-screen flex-center h-screen flex-col gap-2">
+        <p>This page is for staff only.</p>
+        <Button
+          variant="primary"
+          onClick={async () => {
+            await nhost.auth.signOut({ all: false })
+            window.open('https://thisweekhawaii.com', '_self')
+          }}
+        >
+          Sign Out
+        </Button>
+      </main>
+    )
+  }
+
   return (
     <>
-      <main className={`max-w-screen h-contentD flex flex-col pb-16 sm:pb-0 sm:pt-16`}>
+      <main className={`max-w-screen flex h-screen flex-col pb-16 sm:pb-0 sm:pt-16`}>
         <Outlet />
         {manageCategories && (
           <Modal onClose={() => setSearchParams((s) => (s.delete('manage-categories'), s))}>
@@ -36,6 +55,7 @@ export const App = () => {
         <h1 className="mr-auto hidden items-center p-2 text-center text-lg font-bold leading-4 text-primary-500 sm:flex md:p-4 md:text-xl">
           This Week Admin
         </h1>
+        <TWHNavLink to="/visitor-management" icon={UsersIcon} label="Visitors" />
         <TWHNavLink to="/ads" icon={MegaphoneIcon} label="Ads" />
         <TWHNavLink to="/listings" icon={BuildingStorefrontIcon} label="Listings" />
         <TWHNavLink to="/profile" icon={UserCircleIcon} label="Profile" />
