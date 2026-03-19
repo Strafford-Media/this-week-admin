@@ -23,9 +23,9 @@ export const ChangePassword = ({ className = '', ...props }: ChangePasswordProps
   }, [])
 
   return (
-    <div className={`${className} flex-center fixed inset-0 z-50 bg-white/80 p-4`} {...props}>
+    <div className={`${className} flex-center fixed inset-0 z-50 bg-white/60 p-4`} {...props}>
       <form
-        className="min-w-md max-w-full space-y-4 rounded-md p-4 shadow-xl"
+        className="min-w-md max-w-full space-y-4 rounded-md bg-white p-4 shadow-xl"
         onSubmit={async (e) => {
           e.preventDefault()
           e.stopPropagation()
