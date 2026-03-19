@@ -1,15 +1,17 @@
 import { Button } from '@8thday/react'
-import { useSendVerificationEmail, useSignOut, useUserData } from '@nhost/react'
+import { useNhostClient, useSendVerificationEmail, useSignOut, useUserData } from '@nhost/react'
 import { ComponentProps } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Badge } from '../atoms/Badge'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { displayUserRole } from '../../utils/general'
 import { toast } from '../../utils/toasts'
+import { UPDATE_USER_METADATA } from '../../graphql/mutations'
 
 export interface ProfileProps extends ComponentProps<'div'> {}
 
 export const Profile = ({ className = '', ...props }: ProfileProps) => {
+  const nhost = useNhostClient()
   const user = useUserData()
 
   const { sendEmail } = useSendVerificationEmail()
@@ -29,7 +31,19 @@ export const Profile = ({ className = '', ...props }: ProfileProps) => {
             className="h-full w-full rounded-lg"
           />
         </div>
-        <h3 className="-mb-3">{user.displayName}</h3>
+        <h3
+          className="-mb-3 cursor-pointer"
+          onClick={async () => {
+            const newName = prompt('Change your username:')
+
+            if (newName) {
+              await nhost.graphql.request(UPDATE_USER_METADATA, { id: user.id, metadata: {}, displayName: newName })
+              nhost.auth.refreshSession()
+            }
+          }}
+        >
+          {user.displayName}
+        </h3>
         <Badge color="primary" shadow size="large">
           {displayUserRole(user.defaultRole)}
         </Badge>
