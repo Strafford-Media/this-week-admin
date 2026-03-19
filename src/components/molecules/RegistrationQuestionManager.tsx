@@ -116,7 +116,7 @@ export const RegistrationQuestionManager = ({ className = '', ...props }: Regist
 
               newQuestion.metadata = { choices: newQuestion.question_type === 'choice' ? [] : undefined }
               newQuestion.order =
-                Math.max(...(data?.visitor_question.filter((q) => q.active).map((q) => q.order) ?? [])) + 1
+                Math.max(0, ...(data?.visitor_question.filter((q) => q.active).map((q) => q.order) ?? [])) + 1
 
               const res = await nhost.graphql
                 .request(CREATE_VISITOR_QUESTION, { input: newQuestion })
