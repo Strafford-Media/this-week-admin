@@ -15,3 +15,5 @@ export const adSizeDisplayMap = adSizes.reduce<Record<string, string>>(
   (map, item) => ({ ...map, [item.value]: item.label }),
   {},
 )
+
+export const ONE_MONTH = 1000 * 60 * 60 * 24 * 30

@@ -3,15 +3,29 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuthQuery } from '@nhost/react-apollo'
 import { LISTING_BY_ID } from '../../graphql/queries'
 import { LoadingScreen } from './LoadingScreen'
-import { Button, Checkbox, Modal, Select, TextArea, TextInput, Toggle, copyText, toast } from '@8thday/react'
+import {
+  Button,
+  Checkbox,
+  Modal,
+  Select,
+  TextArea,
+  TextInput,
+  Toggle,
+  copyText,
+  toast,
+  useRememberedState,
+} from '@8thday/react'
 import { ArrowPathIcon, TagIcon, ChevronRightIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { CameraIcon, StarIcon, PlusIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/solid'
 import { useNhostClient } from '@nhost/react'
 import {
   CREATE_CATEGORY_LISTINGS,
+  CREATE_PROMO_CODE,
   DELETE_CATEGORY_LISTING_BY_ID,
   DELETE_LISTING,
+  DELETE_PROMO_CODE,
   UPDATE_LISTING,
+  UPDATE_PROMO_CODE,
 } from '../../graphql/mutations'
 import { ListingByIdQuery } from '../../gql/graphql'
 import { useMutation } from '@apollo/client'
@@ -28,6 +42,7 @@ import { Menu } from '../atoms/Menu'
 import { RichTextEditor } from '../atoms/RichTextEditor'
 import { onlyDigitsRegex } from '../../utils/general'
 import { BreadcrumbsEditor } from './BreadcrumbsEditor'
+import { ONE_MONTH } from '../../utils/constants'
 
 interface BookingLink {
   type: 'fareharbor-item' | 'fareharbor-grid' | 'external'
@@ -55,6 +70,8 @@ const tiers = [
 ]
 
 const islands = ['oahu', 'maui', 'hawaii', 'kauai']
+
+const tabs = ['info', 'media', 'sales', 'website', 'settings'] as const
 
 export interface ListingProps extends ComponentProps<'div'> {}
 
@@ -91,11 +108,14 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     updated_at: '',
     this_week_recommended: false,
     is_island_original: false,
+    promo_code_visitor_hook: '',
+    promo_code_count: 0,
     social_media: {},
     business_hours: {},
     images: [],
     videos: [],
     booking_links: [],
+    promo_codes: [],
     layout_data: {},
     lat_lng: '',
   })
@@ -125,11 +145,31 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
   }
 
   const [updateListing, { loading: saveLoading }] = useMutation(UPDATE_LISTING)
+  const [updatePromoCodeMutation, { loading: savePCLoading }] = useMutation(UPDATE_PROMO_CODE)
+  const [createPromoCode, { loading: createPCLoading }] = useMutation(CREATE_PROMO_CODE)
 
   const update = async (key: string, value: any, shouldRefresh = true) => {
     if ((data?.listing_by_pk as any)?.[key] === value) return
 
     const res = await updateListing({ variables: { id, set: { [key]: value } } }).catch((err) =>
+      err instanceof Error ? err : new Error(JSON.stringify(err)),
+    )
+
+    if (res instanceof Error) {
+      return toast.error({
+        message: "Couldn't save.",
+        description: res.message,
+        duration: 1000,
+      })
+    }
+
+    shouldRefresh && refreshListingData()
+  }
+
+  const updatePromoCode = async (id: number, key: string, value: any, shouldRefresh = true) => {
+    if ((data?.listing_by_pk as any)?.[key] === value) return
+
+    const res = await updatePromoCodeMutation({ variables: { id, set: { [key]: value } } }).catch((err) =>
       err instanceof Error ? err : new Error(JSON.stringify(err)),
     )
 
@@ -188,6 +228,19 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
     }, 400)
   }
 
+  const debouncePromoCodeUpdate = (id: number, key: string, value: any) => {
+    if (!key || typeof value === 'undefined') return
+
+    setListing((l) => ({ ...l, promo_codes: l.promo_codes.map((p) => (p.id === id ? { ...p, [key]: value } : p)) }))
+
+    const timeoutKey = `${key}:${id}`
+
+    clearTimeout(timeoutIdRef.current[timeoutKey])
+    timeoutIdRef.current[timeoutKey] = window.setTimeout(() => {
+      updatePromoCode(id, key, value, false)
+    }, 400)
+  }
+
   const tagOptions = useMemo(() => {
     return tags
       .filter((t) => listing.listing_category_tags.every((c) => c.category_tag_id !== t.id))
@@ -200,19 +253,23 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
 
   const [openBookingLink, setOpenBookingLink] = useState(-1)
 
+  const [currentTab, setCurrentTab] = useRememberedState<(typeof tabs)[number]>('twh-listing-current-tab', 'info')
+
+  const [isDemoDesktop, setIsDemoDesktop] = useState(true)
+
   if (called && !fetchLoading && !error && !data?.listing_by_pk) {
     setTimeout(() => goTo('..'), 0)
     return null
   }
 
   return (
-    <div className={`${className} h-full max-h-contentD overflow-y-auto px-4 pb-8 shadow-inner`} {...props}>
+    <div className={`${className} flex h-contentD flex-col px-4 shadow-inner`} {...props}>
       {!listing ? (
         <LoadingScreen className="!h-full !min-h-0" />
       ) : (
         <>
-          <div className="sticky top-0 z-10 -mx-4 flex min-h-8 p-4 backdrop-blur-sm">
-            <button
+          <ul className="flex h-12 shrink-0 items-center gap-1 shadow-sm md:gap-2">
+            <li
               className="mr-auto"
               role="navigation"
               onClick={(e) => {
@@ -229,121 +286,1000 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
               }}
             >
               <ChevronRightIcon className="h-5 w-5" />
-            </button>
+            </li>
             {createPortal(
               <ArrowPathIcon
                 className={`fixed right-2 top-[4.5rem] z-[9999] h-8 w-8 animate-spin text-green-500 ease-in ${
-                  saveLoading ? 'opacity-100' : 'opacity-0 delay-1000 duration-500'
+                  saveLoading || savePCLoading || createPCLoading ? 'opacity-100' : 'opacity-0 delay-1000 duration-500'
                 }`}
               />,
               document.body,
             )}
-          </div>
-          <div className="max-w-3xl space-y-4 @container">
-            <div className="flex items-center justify-between text-gray-500">
-              <a
-                href={`https://www.thisweekhawaii.com/listing/${listing.slug}`}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="hover:text-blue-500 focus:text-blue-500 focus:underline focus:outline-none"
+            {tabs.map((tab) => (
+              <li
+                key={tab}
+                role="navigation"
+                className={clsx(
+                  'flex-center cursor-pointer rounded-full px-2 py-1 capitalize text-secondary-950 shadow-md transition-all duration-300',
+                  tab === currentTab
+                    ? 'bg-secondary-200 text-lg'
+                    : 'bg-white text-base hover:bg-secondary-50 hover:text-secondary-900',
+                )}
+                onClick={() => setCurrentTab(tab)}
               >
-                https://www.thisweekhawaii.com/listing/{listing.slug}
-              </a>
-              <button
-                className="focus:text-blue-500 focus:outline-none"
-                onClick={async () => {
-                  copyText(`${listing.id}`).then(() => {
-                    toast.success({
-                      message: 'Copied Listing ID to clipboard',
-                      description: `Listing ID: ${listing.id}`,
+                {tab}
+              </li>
+            ))}
+            <div className="ml-auto h-0 w-4"></div>
+          </ul>
+          {currentTab === 'info' && (
+            <div className="-mx-2 grow space-y-4 overflow-y-auto p-2 @container">
+              <div className="flex items-center justify-between text-gray-500">
+                <a
+                  href={`https://www.thisweekhawaii.com/listing/${listing.slug}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="hover:text-blue-500 focus:text-blue-500 focus:underline focus:outline-none"
+                >
+                  https://www.thisweekhawaii.com/listing/{listing.slug}
+                </a>
+                <button
+                  className="focus:text-blue-500 focus:outline-none"
+                  onClick={async () => {
+                    copyText(`${listing.id}`).then(() => {
+                      toast.success({
+                        message: 'Copied Listing ID to clipboard',
+                        description: `Listing ID: ${listing.id}`,
+                      })
                     })
-                  })
-                }}
-              >
-                ID: {listing.id}
-              </button>
-            </div>
-            <TextInput
-              collapseDescriptionArea
-              label="Business Name"
-              value={listing.business_name}
-              onChange={(e) => setAndDebounceUpdate('business_name', e.target.value)}
-            />
-            <BreadcrumbsEditor
-              breadcrumbs={listing.breadcrumbs}
-              businessName={listing.business_name}
-              slug={listing.slug}
-              onSave={(bcs) => updateImmediately('breadcrumbs', bcs)}
-            />
-            <Select
-              collapseDescriptionArea
-              label="Tier"
-              value={listing.tier}
-              onValueChange={(v) => updateImmediately('tier', v)}
-              items={tiers}
-            />
-            <Toggle
-              className="!flex"
-              checked={listing.promoted}
-              setChecked={(c) => updateImmediately('promoted', c)}
-              rightLabel="Promoted"
-              rightDescription=""
-            />
-            <div className="grid grid-cols-2 gap-4 @md:grid-cols-4">
-              <label className="col-span-full">Island(s)</label>
-              {islands.map((isle) => (
-                <Checkbox
-                  key={isle}
-                  checked={(listing.island || '').includes(isle)}
-                  setChecked={(c) => {
-                    updateImmediately(
-                      'island',
-                      islands.filter((is) => (is === isle ? c : listing.island?.includes(is))).join('|'),
-                    )
                   }}
-                  label={isle}
-                  labelClass="capitalize"
-                />
-              ))}
+                >
+                  ID: {listing.id}
+                </button>
+              </div>
+              <TextInput
+                collapseDescriptionArea
+                label="Business Name"
+                value={listing.business_name}
+                onChange={(e) => setAndDebounceUpdate('business_name', e.target.value)}
+              />
+              <TextInput
+                collapseDescriptionArea
+                label="Short Slogan"
+                value={listing.slogan ?? ''}
+                onChange={(e) => setAndDebounceUpdate('slogan', e.target.value)}
+              />
+              <TextInput
+                collapseDescriptionArea
+                label="Primary Email"
+                value={listing.primary_email ?? ''}
+                onChange={(e) => setAndDebounceUpdate('primary_email', e.target.value)}
+              />
+              <TextInput
+                collapseDescriptionArea
+                label="Primary Phone"
+                value={listing.primary_phone ?? ''}
+                onChange={(e) => setAndDebounceUpdate('primary_phone', e.target.value)}
+              />
+              <TextInput
+                collapseDescriptionArea
+                label="Primary Website URL"
+                value={listing.primary_web_url ?? ''}
+                onChange={(e) => setAndDebounceUpdate('primary_web_url', e.target.value)}
+              />
+              <TextInput
+                label="Primary Address"
+                description="Optional if Latitude/Longitude provided"
+                value={listing.primary_address ?? ''}
+                onChange={(e) => setAndDebounceUpdate('primary_address', e.target.value)}
+              />
+              <TextInput
+                description="Optional if Primary Address provided"
+                label="Latitude/Longitude"
+                placeholder="ex: (0,0)"
+                value={listing.lat_lng ?? ''}
+                onChange={(e) => setAndDebounceUpdate('lat_lng', e.target.value)}
+              />
+              <BusinessHours
+                businessHours={listing.business_hours}
+                onUpdate={(bh) => setAndDebounceUpdate('business_hours', bh)}
+              />
             </div>
-            <Toggle
-              className="!flex"
-              checked={listing.live}
-              setChecked={(c) => updateImmediately('live', c)}
-              rightLabel="Live"
-              rightDescription="Show this listing to the public"
-            />
-            <Toggle
-              className="!flex"
-              checked={listing.is_island_original}
-              setChecked={(c) => updateImmediately('is_island_original', c)}
-              rightLabel="Island Original"
-              rightDescription="This business creates local hawaiian goods"
-            />
-            <Toggle
-              className="!flex"
-              checked={listing.this_week_recommended}
-              setChecked={(c) => updateImmediately('this_week_recommended', c)}
-              rightLabel="This Week Recommended"
-              rightDescription="Publicly recommend this listing"
-            />
-            <SocialAccounts
-              socialAccounts={listing.social_media}
-              setSocialAccounts={(sa) => setAndDebounceUpdate('social_media', sa)}
-            />
-            {tags.length ? (
+          )}
+          {currentTab === 'media' && (
+            <div className="-mx-2 grow space-y-4 overflow-y-auto p-2 @container">
+              <RichTextEditor
+                key={id}
+                label="Description / Content Body"
+                html={listing.rich_description || listing.description || ''}
+                text={listing.description || ''}
+                onValueChange={(e) => {
+                  setAndDebounceUpdate('description', e.text)
+                  setAndDebounceUpdate('rich_description', e.html)
+                }}
+              />
+              <SocialAccounts
+                socialAccounts={listing.social_media}
+                setSocialAccounts={(sa) => setAndDebounceUpdate('social_media', sa)}
+              />
               <div>
-                <label className="block w-full">Category Tags</label>
-                <ul className="flex flex-wrap gap-2 py-2">
-                  {listing.listing_category_tags.map((lct) => {
-                    if (tagMap[lct.category_tag_id]) {
-                      const deleteOnClick = async () => {
+                <label>Logo</label>
+                {listing.layout_data.logo ? (
+                  <div className="relative h-full w-fit">
+                    <img src={listing.layout_data.logo} alt="Company Logo" className="h-full" />
+                    <button
+                      className="absolute right-0 top-0 flex justify-end hover:opacity-100 sm:inset-0 sm:bg-white/25 sm:opacity-0"
+                      onClick={async () => {
+                        if (confirm('Remove this logo?')) {
+                          updateLayoutData('logo', '')
+                        }
+                      }}
+                    >
+                      <TrashIcon className="h-6 w-6 text-red-500" />
+                    </button>
+                  </div>
+                ) : (
+                  <ImageUploader
+                    contentLabel="Logo"
+                    type="logo"
+                    className="h-full max-w-80"
+                    entityId={id}
+                    onSuccess={() => {
+                      refetch().then(({ data }) => {
+                        if (data.listing_by_pk) {
+                          setListing(data.listing_by_pk)
+                        }
+                      })
+                    }}
+                  />
+                )}
+              </div>
+              <div>
+                <label>Images</label>
+                <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
+                  <ImageUploader
+                    contentLabel="Images"
+                    className="h-full"
+                    entityId={id}
+                    onSuccess={() => {
+                      refetch().then(({ data }) => {
+                        if (data.listing_by_pk) {
+                          setListing(data.listing_by_pk)
+                        }
+                      })
+                    }}
+                  />
+                  {listing.images.map((image: any) => {
+                    const isMain = listing.layout_data.main_image === image.url
+                    const isAction = listing.layout_data.action_shot1 === image.url
+
+                    return (
+                      <li
+                        className={clsx('group relative h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
+                        key={image.original_url}
+                      >
+                        <img
+                          className="h-full w-full rounded shadow"
+                          src={image.url}
+                          alt={image.original_url}
+                          onError={async () => {
+                            setErroredImg((e) => ({ ...e, [image.url]: true }))
+                            if (image.original_url) {
+                              const fetchable = await fetch(image.original_url).then((r) => r.ok)
+
+                              if (fetchable) {
+                                setFixable((f) => ({ ...f, [image.url]: true }))
+                              }
+                            }
+                          }}
+                        />
+                        {(isMain || isAction) && (
+                          <div className="flex-center absolute left-0 top-0 gap-2 rounded-br rounded-tl bg-white/40 p-2">
+                            {isMain && <StarIcon className="h-6 w-6 text-yellow-400" />}
+                            {isAction && <CameraIcon className="h-6 w-6 text-sky-400" />}
+                          </div>
+                        )}
+                        <Menu
+                          className="absolute right-1 top-1 h-8 w-8 bg-white p-1 text-primary-500"
+                          listItems={[
+                            {
+                              label: (
+                                <span className="flex items-center gap-2 text-sm">
+                                  <StarIcon
+                                    className={clsx(
+                                      'h-5 w-5 text-gray-400 group-focus-within/menu-item:text-yellow-400',
+                                      {
+                                        'text-yellow-400': isMain,
+                                      },
+                                    )}
+                                  />{' '}
+                                  {isMain ? 'Unset' : 'Set'} as Hero Image
+                                </span>
+                              ),
+                              onClick: () => {
+                                isMain ? updateLayoutData('main_image', '') : updateLayoutData('main_image', image.url)
+                              },
+                              disabled: !!fixable[image.url as string],
+                            },
+                            {
+                              label: (
+                                <span className="flex items-center gap-2 text-sm">
+                                  <CameraIcon
+                                    className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-sky-500', {
+                                      'text-sky-500': isAction,
+                                    })}
+                                  />{' '}
+                                  {isAction ? 'Unset' : 'Set'} as Action Shot
+                                </span>
+                              ),
+                              onClick: () =>
+                                isAction
+                                  ? updateLayoutData('action_shot1', '')
+                                  : updateLayoutData('action_shot1', image.url),
+                              disabled: !!fixable[image.url],
+                            },
+                            {
+                              label: (
+                                <span className="flex items-center gap-2 text-sm">
+                                  <TrashIcon
+                                    className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-red-500')}
+                                  />{' '}
+                                  Remove Image
+                                </span>
+                              ),
+                              onClick: async () => {
+                                if (confirm('Deleting here does not remove from the Duda media manager.')) {
+                                  updateImmediately(
+                                    'images',
+                                    listing.images.filter((i: any) => i.url !== image.url),
+                                  )
+
+                                  if (listing.layout_data.main_image === image.url) {
+                                    updateLayoutData('main_image', '')
+                                  }
+
+                                  if (listing.layout_data.action_shot1 === image.url) {
+                                    updateLayoutData('action_shot1', '')
+                                  }
+                                }
+                              },
+                            },
+                            {
+                              label: (
+                                <span className="flex items-center gap-2 text-sm">
+                                  <WrenchScrewdriverIcon
+                                    className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-red-500')}
+                                  />{' '}
+                                  Fix Image
+                                </span>
+                              ),
+                              onClick: async () => {
+                                const res = await nhost.graphql
+                                  .request(
+                                    graphql(`
+                                      mutation fixImage($entityId: Int!, $src: String!) {
+                                        uploadImage(entityId: $entityId, src: $src, fix: true) {
+                                          success
+                                          error
+                                          fixed_url
+                                        }
+                                      }
+                                    `),
+                                    {
+                                      entityId: id,
+                                      src: image.original_url,
+                                    },
+                                  )
+                                  .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                                if (res instanceof Error || res.data?.uploadImage.error) {
+                                  toast.error({
+                                    message: 'Fixing Image Failed',
+                                    description: res instanceof Error ? res.message : res.data?.uploadImage.error,
+                                  })
+                                  return console.error(res)
+                                }
+
+                                if (res.data?.uploadImage.fixed_url) {
+                                  toast.success({
+                                    message: 'Image Restored!',
+                                  })
+
+                                  updateImmediately(
+                                    'images',
+                                    listing.images.map((i: any) =>
+                                      i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
+                                    ),
+                                  ).then(() => {
+                                    setErroredImg((e) => ({ ...e, [image.url]: false }))
+                                    setFixable((f) => ({ ...f, [image.url]: false }))
+                                  })
+                                }
+                              },
+                              disabled: !fixable[image.url],
+                            },
+                          ]}
+                        />
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+              <div>
+                <form
+                  className="mb-2"
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+
+                    if (!newVidUrl) return
+
+                    // parse id and type out of url
+                    const { id, type } = parseVideoUrl(newVidUrl)
+
+                    if (!id || !type) {
+                      return toast.error({
+                        message: 'Unable to parse url',
+                        description: 'Try copying the url directly from the browser or share button.',
+                      })
+                    }
+
+                    setNewVidUrl('')
+
+                    update('videos', listing.videos.concat([{ url: newVidUrl, id, type }]))
+                  }}
+                >
+                  <TextInput
+                    label="Add Video(s) by URL"
+                    description='Paste a youtube, vimeo, or daily motion video url and hit "enter"'
+                    value={newVidUrl}
+                    onChange={(e) => setNewVidUrl(e.target.value)}
+                  />
+                </form>
+                {!!listing.videos.length && (
+                  <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
+                    {listing.videos.map((video: any, i: number) => (
+                      <div className="relative w-fit" key={video.id}>
+                        <VideoPlayer videoDetails={video} />
+                        <Button
+                          className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"
+                          variant="destructive"
+                          PostIcon={TrashIcon}
+                          onClick={() =>
+                            updateImmediately(
+                              'videos',
+                              listing.videos.filter((_: any, idx: number) => idx !== i),
+                            )
+                          }
+                        ></Button>
+                      </div>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          )}
+          {currentTab === 'sales' && (
+            <div className="-mx-2 grow space-y-4 overflow-y-auto p-2 @container">
+              <div>
+                <h3 className="mb-4">Booking Links</h3>
+                <ul className="flex flex-wrap gap-2">
+                  {listing.booking_links?.map((bl: BookingLink, i: number) => (
+                    <li key={i} tabIndex={0} onClick={(e) => setOpenBookingLink(i)}>
+                      <div className="flex w-full max-w-80 cursor-pointer flex-col items-center gap-4 rounded-md border border-gray-300 p-4 shadow-md">
+                        {bl.type === 'fareharbor-grid' ? (
+                          <>
+                            <h4>Fareharbor Grid</h4>
+                            <p>Flow ID: {getFlowFromScript(bl.script)}</p>
+                          </>
+                        ) : (
+                          <>
+                            {bl.title && <h4 className="text-center">{bl.title}</h4>}
+                            {bl.imageUrl && <img src={bl.imageUrl} alt="Booking Link Image" />}
+                            {bl.description && (
+                              <div className="text-justify">
+                                {bl.description.split('\n').map((text, i) => (
+                                  <Fragment key={i}>
+                                    {i !== 0 && <br />}
+                                    {text}
+                                  </Fragment>
+                                ))}
+                              </div>
+                            )}
+                            {bl.label && (
+                              <Button disabled={!bl.href && !bl.shortname} tabIndex={-1} variant="primary">
+                                {bl.label}
+                              </Button>
+                            )}
+                          </>
+                        )}
+                      </div>
+                      {openBookingLink === i && (
+                        <Modal onClose={() => {}} portal className="relative w-2xl">
+                          <div className="relative flex w-2xl max-w-full flex-col gap-y-3">
+                            <Button
+                              onClick={() => setOpenBookingLink(-1)}
+                              className="!absolute right-0 top-0 z-10 w-fit"
+                              variant="dismissive"
+                            >
+                              <XMarkIcon className="h-5 w-5" />
+                            </Button>
+                            <h3 className="mb-4">
+                              {bl.type === 'external'
+                                ? 'External Booking Link'
+                                : bl.type === 'fareharbor-item'
+                                  ? 'Single Fareharbor Item'
+                                  : 'Fareharbor Grid'}
+                            </h3>
+                            {bl.type !== 'fareharbor-grid' && (
+                              <>
+                                <TextInput
+                                  value={bl.title}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'title', e.target.value),
+                                    )
+                                  }
+                                  label="Link Heading"
+                                  collapseDescriptionArea
+                                />
+                                {bl.imageUrl && (
+                                  <div className="mx-auto w-full max-w-80">
+                                    <img src={bl.imageUrl} alt="Booking Link Image" />
+                                  </div>
+                                )}
+                                <TextInput
+                                  label="Image URL"
+                                  description="Optional"
+                                  value={bl.imageUrl ?? ''}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'imageUrl', e.target.value),
+                                    )
+                                  }
+                                />
+                                <TextArea
+                                  value={bl.description}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'description', e.target.value),
+                                    )
+                                  }
+                                  label="Link Description"
+                                  collapseDescriptionArea
+                                />
+                                <TextInput
+                                  value={bl.label}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'label', e.target.value),
+                                    )
+                                  }
+                                  label="Button Label"
+                                  collapseDescriptionArea
+                                  required
+                                />
+                              </>
+                            )}
+                            {bl.type === 'fareharbor-grid' && (
+                              <TextArea
+                                className="mb-4"
+                                label="Fareharbor Script"
+                                description="Paste the code provided in the Fareharbor dashboard for a grid of items."
+                                value={bl.script}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'script', e.target.value),
+                                  )
+                                }
+                                required
+                              />
+                            )}
+                            {bl.type === 'external' && (
+                              <TextInput
+                                label="Link URL"
+                                value={bl.href}
+                                onChange={(e) =>
+                                  setAndDebounceUpdate(
+                                    'booking_links',
+                                    updateBookingLinks(listing.booking_links, i, 'href', e.target.value),
+                                  )
+                                }
+                                required
+                              />
+                            )}
+                            {bl.type === 'fareharbor-item' && (
+                              <>
+                                <hr className="my-4" />
+                                <TextArea
+                                  label="Paste an Existing Link"
+                                  placeholder="Paste a fareharbor link here and Hit Enter/Return"
+                                  description="Using this shortcut will overwrite any previous data about this link."
+                                  onKeyDown={(e) => {
+                                    if (e.key !== 'Enter') return
+
+                                    e.preventDefault()
+                                    e.stopPropagation()
+
+                                    const value = e.currentTarget.value
+
+                                    if (!value || !value.includes('https://fareharbor.com/embeds/book/'))
+                                      return toast.warn({
+                                        message: 'Paste a real fareharbor link and try again.',
+                                        duration: 3000,
+                                      })
+
+                                    let url: URL
+                                    try {
+                                      url = new URL(value)
+                                    } catch (e) {
+                                      return toast.error({
+                                        message: 'Bad Link',
+                                        description:
+                                          'Links should be in the format "https://fareharbor.com/embeds/book/{IMPORTANT NAME HERE}/items/{IMPORTANT ID HERE}/maybe/other/paths?several=query&params=here"',
+                                        duration: 20000,
+                                      })
+                                    }
+
+                                    const item = url.pathname.split('/').find((d) => d.match(onlyDigitsRegex))
+
+                                    const shortname = url.pathname
+                                      .replace('embeds/book', '')
+                                      .split('/')
+                                      .filter(Boolean)[0]
+
+                                    if (!item || !shortname)
+                                      return toast.error({
+                                        message: 'Bad Link',
+                                        description: 'No company shortname or item ID found in this link',
+                                      })
+
+                                    const linksWithShortName = updateBookingLinks(
+                                      listing.booking_links,
+                                      i,
+                                      'shortname',
+                                      shortname,
+                                    )
+                                    const linksWithItem = updateBookingLinks(linksWithShortName, i, 'item', item)
+
+                                    const finalizedLinks = [...url.searchParams.keys()].reduce((updatedLinks, key) => {
+                                      switch (key) {
+                                        case 'asn': {
+                                          const paramValue = url.searchParams.get(key)
+                                          if (!paramValue) return updatedLinks
+                                          return updateBookingLinks(updatedLinks, i, 'asn', paramValue)
+                                        }
+                                        case 'asn-ref': {
+                                          const paramValue = url.searchParams.get(key)
+                                          if (!paramValue) return updatedLinks
+                                          return updateBookingLinks(updatedLinks, i, 'asn-ref', paramValue)
+                                        }
+                                        case 'full-items':
+                                        case 'full-item': {
+                                          const paramValue = url.searchParams.get(key)
+                                          return updateBookingLinks(
+                                            updatedLinks,
+                                            i,
+                                            'full-item',
+                                            ['yes', 'true', '1', 'on'].includes(paramValue!),
+                                          )
+                                        }
+                                        case 'flow': {
+                                          const paramValue = url.searchParams.get(key)
+                                          return updateBookingLinks(updatedLinks, i, 'flow', paramValue ?? '')
+                                        }
+                                        case 'branding': {
+                                          const paramValue = url.searchParams.get(key)
+                                          return updateBookingLinks(
+                                            updatedLinks,
+                                            i,
+                                            'branding',
+                                            ['yes', 'true', '1', 'on'].includes(paramValue!),
+                                          )
+                                        }
+                                        case 'bookable-only': {
+                                          const paramValue = url.searchParams.get(key)
+                                          return updateBookingLinks(
+                                            updatedLinks,
+                                            i,
+                                            'bookable-only',
+                                            ['yes', 'true', '1', 'on'].includes(paramValue!),
+                                          )
+                                        }
+                                      }
+                                      return updatedLinks
+                                    }, linksWithItem)
+
+                                    update('booking_links', finalizedLinks, true)
+                                    e.currentTarget.value = ''
+                                    toast.success({ message: 'Link Populated!' })
+                                  }}
+                                />
+                                <hr className="my-4" />
+                                <h4>Link Data</h4>
+                                <TextInput
+                                  value={bl.shortname}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'shortname', e.target.value),
+                                    )
+                                  }
+                                  label="Company shortname"
+                                  description="Fareharbor customer identifier"
+                                  required
+                                />
+                                <TextInput
+                                  value={bl.item}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'item', e.target.value),
+                                    )
+                                  }
+                                  label="Item ID"
+                                  placeholder="usually a 3-6 digit number"
+                                  collapseDescriptionArea
+                                  required
+                                />
+                                <hr className="my-8" />
+                                <h3 className="font-normal">Advanced Options</h3>
+                                <Toggle
+                                  rightLabel="Full Item"
+                                  rightDescription="Include item description and images"
+                                  checked={bl['full-item']}
+                                  setChecked={(c) => {
+                                    updateImmediately(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'full-item', c),
+                                    )
+                                  }}
+                                />
+                                <TextInput
+                                  value={bl.sheet}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'sheet', e.target.value),
+                                    )
+                                  }
+                                  label="Pricing Sheet ID"
+                                  placeholder="usually a 3-6 digit number"
+                                  collapseDescriptionArea
+                                />
+                                <TextInput
+                                  label="ASN"
+                                  value={bl.asn}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'asn', e.target.value),
+                                    )
+                                  }
+                                  description="The affiliate to associate with bookings, if you are using the ASN network"
+                                />
+                                <TextInput
+                                  label="asn-ref"
+                                  value={bl['asn-ref']}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'asn-ref', e.target.value),
+                                    )
+                                  }
+                                  description="The voucher number that should be set for ASN bookings"
+                                />
+                                <TextInput
+                                  value={bl.flow}
+                                  onChange={(e) =>
+                                    setAndDebounceUpdate(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'flow', e.target.value),
+                                    )
+                                  }
+                                  label="Flow ID"
+                                  description="Specify a defined sales flow (leave empty for defaults)"
+                                />
+                                <Toggle
+                                  rightLabel="Branding"
+                                  checked={bl.branding}
+                                  setChecked={(c) => {
+                                    updateImmediately(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'branding', c),
+                                    )
+                                  }}
+                                />
+                                <Toggle
+                                  rightLabel="Bookable Only"
+                                  rightDescription="Hide closed and call to book availabilities"
+                                  checked={bl['bookable-only']}
+                                  setChecked={(c) => {
+                                    updateImmediately(
+                                      'booking_links',
+                                      updateBookingLinks(listing.booking_links, i, 'bookable-only', c),
+                                    )
+                                  }}
+                                />
+                              </>
+                            )}
+                            <hr className="my-6" />
+                            <Button
+                              className="self-start"
+                              PreIcon={TrashIcon}
+                              variant="destructive"
+                              onClick={() => {
+                                if (confirm('Deleting a booking link is irrevocable. Continue?')) {
+                                  updateImmediately(
+                                    'booking_links',
+                                    listing.booking_links.filter((_: any, ix: number) => ix !== i),
+                                  )
+                                  setOpenBookingLink(-1)
+                                }
+                              }}
+                            >
+                              Delete Booking Link
+                            </Button>
+                          </div>
+                        </Modal>
+                      )}
+                    </li>
+                  ))}
+                  <Button
+                    variant={!listing.booking_links?.length ? 'primary' : 'secondary'}
+                    PreIcon={PlusIcon}
+                    className="self-center"
+                    onClick={() => setOpenCreateBookingModal(true)}
+                  >
+                    Add a Booking Link
+                  </Button>
+                </ul>
+              </div>
+              <hr />
+              <div className="flex flex-col gap-y-2">
+                <h3 className="flex justify-between">
+                  Promo Codes
+                  <Button variant="dismissive" onClick={() => setIsDemoDesktop((d) => !d)}>
+                    Demo Size: {isDemoDesktop ? 'Desktop' : 'Mobile'}
+                  </Button>
+                </h3>
+                <ul className="-mx-4">
+                  {listing.promo_codes?.map((p) => (
+                    <li key={p.id} className="flex flex-col p-4 odd:bg-gray-100 even:bg-white">
+                      <div className="mb-1 flex gap-2">
+                        <TextInput
+                          label="Promotion Label"
+                          className="grow"
+                          value={p.label ?? ''}
+                          onChange={(e) => debouncePromoCodeUpdate(p.id, 'label', e.target.value)}
+                          collapseDescriptionArea
+                        />
+                        <TextInput
+                          label="Code"
+                          value={p.code}
+                          onChange={(e) => debouncePromoCodeUpdate(p.id, 'code', e.target.value)}
+                          collapseDescriptionArea
+                        />
+                        <Button
+                          variant="destructive-outline"
+                          className="self-end"
+                          PreIcon={TrashIcon}
+                          onClick={async () => {
+                            if (confirm('Permanently delete this promo code?')) {
+                              const res = await nhost.graphql
+                                .request(DELETE_PROMO_CODE, { id: p.id })
+                                .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                              if (res instanceof Error || res.error) {
+                                return toast.error({
+                                  message: 'Unable to delete this promo code',
+                                  description: (res as Error).message || JSON.stringify((res as any).error),
+                                })
+                              }
+
+                              refreshListingData()
+                            }
+                          }}
+                        />
+                      </div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <Checkbox
+                          label="Enable Expiration"
+                          description="Expired Promo Codes will cease displaying on the website."
+                          checked={!!p.expiration}
+                          setChecked={(c) => {
+                            if (savePCLoading) return
+
+                            updatePromoCode(
+                              p.id,
+                              'expiration',
+                              c ? new Date(Date.now() + ONE_MONTH).toISOString() : null,
+                            )
+                          }}
+                          disabled={savePCLoading}
+                        />
+                        <TextInput
+                          type="date"
+                          label="Expiration Date (Exclusive)"
+                          value={p.expiration?.split('T')[0] ?? undefined}
+                          onChange={(e) => debouncePromoCodeUpdate(p.id, 'expiration', e.target.value)}
+                          disabled={!p.expiration || savePCLoading}
+                        />
+                      </div>
+                      <div className={clsx('mx-auto @container/demo', isDemoDesktop ? 'w-[840px]' : 'w-xs')}>
+                        <div
+                          className={`${className} flex flex-col items-center justify-center gap-1 rounded border-2 border-red-500 p-2 @md/demo:flex-row @md/demo:justify-start`}
+                          {...props}
+                        >
+                          <div className="flex min-w-0 shrink flex-wrap justify-center gap-x-2 text-center text-lg/5 font-bold @md/demo:justify-start @md/demo:text-left @md/demo:text-2xl/7">
+                            <span className="whitespace-nowrap">Special Subscriber Savings:</span>
+                            <span className="text-red-500">{p.label ?? ''}</span>
+                            <span className="h-0 basis-full"></span>
+                          </div>
+                          <button
+                            className="flex shrink-0 cursor-not-allowed items-center justify-center whitespace-nowrap rounded bg-red-500 px-2 py-2 text-white @md/demo:ml-auto @md/demo:text-xl"
+                            disabled
+                          >
+                            <span>
+                              PROMO CODE:{' '}
+                              <span className="font-bold">{p.code || <em className="font-thin">None</em>}</span>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                  {!listing.promo_codes?.length && <em className="px-4 text-gray-500">No Promo Codes Yet!</em>}
+                </ul>
+                <Button
+                  variant="primary"
+                  className="my-4 self-start"
+                  PreIcon={PlusIcon}
+                  onClick={async () => {
+                    if (!listing.id) return
+
+                    const res = await createPromoCode({
+                      variables: { pc: { code: '', listing_id: listing.id } },
+                    }).catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                    if (res instanceof Error) {
+                      return toast.error({
+                        message: "Couldn't create a new Promo Code.",
+                        description: res.message,
+                        duration: 1000,
+                      })
+                    }
+
+                    refreshListingData()
+                  }}
+                >
+                  New Promo Code
+                </Button>
+                <TextInput
+                  label="Visitor Hook"
+                  labelClass="!font-bold"
+                  value={listing.promo_code_visitor_hook ?? ''}
+                  onChange={(e) => setAndDebounceUpdate('promo_code_visitor_hook', e.target.value)}
+                  description="Displays when a site visitor is not logged in"
+                />
+                <div className="mx-auto w-auto">
+                  <em className="-mb-2 text-sm text-gray-500">Visitor Hook Demo</em>
+                  <div className={clsx('@container/demo', isDemoDesktop ? 'w-[840px]' : 'w-xs')}>
+                    <div
+                      className={`${className} flex flex-col items-center justify-center gap-1 rounded border-2 border-red-500 p-2 @md/demo:flex-row @md/demo:justify-start`}
+                      {...props}
+                    >
+                      <div className="text-center @md/demo:text-left">
+                        <p className="mb-0.5 flex min-w-0 flex-wrap justify-center gap-x-2 text-lg/5 font-bold @md/demo:justify-start @md/demo:text-2xl/7">
+                          Special Subscriber Savings{listing.promo_code_visitor_hook && ': '}
+                          <span className="text-red-500">{listing.promo_code_visitor_hook ?? ''}</span>
+                          <span className="h-0 basis-full"></span>
+                        </p>
+                        <p className="text-[11px]/none text-gray-600">
+                          Subscribe for FREE to receive these special savings.
+                        </p>
+                      </div>
+                      <button
+                        className="flex shrink-0 cursor-not-allowed items-center justify-center whitespace-nowrap rounded bg-red-500 px-2 py-2 text-sm font-bold text-white @md/demo:ml-auto"
+                        disabled
+                      >
+                        LOGIN / SUBSCRIBE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {currentTab === 'website' && (
+            <div className="-mx-2 grow space-y-4 overflow-y-auto p-2 @container">
+              <BreadcrumbsEditor
+                breadcrumbs={listing.breadcrumbs}
+                businessName={listing.business_name}
+                slug={listing.slug}
+                onSave={(bcs) => updateImmediately('breadcrumbs', bcs)}
+              />
+              <div className="grid grid-cols-2 gap-4 @md:grid-cols-4">
+                <label className="col-span-full">Island(s)</label>
+                {islands.map((isle) => (
+                  <Checkbox
+                    key={isle}
+                    checked={(listing.island || '').includes(isle)}
+                    setChecked={(c) => {
+                      updateImmediately(
+                        'island',
+                        islands.filter((is) => (is === isle ? c : listing.island?.includes(is))).join('|'),
+                      )
+                    }}
+                    label={isle}
+                    labelClass="capitalize"
+                  />
+                ))}
+              </div>
+              {tags.length ? (
+                <div>
+                  <label className="block w-full">Category Tags</label>
+                  <ul className="flex flex-wrap gap-2 py-2">
+                    {listing.listing_category_tags.map((lct) => {
+                      if (tagMap[lct.category_tag_id]) {
+                        const deleteOnClick = async () => {
+                          const res = await nhost.graphql
+                            .request(DELETE_CATEGORY_LISTING_BY_ID, { id: lct.id })
+                            .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
+
+                          if (res instanceof Error || res.error) {
+                            return toast.error({ message: 'Unable to remove this tag' })
+                          }
+
+                          refetch().then(({ data }) => {
+                            if (data.listing_by_pk) {
+                              setListing(data.listing_by_pk)
+                            }
+                          })
+                        }
+                        return (
+                          <li
+                            className="relative cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white before:absolute before:inset-0 before:z-10 before:rounded-full before:bg-gray-700 before:opacity-0 after:absolute after:inset-0 after:z-20 after:mx-auto after:py-0.5 after:text-center after:font-bold after:opacity-0 after:content-x hover:before:opacity-50 hover:after:opacity-100 focus:outline-none focus:ring-2 focus:before:opacity-50 focus:after:opacity-100"
+                            key={lct.id}
+                            onClick={deleteOnClick}
+                            tabIndex={0}
+                            onKeyDown={(e) => e.key === 'Enter' && deleteOnClick()}
+                          >
+                            {tagMap[lct.category_tag_id].label}
+                          </li>
+                        )
+                      }
+                    })}
+                  </ul>
+                  <div className="flex items-center">
+                    <Select
+                      className="inline-block"
+                      placeholder="Add a Category Tag"
+                      collapseDescriptionArea
+                      items={tagOptions}
+                      value=""
+                      onValueChange={async (t) => {
+                        const ctId = Number(t)
+
+                        if (!ctId) return
+
                         const res = await nhost.graphql
-                          .request(DELETE_CATEGORY_LISTING_BY_ID, { id: lct.id })
+                          .request(CREATE_CATEGORY_LISTINGS, {
+                            objects: [{ listing_id: id, category_tag_id: ctId }],
+                          })
                           .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
                         if (res instanceof Error || res.error) {
-                          return toast.error({ message: 'Unable to remove this tag' })
+                          console.error(res)
+                          return toast.error({
+                            message: `There was an error adding the tag`,
+                            description: `please try again`,
+                          })
                         }
 
                         refetch().then(({ data }) => {
@@ -351,780 +1287,89 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
                             setListing(data.listing_by_pk)
                           }
                         })
-                      }
-                      return (
-                        <li
-                          className="relative cursor-pointer rounded-full bg-primary-500 px-2 py-0.5 text-sm capitalize text-white before:absolute before:inset-0 before:z-10 before:rounded-full before:bg-gray-700 before:opacity-0 after:absolute after:inset-0 after:z-20 after:mx-auto after:py-0.5 after:text-center after:font-bold after:opacity-0 after:content-x hover:before:opacity-50 hover:after:opacity-100 focus:outline-none focus:ring-2 focus:before:opacity-50 focus:after:opacity-100"
-                          key={lct.id}
-                          onClick={deleteOnClick}
-                          tabIndex={0}
-                          onKeyDown={(e) => e.key === 'Enter' && deleteOnClick()}
-                        >
-                          {tagMap[lct.category_tag_id].label}
-                        </li>
-                      )
-                    }
-                  })}
-                </ul>
-                <div className="flex items-center">
-                  <Select
-                    className="inline-block"
-                    placeholder="Add a Category Tag"
-                    collapseDescriptionArea
-                    items={tagOptions}
-                    value=""
-                    onValueChange={async (t) => {
-                      const ctId = Number(t)
-
-                      if (!ctId) return
-
-                      const res = await nhost.graphql
-                        .request(CREATE_CATEGORY_LISTINGS, {
-                          objects: [{ listing_id: id, category_tag_id: ctId }],
-                        })
-                        .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
-
-                      if (res instanceof Error || res.error) {
-                        console.error(res)
-                        return toast.error({
-                          message: `There was an error adding the tag`,
-                          description: `please try again`,
-                        })
-                      }
-
-                      refetch().then(({ data }) => {
-                        if (data.listing_by_pk) {
-                          setListing(data.listing_by_pk)
-                        }
-                      })
-                    }}
-                  ></Select>
-                  <Button
-                    PreIcon={TagIcon}
-                    className="ml-4"
-                    onClick={() => {
-                      setSearchParams((s) => (s.set('manage-categories', '1'), s))
-                    }}
-                  >
-                    Manage Categories
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <Button
-                onClick={() => {
-                  setSearchParams((s) => (s.set('manage-categories', '1'), s))
-                }}
-              >
-                Configure Category Tags
-              </Button>
-            )}
-            <div>
-              <label>Logo</label>
-              {listing.layout_data.logo ? (
-                <div className="relative h-full w-fit">
-                  <img src={listing.layout_data.logo} alt="Company Logo" className="h-full" />
-                  <button
-                    className="absolute right-0 top-0 flex justify-end hover:opacity-100 sm:inset-0 sm:bg-white/25 sm:opacity-0"
-                    onClick={async () => {
-                      if (confirm('Remove this logo?')) {
-                        updateLayoutData('logo', '')
-                      }
-                    }}
-                  >
-                    <TrashIcon className="h-6 w-6 text-red-500" />
-                  </button>
+                      }}
+                    ></Select>
+                    <Button
+                      PreIcon={TagIcon}
+                      className="ml-4"
+                      onClick={() => {
+                        setSearchParams((s) => (s.set('manage-categories', '1'), s))
+                      }}
+                    >
+                      Manage Categories
+                    </Button>
+                  </div>
                 </div>
               ) : (
-                <ImageUploader
-                  contentLabel="Logo"
-                  type="logo"
-                  className="h-full max-w-80"
-                  entityId={id}
-                  onSuccess={() => {
-                    refetch().then(({ data }) => {
-                      if (data.listing_by_pk) {
-                        setListing(data.listing_by_pk)
-                      }
-                    })
+                <Button
+                  onClick={() => {
+                    setSearchParams((s) => (s.set('manage-categories', '1'), s))
                   }}
-                />
+                >
+                  Configure Category Tags
+                </Button>
               )}
             </div>
-            <TextInput
-              collapseDescriptionArea
-              label="Short Slogan"
-              value={listing.slogan ?? ''}
-              onChange={(e) => setAndDebounceUpdate('slogan', e.target.value)}
-            />
-            <RichTextEditor
-              key={id}
-              label="Description / Content Body"
-              html={listing.rich_description || listing.description || ''}
-              text={listing.description || ''}
-              onValueChange={(e) => {
-                setAndDebounceUpdate('description', e.text)
-                setAndDebounceUpdate('rich_description', e.html)
-              }}
-            />
-            <div className="mb-6">
-              <label className="mb-4">Booking Links</label>
-              <ul className="flex flex-wrap gap-2">
-                {listing.booking_links?.map((bl: BookingLink, i: number) => (
-                  <li key={i} tabIndex={0} onClick={(e) => setOpenBookingLink(i)}>
-                    <div className="flex w-full max-w-80 cursor-pointer flex-col items-center gap-4 rounded-md border border-gray-300 p-4 shadow-md">
-                      {bl.type === 'fareharbor-grid' ? (
-                        <>
-                          <h4>Fareharbor Grid</h4>
-                          <p>Flow ID: {getFlowFromScript(bl.script)}</p>
-                        </>
-                      ) : (
-                        <>
-                          {bl.title && <h4 className="text-center">{bl.title}</h4>}
-                          {bl.imageUrl && <img src={bl.imageUrl} alt="Booking Link Image" />}
-                          {bl.description && (
-                            <div className="text-justify">
-                              {bl.description.split('\n').map((text, i) => (
-                                <Fragment key={i}>
-                                  {i !== 0 && <br />}
-                                  {text}
-                                </Fragment>
-                              ))}
-                            </div>
-                          )}
-                          {bl.label && (
-                            <Button disabled={!bl.href && !bl.shortname} tabIndex={-1} variant="primary">
-                              {bl.label}
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </div>
-                    {openBookingLink === i && (
-                      <Modal onClose={() => {}} portal className="relative w-2xl">
-                        <div className="relative flex w-2xl max-w-full flex-col gap-y-3">
-                          <Button
-                            onClick={() => setOpenBookingLink(-1)}
-                            className="!absolute right-0 top-0 z-10 w-fit"
-                            variant="dismissive"
-                          >
-                            <XMarkIcon className="h-5 w-5" />
-                          </Button>
-                          <h3 className="mb-4">
-                            {bl.type === 'external'
-                              ? 'External Booking Link'
-                              : bl.type === 'fareharbor-item'
-                                ? 'Single Fareharbor Item'
-                                : 'Fareharbor Grid'}
-                          </h3>
-                          {bl.type !== 'fareharbor-grid' && (
-                            <>
-                              <TextInput
-                                value={bl.title}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'title', e.target.value),
-                                  )
-                                }
-                                label="Link Heading"
-                                collapseDescriptionArea
-                              />
-                              {bl.imageUrl && (
-                                <div className="mx-auto w-full max-w-80">
-                                  <img src={bl.imageUrl} alt="Booking Link Image" />
-                                </div>
-                              )}
-                              <TextInput
-                                label="Image URL"
-                                description="Optional"
-                                value={bl.imageUrl ?? ''}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'imageUrl', e.target.value),
-                                  )
-                                }
-                              />
-                              <TextArea
-                                value={bl.description}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'description', e.target.value),
-                                  )
-                                }
-                                label="Link Description"
-                                collapseDescriptionArea
-                              />
-                              <TextInput
-                                value={bl.label}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'label', e.target.value),
-                                  )
-                                }
-                                label="Button Label"
-                                collapseDescriptionArea
-                                required
-                              />
-                            </>
-                          )}
-                          {bl.type === 'fareharbor-grid' && (
-                            <TextArea
-                              className="mb-4"
-                              label="Fareharbor Script"
-                              description="Paste the code provided in the Fareharbor dashboard for a grid of items."
-                              value={bl.script}
-                              onChange={(e) =>
-                                setAndDebounceUpdate(
-                                  'booking_links',
-                                  updateBookingLinks(listing.booking_links, i, 'script', e.target.value),
-                                )
-                              }
-                              required
-                            />
-                          )}
-                          {bl.type === 'external' && (
-                            <TextInput
-                              label="Link URL"
-                              value={bl.href}
-                              onChange={(e) =>
-                                setAndDebounceUpdate(
-                                  'booking_links',
-                                  updateBookingLinks(listing.booking_links, i, 'href', e.target.value),
-                                )
-                              }
-                              required
-                            />
-                          )}
-                          {bl.type === 'fareharbor-item' && (
-                            <>
-                              <hr className="my-4" />
-                              <TextArea
-                                label="Paste an Existing Link"
-                                placeholder="Paste a fareharbor link here and Hit Enter/Return"
-                                description="Using this shortcut will overwrite any previous data about this link."
-                                onKeyDown={(e) => {
-                                  if (e.key !== 'Enter') return
+          )}
+          {currentTab === 'settings' && (
+            <div className="-mx-2 flex grow flex-col items-start gap-y-4 overflow-y-auto p-2 @container">
+              <Select
+                className="shrink-0"
+                collapseDescriptionArea
+                label="Tier"
+                value={listing.tier}
+                onValueChange={(v) => updateImmediately('tier', v)}
+                items={tiers}
+              />
+              <Toggle
+                className="!flex shrink-0"
+                checked={listing.promoted}
+                setChecked={(c) => updateImmediately('promoted', c)}
+                rightLabel="Promoted"
+                rightDescription=""
+              />
+              <Toggle
+                className="!flex shrink-0"
+                checked={listing.live}
+                setChecked={(c) => updateImmediately('live', c)}
+                rightLabel="Live"
+                rightDescription="Show this listing to the public"
+              />
+              <Toggle
+                className="!flex shrink-0"
+                checked={listing.is_island_original}
+                setChecked={(c) => updateImmediately('is_island_original', c)}
+                rightLabel="Island Original"
+                rightDescription="This business creates local hawaiian goods"
+              />
+              <Toggle
+                className="mb-4 !flex shrink-0"
+                checked={listing.this_week_recommended}
+                setChecked={(c) => updateImmediately('this_week_recommended', c)}
+                rightLabel="This Week Recommended"
+                rightDescription="Publicly recommend this listing"
+              />
+              <hr className="!mt-auto w-full" />
+              <Button
+                PreIcon={TrashIcon}
+                variant="destructive"
+                onClick={async (e) => {
+                  if (!confirm('Are you sure? Deleting a Listing cannot be undone.')) return
 
-                                  e.preventDefault()
-                                  e.stopPropagation()
+                  const res = await nhost.graphql
+                    .request(DELETE_LISTING, { id: listing.id })
+                    .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
 
-                                  const value = e.currentTarget.value
-
-                                  if (!value || !value.includes('https://fareharbor.com/embeds/book/'))
-                                    return toast.warn({
-                                      message: 'Paste a real fareharbor link and try again.',
-                                      duration: 3000,
-                                    })
-
-                                  let url: URL
-                                  try {
-                                    url = new URL(value)
-                                  } catch (e) {
-                                    return toast.error({
-                                      message: 'Bad Link',
-                                      description:
-                                        'Links should be in the format "https://fareharbor.com/embeds/book/{IMPORTANT NAME HERE}/items/{IMPORTANT ID HERE}/maybe/other/paths?several=query&params=here"',
-                                      duration: 20000,
-                                    })
-                                  }
-
-                                  const item = url.pathname.split('/').find((d) => d.match(onlyDigitsRegex))
-
-                                  const shortname = url.pathname
-                                    .replace('embeds/book', '')
-                                    .split('/')
-                                    .filter(Boolean)[0]
-
-                                  if (!item || !shortname)
-                                    return toast.error({
-                                      message: 'Bad Link',
-                                      description: 'No company shortname or item ID found in this link',
-                                    })
-
-                                  const linksWithShortName = updateBookingLinks(
-                                    listing.booking_links,
-                                    i,
-                                    'shortname',
-                                    shortname,
-                                  )
-                                  const linksWithItem = updateBookingLinks(linksWithShortName, i, 'item', item)
-
-                                  const finalizedLinks = [...url.searchParams.keys()].reduce((updatedLinks, key) => {
-                                    switch (key) {
-                                      case 'asn': {
-                                        const paramValue = url.searchParams.get(key)
-                                        if (!paramValue) return updatedLinks
-                                        return updateBookingLinks(updatedLinks, i, 'asn', paramValue)
-                                      }
-                                      case 'asn-ref': {
-                                        const paramValue = url.searchParams.get(key)
-                                        if (!paramValue) return updatedLinks
-                                        return updateBookingLinks(updatedLinks, i, 'asn-ref', paramValue)
-                                      }
-                                      case 'full-items':
-                                      case 'full-item': {
-                                        const paramValue = url.searchParams.get(key)
-                                        return updateBookingLinks(
-                                          updatedLinks,
-                                          i,
-                                          'full-item',
-                                          ['yes', 'true', '1', 'on'].includes(paramValue!),
-                                        )
-                                      }
-                                      case 'flow': {
-                                        const paramValue = url.searchParams.get(key)
-                                        return updateBookingLinks(updatedLinks, i, 'flow', paramValue ?? '')
-                                      }
-                                      case 'branding': {
-                                        const paramValue = url.searchParams.get(key)
-                                        return updateBookingLinks(
-                                          updatedLinks,
-                                          i,
-                                          'branding',
-                                          ['yes', 'true', '1', 'on'].includes(paramValue!),
-                                        )
-                                      }
-                                      case 'bookable-only': {
-                                        const paramValue = url.searchParams.get(key)
-                                        return updateBookingLinks(
-                                          updatedLinks,
-                                          i,
-                                          'bookable-only',
-                                          ['yes', 'true', '1', 'on'].includes(paramValue!),
-                                        )
-                                      }
-                                    }
-                                    return updatedLinks
-                                  }, linksWithItem)
-
-                                  update('booking_links', finalizedLinks, true)
-                                  e.currentTarget.value = ''
-                                  toast.success({ message: 'Link Populated!' })
-                                }}
-                              />
-                              <hr className="my-4" />
-                              <h4>Link Data</h4>
-                              <TextInput
-                                value={bl.shortname}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'shortname', e.target.value),
-                                  )
-                                }
-                                label="Company shortname"
-                                description="Fareharbor customer identifier"
-                                required
-                              />
-                              <TextInput
-                                value={bl.item}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'item', e.target.value),
-                                  )
-                                }
-                                label="Item ID"
-                                placeholder="usually a 3-6 digit number"
-                                collapseDescriptionArea
-                                required
-                              />
-                              <hr className="my-8" />
-                              <h3 className="font-normal">Advanced Options</h3>
-                              <Toggle
-                                rightLabel="Full Item"
-                                rightDescription="Include item description and images"
-                                checked={bl['full-item']}
-                                setChecked={(c) => {
-                                  updateImmediately(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'full-item', c),
-                                  )
-                                }}
-                              />
-                              <TextInput
-                                value={bl.sheet}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'sheet', e.target.value),
-                                  )
-                                }
-                                label="Pricing Sheet ID"
-                                placeholder="usually a 3-6 digit number"
-                                collapseDescriptionArea
-                              />
-                              <TextInput
-                                label="ASN"
-                                value={bl.asn}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'asn', e.target.value),
-                                  )
-                                }
-                                description="The affiliate to associate with bookings, if you are using the ASN network"
-                              />
-                              <TextInput
-                                label="asn-ref"
-                                value={bl['asn-ref']}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'asn-ref', e.target.value),
-                                  )
-                                }
-                                description="The voucher number that should be set for ASN bookings"
-                              />
-                              <TextInput
-                                value={bl.flow}
-                                onChange={(e) =>
-                                  setAndDebounceUpdate(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'flow', e.target.value),
-                                  )
-                                }
-                                label="Flow ID"
-                                description="Specify a defined sales flow (leave empty for defaults)"
-                              />
-                              <Toggle
-                                rightLabel="Branding"
-                                checked={bl.branding}
-                                setChecked={(c) => {
-                                  updateImmediately(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'branding', c),
-                                  )
-                                }}
-                              />
-                              <Toggle
-                                rightLabel="Bookable Only"
-                                rightDescription="Hide closed and call to book availabilities"
-                                checked={bl['bookable-only']}
-                                setChecked={(c) => {
-                                  updateImmediately(
-                                    'booking_links',
-                                    updateBookingLinks(listing.booking_links, i, 'bookable-only', c),
-                                  )
-                                }}
-                              />
-                            </>
-                          )}
-                          <hr className="my-6" />
-                          <Button
-                            className="self-start"
-                            PreIcon={TrashIcon}
-                            variant="destructive"
-                            onClick={() => {
-                              if (confirm('Deleting a booking link is irrevocable. Continue?')) {
-                                updateImmediately(
-                                  'booking_links',
-                                  listing.booking_links.filter((_: any, ix: number) => ix !== i),
-                                )
-                                setOpenBookingLink(-1)
-                              }
-                            }}
-                          >
-                            Delete Booking Link
-                          </Button>
-                        </div>
-                      </Modal>
-                    )}
-                  </li>
-                ))}
-                <Button
-                  variant={!listing.booking_links?.length ? 'primary' : 'secondary'}
-                  PreIcon={PlusIcon}
-                  className="self-center"
-                  onClick={() => setOpenCreateBookingModal(true)}
-                >
-                  Add a Booking Link
-                </Button>
-              </ul>
-            </div>
-            <TextInput
-              collapseDescriptionArea
-              label="Primary Email"
-              value={listing.primary_email ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_email', e.target.value)}
-            />
-            <TextInput
-              collapseDescriptionArea
-              label="Primary Phone"
-              value={listing.primary_phone ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_phone', e.target.value)}
-            />
-            <TextInput
-              collapseDescriptionArea
-              label="Primary Website URL"
-              value={listing.primary_web_url ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_web_url', e.target.value)}
-            />
-            <TextInput
-              label="Primary Address"
-              description="Optional if Latitude/Longitude provided"
-              value={listing.primary_address ?? ''}
-              onChange={(e) => setAndDebounceUpdate('primary_address', e.target.value)}
-            />
-            <TextInput
-              description="Optional if Primary Address provided"
-              label="Latitude/Longitude"
-              placeholder="ex: (0,0)"
-              value={listing.lat_lng ?? ''}
-              onChange={(e) => setAndDebounceUpdate('lat_lng', e.target.value)}
-            />
-            <BusinessHours
-              businessHours={listing.business_hours}
-              onUpdate={(bh) => setAndDebounceUpdate('business_hours', bh)}
-            />
-            <div>
-              <label>Images</label>
-              <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                <ImageUploader
-                  contentLabel="Images"
-                  className="h-full"
-                  entityId={id}
-                  onSuccess={() => {
-                    refetch().then(({ data }) => {
-                      if (data.listing_by_pk) {
-                        setListing(data.listing_by_pk)
-                      }
-                    })
-                  }}
-                />
-                {listing.images.map((image: any) => {
-                  const isMain = listing.layout_data.main_image === image.url
-                  const isAction = listing.layout_data.action_shot1 === image.url
-
-                  return (
-                    <li
-                      className={clsx('group relative h-32', erroredImg[image.url] ? 'w-64' : 'w-auto')}
-                      key={image.original_url}
-                    >
-                      <img
-                        className="h-full w-full rounded shadow"
-                        src={image.url}
-                        alt={image.original_url}
-                        onError={async () => {
-                          setErroredImg((e) => ({ ...e, [image.url]: true }))
-                          if (image.original_url) {
-                            const fetchable = await fetch(image.original_url).then((r) => r.ok)
-
-                            if (fetchable) {
-                              setFixable((f) => ({ ...f, [image.url]: true }))
-                            }
-                          }
-                        }}
-                      />
-                      {(isMain || isAction) && (
-                        <div className="flex-center absolute left-0 top-0 gap-2 rounded-br rounded-tl bg-white/40 p-2">
-                          {isMain && <StarIcon className="h-6 w-6 text-yellow-400" />}
-                          {isAction && <CameraIcon className="h-6 w-6 text-sky-400" />}
-                        </div>
-                      )}
-                      <Menu
-                        className="absolute right-1 top-1 h-8 w-8 bg-white p-1 text-primary-500"
-                        listItems={[
-                          {
-                            label: (
-                              <span className="flex items-center gap-2 text-sm">
-                                <StarIcon
-                                  className={clsx(
-                                    'h-5 w-5 text-gray-400 group-focus-within/menu-item:text-yellow-400',
-                                    {
-                                      'text-yellow-400': isMain,
-                                    },
-                                  )}
-                                />{' '}
-                                {isMain ? 'Unset' : 'Set'} as Hero Image
-                              </span>
-                            ),
-                            onClick: () => {
-                              isMain ? updateLayoutData('main_image', '') : updateLayoutData('main_image', image.url)
-                            },
-                            disabled: !!fixable[image.url as string],
-                          },
-                          {
-                            label: (
-                              <span className="flex items-center gap-2 text-sm">
-                                <CameraIcon
-                                  className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-sky-500', {
-                                    'text-sky-500': isAction,
-                                  })}
-                                />{' '}
-                                {isAction ? 'Unset' : 'Set'} as Action Shot
-                              </span>
-                            ),
-                            onClick: () =>
-                              isAction
-                                ? updateLayoutData('action_shot1', '')
-                                : updateLayoutData('action_shot1', image.url),
-                            disabled: !!fixable[image.url],
-                          },
-                          {
-                            label: (
-                              <span className="flex items-center gap-2 text-sm">
-                                <TrashIcon
-                                  className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-red-500')}
-                                />{' '}
-                                Remove Image
-                              </span>
-                            ),
-                            onClick: async () => {
-                              if (confirm('Deleting here does not remove from the Duda media manager.')) {
-                                updateImmediately(
-                                  'images',
-                                  listing.images.filter((i: any) => i.url !== image.url),
-                                )
-
-                                if (listing.layout_data.main_image === image.url) {
-                                  updateLayoutData('main_image', '')
-                                }
-
-                                if (listing.layout_data.action_shot1 === image.url) {
-                                  updateLayoutData('action_shot1', '')
-                                }
-                              }
-                            },
-                          },
-                          {
-                            label: (
-                              <span className="flex items-center gap-2 text-sm">
-                                <WrenchScrewdriverIcon
-                                  className={clsx('h-5 w-5 text-gray-400 group-focus-within/menu-item:text-red-500')}
-                                />{' '}
-                                Fix Image
-                              </span>
-                            ),
-                            onClick: async () => {
-                              const res = await nhost.graphql
-                                .request(
-                                  graphql(`
-                                    mutation fixImage($entityId: Int!, $src: String!) {
-                                      uploadImage(entityId: $entityId, src: $src, fix: true) {
-                                        success
-                                        error
-                                        fixed_url
-                                      }
-                                    }
-                                  `),
-                                  {
-                                    entityId: id,
-                                    src: image.original_url,
-                                  },
-                                )
-                                .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
-
-                              if (res instanceof Error || res.data?.uploadImage.error) {
-                                toast.error({
-                                  message: 'Fixing Image Failed',
-                                  description: res instanceof Error ? res.message : res.data?.uploadImage.error,
-                                })
-                                return console.error(res)
-                              }
-
-                              if (res.data?.uploadImage.fixed_url) {
-                                toast.success({
-                                  message: 'Image Restored!',
-                                })
-
-                                updateImmediately(
-                                  'images',
-                                  listing.images.map((i: any) =>
-                                    i.url === image.url ? { ...i, url: res.data.uploadImage.fixed_url } : i,
-                                  ),
-                                ).then(() => {
-                                  setErroredImg((e) => ({ ...e, [image.url]: false }))
-                                  setFixable((f) => ({ ...f, [image.url]: false }))
-                                })
-                              }
-                            },
-                            disabled: !fixable[image.url],
-                          },
-                        ]}
-                      />
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-            <div>
-              <form
-                className="mb-2"
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-
-                  if (!newVidUrl) return
-
-                  // parse id and type out of url
-                  const { id, type } = parseVideoUrl(newVidUrl)
-
-                  if (!id || !type) {
-                    return toast.error({
-                      message: 'Unable to parse url',
-                      description: 'Try copying the url directly from the browser or share button.',
-                    })
+                  if (res instanceof Error || res.error) {
+                    return console.error(res)
                   }
 
-                  setNewVidUrl('')
-
-                  update('videos', listing.videos.concat([{ url: newVidUrl, id, type }]))
+                  goTo('..')
                 }}
               >
-                <TextInput
-                  label="Add Video(s) by URL"
-                  description='Paste a youtube, vimeo, or daily motion video url and hit "enter"'
-                  value={newVidUrl}
-                  onChange={(e) => setNewVidUrl(e.target.value)}
-                />
-              </form>
-              {!!listing.videos.length && (
-                <ul className="flex max-h-80 flex-wrap gap-2 overflow-y-auto p-2 shadow-inner">
-                  {listing.videos.map((video: any, i: number) => (
-                    <div className="relative w-fit" key={video.id}>
-                      <VideoPlayer videoDetails={video} />
-                      <Button
-                        className="!absolute bottom-1 right-1 !px-2 [&>svg]:m-0"
-                        variant="destructive"
-                        PostIcon={TrashIcon}
-                        onClick={() =>
-                          updateImmediately(
-                            'videos',
-                            listing.videos.filter((_: any, idx: number) => idx !== i),
-                          )
-                        }
-                      ></Button>
-                    </div>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <hr className="!my-12" />
-            <Button
-              PreIcon={TrashIcon}
-              variant="destructive"
-              onClick={async (e) => {
-                if (!confirm('Are you sure? Deleting a Listing cannot be undone.')) return
-
-                const res = await nhost.graphql
-                  .request(DELETE_LISTING, { id: listing.id })
-                  .catch((err) => (err instanceof Error ? err : new Error(JSON.stringify(err))))
-
-                if (res instanceof Error || res.error) {
-                  return console.error(res)
-                }
-
-                goTo('..')
-              }}
-            >
-              Delete Listing
-            </Button>
-            {/* <Button
+                Delete Listing
+              </Button>
+              {/* <Button
               PreIcon={BeakerIcon}
               variant="secondary"
               onClick={async (e) => {
@@ -1146,7 +1391,8 @@ export const Listing = ({ className = '', ...props }: ListingProps) => {
             >
               Test
             </Button> */}
-          </div>
+            </div>
+          )}
         </>
       )}
       {openCreateBookingModal && (

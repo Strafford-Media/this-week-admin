@@ -32,6 +32,30 @@ export const UPDATE_LISTING = graphql(`
   }
 `)
 
+export const CREATE_PROMO_CODE = graphql(`
+  mutation CreatePromoCode($pc: promo_code_insert_input!) {
+    insert_promo_code_one(object: $pc) {
+      id
+    }
+  }
+`)
+
+export const UPDATE_PROMO_CODE = graphql(`
+  mutation UpdatePromoCode($id: Int!, $set: promo_code_set_input!) {
+    update_promo_code_by_pk(pk_columns: { id: $id }, _set: $set) {
+      id
+    }
+  }
+`)
+
+export const DELETE_PROMO_CODE = graphql(`
+  mutation DeletePromoCode($id: Int!) {
+    delete_promo_code_by_pk(id: $id) {
+      id
+    }
+  }
+`)
+
 export const CREATE_CATEGORY = graphql(`
   mutation CreateCategory($label: String!, $isPrimary: Boolean) {
     insert_category_tag_one(object: { label: $label, is_primary: $isPrimary }) {
@@ -123,6 +147,38 @@ export const DELETE_AD_CYCLE = graphql(`
 export const DELETE_AD = graphql(`
   mutation DeleteAd($id: Int!) {
     delete_ad_by_pk(id: $id) {
+      id
+    }
+  }
+`)
+
+export const CREATE_VISITOR_QUESTION = graphql(`
+  mutation CreateVisitorQuestion($input: visitor_question_insert_input!) {
+    insert_visitor_question_one(object: $input) {
+      id
+    }
+  }
+`)
+
+export const UPDATE_VISITOR_QUESTION = graphql(`
+  mutation UpdateVisitorQuestion($id: Int!, $set: visitor_question_set_input) {
+    update_visitor_question_by_pk(pk_columns: { id: $id }, _set: $set) {
+      id
+    }
+  }
+`)
+
+export const UPDATE_VISITOR_QUESTIONS = graphql(`
+  mutation UpdateVisitorQuestions($updates: [visitor_question_updates!]!) {
+    update_visitor_question_many(updates: $updates) {
+      affected_rows
+    }
+  }
+`)
+
+export const DELETE_VISITOR_QUESTION = graphql(`
+  mutation DeleteVisitorQuestion($id: Int!) {
+    delete_visitor_question_by_pk(id: $id) {
       id
     }
   }

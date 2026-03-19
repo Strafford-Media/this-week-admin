@@ -73,6 +73,8 @@ export const LISTING_BY_ID = graphql(`
       business_hours
       breadcrumbs
       social_media
+      promo_code_visitor_hook
+      promo_code_count
       images
       videos
       layout_data
@@ -80,6 +82,12 @@ export const LISTING_BY_ID = graphql(`
       listing_category_tags {
         id
         category_tag_id
+      }
+      promo_codes(order_by: { created_at: asc }) {
+        id
+        code
+        label
+        expiration
       }
     }
   }
@@ -205,6 +213,93 @@ export const BREADCRUMBS = graphql(`
   query Breadcrumbs {
     listing(where: { breadcrumbs: { _neq: [] } }) {
       breadcrumbs
+    }
+  }
+`)
+
+export const REGISTRATION_QUESTIONS = graphql(`
+  query getRegistrationQuestions {
+    visitor_question(order_by: { order: asc }) {
+      id
+      label
+      question_type
+      active
+      metadata
+      order
+      visitor_answers_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+`)
+
+export const VISITORS = graphql(`
+  query Visitors {
+    users(order_by: { lastSeen: desc }) {
+      id
+      email
+      displayName
+      lastSeen
+      defaultRole
+    }
+  }
+`)
+
+export const ALL_ANSWERS = graphql(`
+  query AllAnswers {
+    visitor_answer {
+      id
+      question_id
+      user_id
+      answer
+      created_at
+    }
+  }
+`)
+
+export const VISITOR_ANSWERS = graphql(`
+  query visitorAnswers {
+    visitor_answer {
+      id
+      question_id
+      answer
+      created_at
+      updated_at
+      user_id
+    }
+  }
+`)
+
+export const VISITOR_ANSWERS_BY_USER_ID = graphql(`
+  query visitorAnswersByUserId($userId: uuid!) {
+    visitor_answer(where: { user_id: { _eq: $userId } }) {
+      id
+      question_id
+      answer
+      created_at
+      updated_at
+      user_id
+    }
+  }
+`)
+
+export const VISITOR_QUESTION_WITH_ANSWERS = graphql(`
+  query VisitorQuestionWithAnswers($questionId: Int!) {
+    visitor_question_by_pk(id: $questionId) {
+      id
+      label
+      question_type
+      active
+      metadata
+      order
+      visitor_answers {
+        id
+        user_id
+        answer
+        created_at
+      }
     }
   }
 `)

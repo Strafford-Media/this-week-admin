@@ -16,18 +16,35 @@ import { Redirect, customizeButtonClasses } from '@8thday/react'
 import { AdScheduler } from './components/molecules/AdScheduler'
 import { CategoryTagProvider } from './hooks/useCategoryTags'
 import { SVGIcons } from './components/atoms/SVGIcons'
+import { VisitorManagement } from './components/molecules/VisitorManagement'
+import { VisitorList } from './components/molecules/VisitorList'
+import { RegistrationQuestionManager } from './components/molecules/RegistrationQuestionManager'
+import { SurveyResponseGrid } from './components/molecules/SurveyResponseGrid'
 
 customizeButtonClasses({
   variants: {
     secondary: `border-transparent bg-secondary-100 text-secondary-700 enabled:hover:bg-secondary-200 focus:ring-secondary-500`,
+    'destructive-outline': 'border-red-300 bg-white text-red-500 enabled:hover:bg-red-50 focus:ring-red-500',
+    'secondary-outline':
+      'border-primary-300 bg-white text-primary-500 enabled:hover:bg-primary-50 focus:ring-primary-500',
   },
 })
 
-const nhost = new NhostClient({
-  subdomain: process.env.REACT_APP_NHOST_SUBDOMAIN,
-  region: process.env.REACT_APP_NHOST_REGION,
-  clientStorageType: 'cookie',
-})
+const nhost = new NhostClient(
+  process.env.REACT_APP_NHOST_SUBDOMAIN === 'local'
+    ? {
+        subdomain: 'local',
+        region: 'local',
+        clientStorageType: 'cookie',
+      }
+    : {
+        authUrl: 'https://identity.thisweekhawaii.com/v1',
+        storageUrl: 'https://hboobcwwuscftftwhuse.storage.us-east-1.nhost.run/v1',
+        graphqlUrl: 'https://graphql.thisweekhawaii.com/v1/graphql',
+        functionsUrl: 'https://functions.thisweekhawaii.com/v1',
+        clientStorageType: 'cookie',
+      },
+)
 
 const router = createBrowserRouter([
   {
@@ -75,6 +92,27 @@ const router = createBrowserRouter([
           },
           { path: 'manage/:adId', element: <AdDesigner key="managing" /> },
           { path: '*', element: <Redirect to="" /> },
+        ],
+      },
+      {
+        path: 'visitor-management',
+        children: [
+          {
+            index: true,
+            element: <VisitorManagement />,
+          },
+          {
+            path: 'visitors',
+            element: <VisitorList />,
+          },
+          {
+            path: 'registration-questions',
+            element: <RegistrationQuestionManager />,
+          },
+          {
+            path: 'survey-responses',
+            element: <SurveyResponseGrid />,
+          },
         ],
       },
       { path: '*', element: <Redirect to="" /> },

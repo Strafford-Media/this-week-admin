@@ -69,6 +69,23 @@ export type Int_Comparison_Exp = {
 };
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
+export type String_Array_Comparison_Exp = {
+  /** is the array contained in the given array value */
+  _contained_in?: InputMaybe<Array<Scalars['String']>>;
+  /** does the array contain the given value */
+  _contains?: InputMaybe<Array<Scalars['String']>>;
+  _eq?: InputMaybe<Array<Scalars['String']>>;
+  _gt?: InputMaybe<Array<Scalars['String']>>;
+  _gte?: InputMaybe<Array<Scalars['String']>>;
+  _in?: InputMaybe<Array<Array<Scalars['String']>>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _lt?: InputMaybe<Array<Scalars['String']>>;
+  _lte?: InputMaybe<Array<Scalars['String']>>;
+  _neq?: InputMaybe<Array<Scalars['String']>>;
+  _nin?: InputMaybe<Array<Array<Scalars['String']>>>;
+};
+
+/** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['String']>;
   _gt?: InputMaybe<Scalars['String']>;
@@ -1309,6 +1326,1285 @@ export type Ad_Var_Samp_Fields = {
 export type Ad_Variance_Fields = {
   __typename?: 'ad_variance_fields';
   id?: Maybe<Scalars['Float']>;
+};
+
+/** In-flight OAuth2 authorization requests. */
+export type AuthOauth2AuthRequests = {
+  __typename?: 'authOauth2AuthRequests';
+  authTime?: Maybe<Scalars['timestamptz']>;
+  /** An array relationship */
+  authorizationCodes: Array<AuthOauth2AuthorizationCodes>;
+  /** An aggregate relationship */
+  authorizationCodes_aggregate: AuthOauth2AuthorizationCodes_Aggregate;
+  /** An object relationship */
+  client: AuthOauth2Clients;
+  clientId: Scalars['String'];
+  codeChallenge?: Maybe<Scalars['String']>;
+  codeChallengeMethod?: Maybe<Scalars['String']>;
+  createdAt: Scalars['timestamptz'];
+  done: Scalars['Boolean'];
+  expiresAt: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  nonce?: Maybe<Scalars['String']>;
+  redirectUri: Scalars['String'];
+  /** An array relationship */
+  refreshTokens: Array<AuthOauth2RefreshTokens>;
+  /** An aggregate relationship */
+  refreshTokens_aggregate: AuthOauth2RefreshTokens_Aggregate;
+  resource?: Maybe<Scalars['String']>;
+  responseType: Scalars['String'];
+  scopes: Array<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  /** An object relationship */
+  user?: Maybe<Users>;
+  userId?: Maybe<Scalars['uuid']>;
+};
+
+
+/** In-flight OAuth2 authorization requests. */
+export type AuthOauth2AuthRequestsAuthorizationCodesArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+
+/** In-flight OAuth2 authorization requests. */
+export type AuthOauth2AuthRequestsAuthorizationCodes_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+
+/** In-flight OAuth2 authorization requests. */
+export type AuthOauth2AuthRequestsRefreshTokensArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+
+/** In-flight OAuth2 authorization requests. */
+export type AuthOauth2AuthRequestsRefreshTokens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+/** aggregated selection of "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Aggregate = {
+  __typename?: 'authOauth2AuthRequests_aggregate';
+  aggregate?: Maybe<AuthOauth2AuthRequests_Aggregate_Fields>;
+  nodes: Array<AuthOauth2AuthRequests>;
+};
+
+export type AuthOauth2AuthRequests_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<AuthOauth2AuthRequests_Aggregate_Bool_Exp_Count>;
+};
+
+export type AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_And = {
+  arguments: AuthOauth2AuthRequests_Select_Column_AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: AuthOauth2AuthRequests_Select_Column_AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type AuthOauth2AuthRequests_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Aggregate_Fields = {
+  __typename?: 'authOauth2AuthRequests_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<AuthOauth2AuthRequests_Max_Fields>;
+  min?: Maybe<AuthOauth2AuthRequests_Min_Fields>;
+};
+
+
+/** aggregate fields of "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<AuthOauth2AuthRequests_Max_Order_By>;
+  min?: InputMaybe<AuthOauth2AuthRequests_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Arr_Rel_Insert_Input = {
+  data: Array<AuthOauth2AuthRequests_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<AuthOauth2AuthRequests_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "auth.oauth2_auth_requests". All fields are combined with a logical 'AND'. */
+export type AuthOauth2AuthRequests_Bool_Exp = {
+  _and?: InputMaybe<Array<AuthOauth2AuthRequests_Bool_Exp>>;
+  _not?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  _or?: InputMaybe<Array<AuthOauth2AuthRequests_Bool_Exp>>;
+  authTime?: InputMaybe<Timestamptz_Comparison_Exp>;
+  authorizationCodes?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+  authorizationCodes_aggregate?: InputMaybe<AuthOauth2AuthorizationCodes_Aggregate_Bool_Exp>;
+  client?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+  clientId?: InputMaybe<String_Comparison_Exp>;
+  codeChallenge?: InputMaybe<String_Comparison_Exp>;
+  codeChallengeMethod?: InputMaybe<String_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  done?: InputMaybe<Boolean_Comparison_Exp>;
+  expiresAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  nonce?: InputMaybe<String_Comparison_Exp>;
+  redirectUri?: InputMaybe<String_Comparison_Exp>;
+  refreshTokens?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+  refreshTokens_aggregate?: InputMaybe<AuthOauth2RefreshTokens_Aggregate_Bool_Exp>;
+  resource?: InputMaybe<String_Comparison_Exp>;
+  responseType?: InputMaybe<String_Comparison_Exp>;
+  scopes?: InputMaybe<String_Array_Comparison_Exp>;
+  state?: InputMaybe<String_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  userId?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "auth.oauth2_auth_requests" */
+export enum AuthOauth2AuthRequests_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  Oauth2AuthRequestsPkey = 'oauth2_auth_requests_pkey'
+}
+
+/** input type for inserting data into table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Insert_Input = {
+  authTime?: InputMaybe<Scalars['timestamptz']>;
+  authorizationCodes?: InputMaybe<AuthOauth2AuthorizationCodes_Arr_Rel_Insert_Input>;
+  client?: InputMaybe<AuthOauth2Clients_Obj_Rel_Insert_Input>;
+  clientId?: InputMaybe<Scalars['String']>;
+  codeChallenge?: InputMaybe<Scalars['String']>;
+  codeChallengeMethod?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  done?: InputMaybe<Scalars['Boolean']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  nonce?: InputMaybe<Scalars['String']>;
+  redirectUri?: InputMaybe<Scalars['String']>;
+  refreshTokens?: InputMaybe<AuthOauth2RefreshTokens_Arr_Rel_Insert_Input>;
+  resource?: InputMaybe<Scalars['String']>;
+  responseType?: InputMaybe<Scalars['String']>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  state?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  userId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type AuthOauth2AuthRequests_Max_Fields = {
+  __typename?: 'authOauth2AuthRequests_max_fields';
+  authTime?: Maybe<Scalars['timestamptz']>;
+  clientId?: Maybe<Scalars['String']>;
+  codeChallenge?: Maybe<Scalars['String']>;
+  codeChallengeMethod?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  expiresAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  nonce?: Maybe<Scalars['String']>;
+  redirectUri?: Maybe<Scalars['String']>;
+  resource?: Maybe<Scalars['String']>;
+  responseType?: Maybe<Scalars['String']>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  state?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Max_Order_By = {
+  authTime?: InputMaybe<Order_By>;
+  clientId?: InputMaybe<Order_By>;
+  codeChallenge?: InputMaybe<Order_By>;
+  codeChallengeMethod?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  nonce?: InputMaybe<Order_By>;
+  redirectUri?: InputMaybe<Order_By>;
+  resource?: InputMaybe<Order_By>;
+  responseType?: InputMaybe<Order_By>;
+  scopes?: InputMaybe<Order_By>;
+  state?: InputMaybe<Order_By>;
+  userId?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type AuthOauth2AuthRequests_Min_Fields = {
+  __typename?: 'authOauth2AuthRequests_min_fields';
+  authTime?: Maybe<Scalars['timestamptz']>;
+  clientId?: Maybe<Scalars['String']>;
+  codeChallenge?: Maybe<Scalars['String']>;
+  codeChallengeMethod?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  expiresAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  nonce?: Maybe<Scalars['String']>;
+  redirectUri?: Maybe<Scalars['String']>;
+  resource?: Maybe<Scalars['String']>;
+  responseType?: Maybe<Scalars['String']>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  state?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Min_Order_By = {
+  authTime?: InputMaybe<Order_By>;
+  clientId?: InputMaybe<Order_By>;
+  codeChallenge?: InputMaybe<Order_By>;
+  codeChallengeMethod?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  nonce?: InputMaybe<Order_By>;
+  redirectUri?: InputMaybe<Order_By>;
+  resource?: InputMaybe<Order_By>;
+  responseType?: InputMaybe<Order_By>;
+  scopes?: InputMaybe<Order_By>;
+  state?: InputMaybe<Order_By>;
+  userId?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Mutation_Response = {
+  __typename?: 'authOauth2AuthRequests_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<AuthOauth2AuthRequests>;
+};
+
+/** input type for inserting object relation for remote table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Obj_Rel_Insert_Input = {
+  data: AuthOauth2AuthRequests_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<AuthOauth2AuthRequests_On_Conflict>;
+};
+
+/** on_conflict condition type for table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_On_Conflict = {
+  constraint: AuthOauth2AuthRequests_Constraint;
+  update_columns?: Array<AuthOauth2AuthRequests_Update_Column>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "auth.oauth2_auth_requests". */
+export type AuthOauth2AuthRequests_Order_By = {
+  authTime?: InputMaybe<Order_By>;
+  authorizationCodes_aggregate?: InputMaybe<AuthOauth2AuthorizationCodes_Aggregate_Order_By>;
+  client?: InputMaybe<AuthOauth2Clients_Order_By>;
+  clientId?: InputMaybe<Order_By>;
+  codeChallenge?: InputMaybe<Order_By>;
+  codeChallengeMethod?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  done?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  nonce?: InputMaybe<Order_By>;
+  redirectUri?: InputMaybe<Order_By>;
+  refreshTokens_aggregate?: InputMaybe<AuthOauth2RefreshTokens_Aggregate_Order_By>;
+  resource?: InputMaybe<Order_By>;
+  responseType?: InputMaybe<Order_By>;
+  scopes?: InputMaybe<Order_By>;
+  state?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  userId?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: auth.oauth2_auth_requests */
+export type AuthOauth2AuthRequests_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "auth.oauth2_auth_requests" */
+export enum AuthOauth2AuthRequests_Select_Column {
+  /** column name */
+  AuthTime = 'authTime',
+  /** column name */
+  ClientId = 'clientId',
+  /** column name */
+  CodeChallenge = 'codeChallenge',
+  /** column name */
+  CodeChallengeMethod = 'codeChallengeMethod',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Done = 'done',
+  /** column name */
+  ExpiresAt = 'expiresAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Nonce = 'nonce',
+  /** column name */
+  RedirectUri = 'redirectUri',
+  /** column name */
+  Resource = 'resource',
+  /** column name */
+  ResponseType = 'responseType',
+  /** column name */
+  Scopes = 'scopes',
+  /** column name */
+  State = 'state',
+  /** column name */
+  UserId = 'userId'
+}
+
+/** select "authOauth2AuthRequests_aggregate_bool_exp_bool_and_arguments_columns" columns of table "auth.oauth2_auth_requests" */
+export enum AuthOauth2AuthRequests_Select_Column_AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Done = 'done'
+}
+
+/** select "authOauth2AuthRequests_aggregate_bool_exp_bool_or_arguments_columns" columns of table "auth.oauth2_auth_requests" */
+export enum AuthOauth2AuthRequests_Select_Column_AuthOauth2AuthRequests_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Done = 'done'
+}
+
+/** input type for updating data in table "auth.oauth2_auth_requests" */
+export type AuthOauth2AuthRequests_Set_Input = {
+  authTime?: InputMaybe<Scalars['timestamptz']>;
+  clientId?: InputMaybe<Scalars['String']>;
+  codeChallenge?: InputMaybe<Scalars['String']>;
+  codeChallengeMethod?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  done?: InputMaybe<Scalars['Boolean']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  nonce?: InputMaybe<Scalars['String']>;
+  redirectUri?: InputMaybe<Scalars['String']>;
+  resource?: InputMaybe<Scalars['String']>;
+  responseType?: InputMaybe<Scalars['String']>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  state?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "authOauth2AuthRequests" */
+export type AuthOauth2AuthRequests_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AuthOauth2AuthRequests_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AuthOauth2AuthRequests_Stream_Cursor_Value_Input = {
+  authTime?: InputMaybe<Scalars['timestamptz']>;
+  clientId?: InputMaybe<Scalars['String']>;
+  codeChallenge?: InputMaybe<Scalars['String']>;
+  codeChallengeMethod?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  done?: InputMaybe<Scalars['Boolean']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  nonce?: InputMaybe<Scalars['String']>;
+  redirectUri?: InputMaybe<Scalars['String']>;
+  resource?: InputMaybe<Scalars['String']>;
+  responseType?: InputMaybe<Scalars['String']>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  state?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "auth.oauth2_auth_requests" */
+export enum AuthOauth2AuthRequests_Update_Column {
+  /** column name */
+  AuthTime = 'authTime',
+  /** column name */
+  ClientId = 'clientId',
+  /** column name */
+  CodeChallenge = 'codeChallenge',
+  /** column name */
+  CodeChallengeMethod = 'codeChallengeMethod',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Done = 'done',
+  /** column name */
+  ExpiresAt = 'expiresAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Nonce = 'nonce',
+  /** column name */
+  RedirectUri = 'redirectUri',
+  /** column name */
+  Resource = 'resource',
+  /** column name */
+  ResponseType = 'responseType',
+  /** column name */
+  Scopes = 'scopes',
+  /** column name */
+  State = 'state',
+  /** column name */
+  UserId = 'userId'
+}
+
+export type AuthOauth2AuthRequests_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<AuthOauth2AuthRequests_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: AuthOauth2AuthRequests_Bool_Exp;
+};
+
+/** OAuth2 authorization codes pending exchange for tokens. */
+export type AuthOauth2AuthorizationCodes = {
+  __typename?: 'authOauth2AuthorizationCodes';
+  /** An object relationship */
+  authRequest: AuthOauth2AuthRequests;
+  authRequestId: Scalars['uuid'];
+  codeHash: Scalars['String'];
+  createdAt: Scalars['timestamptz'];
+  expiresAt: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+};
+
+/** aggregated selection of "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Aggregate = {
+  __typename?: 'authOauth2AuthorizationCodes_aggregate';
+  aggregate?: Maybe<AuthOauth2AuthorizationCodes_Aggregate_Fields>;
+  nodes: Array<AuthOauth2AuthorizationCodes>;
+};
+
+export type AuthOauth2AuthorizationCodes_Aggregate_Bool_Exp = {
+  count?: InputMaybe<AuthOauth2AuthorizationCodes_Aggregate_Bool_Exp_Count>;
+};
+
+export type AuthOauth2AuthorizationCodes_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Aggregate_Fields = {
+  __typename?: 'authOauth2AuthorizationCodes_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<AuthOauth2AuthorizationCodes_Max_Fields>;
+  min?: Maybe<AuthOauth2AuthorizationCodes_Min_Fields>;
+};
+
+
+/** aggregate fields of "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<AuthOauth2AuthorizationCodes_Max_Order_By>;
+  min?: InputMaybe<AuthOauth2AuthorizationCodes_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Arr_Rel_Insert_Input = {
+  data: Array<AuthOauth2AuthorizationCodes_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<AuthOauth2AuthorizationCodes_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "auth.oauth2_authorization_codes". All fields are combined with a logical 'AND'. */
+export type AuthOauth2AuthorizationCodes_Bool_Exp = {
+  _and?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Bool_Exp>>;
+  _not?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+  _or?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Bool_Exp>>;
+  authRequest?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  authRequestId?: InputMaybe<Uuid_Comparison_Exp>;
+  codeHash?: InputMaybe<String_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  expiresAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "auth.oauth2_authorization_codes" */
+export enum AuthOauth2AuthorizationCodes_Constraint {
+  /** unique or primary key constraint on columns "code_hash" */
+  Oauth2AuthorizationCodesCodeHashKey = 'oauth2_authorization_codes_code_hash_key',
+  /** unique or primary key constraint on columns "id" */
+  Oauth2AuthorizationCodesPkey = 'oauth2_authorization_codes_pkey'
+}
+
+/** input type for inserting data into table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Insert_Input = {
+  authRequest?: InputMaybe<AuthOauth2AuthRequests_Obj_Rel_Insert_Input>;
+  authRequestId?: InputMaybe<Scalars['uuid']>;
+  codeHash?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type AuthOauth2AuthorizationCodes_Max_Fields = {
+  __typename?: 'authOauth2AuthorizationCodes_max_fields';
+  authRequestId?: Maybe<Scalars['uuid']>;
+  codeHash?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  expiresAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Max_Order_By = {
+  authRequestId?: InputMaybe<Order_By>;
+  codeHash?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type AuthOauth2AuthorizationCodes_Min_Fields = {
+  __typename?: 'authOauth2AuthorizationCodes_min_fields';
+  authRequestId?: Maybe<Scalars['uuid']>;
+  codeHash?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  expiresAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Min_Order_By = {
+  authRequestId?: InputMaybe<Order_By>;
+  codeHash?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Mutation_Response = {
+  __typename?: 'authOauth2AuthorizationCodes_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<AuthOauth2AuthorizationCodes>;
+};
+
+/** on_conflict condition type for table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_On_Conflict = {
+  constraint: AuthOauth2AuthorizationCodes_Constraint;
+  update_columns?: Array<AuthOauth2AuthorizationCodes_Update_Column>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "auth.oauth2_authorization_codes". */
+export type AuthOauth2AuthorizationCodes_Order_By = {
+  authRequest?: InputMaybe<AuthOauth2AuthRequests_Order_By>;
+  authRequestId?: InputMaybe<Order_By>;
+  codeHash?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: auth.oauth2_authorization_codes */
+export type AuthOauth2AuthorizationCodes_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "auth.oauth2_authorization_codes" */
+export enum AuthOauth2AuthorizationCodes_Select_Column {
+  /** column name */
+  AuthRequestId = 'authRequestId',
+  /** column name */
+  CodeHash = 'codeHash',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  ExpiresAt = 'expiresAt',
+  /** column name */
+  Id = 'id'
+}
+
+/** input type for updating data in table "auth.oauth2_authorization_codes" */
+export type AuthOauth2AuthorizationCodes_Set_Input = {
+  authRequestId?: InputMaybe<Scalars['uuid']>;
+  codeHash?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "authOauth2AuthorizationCodes" */
+export type AuthOauth2AuthorizationCodes_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AuthOauth2AuthorizationCodes_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AuthOauth2AuthorizationCodes_Stream_Cursor_Value_Input = {
+  authRequestId?: InputMaybe<Scalars['uuid']>;
+  codeHash?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "auth.oauth2_authorization_codes" */
+export enum AuthOauth2AuthorizationCodes_Update_Column {
+  /** column name */
+  AuthRequestId = 'authRequestId',
+  /** column name */
+  CodeHash = 'codeHash',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  ExpiresAt = 'expiresAt',
+  /** column name */
+  Id = 'id'
+}
+
+export type AuthOauth2AuthorizationCodes_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<AuthOauth2AuthorizationCodes_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: AuthOauth2AuthorizationCodes_Bool_Exp;
+};
+
+/** Registered OAuth2 client applications for the identity provider. */
+export type AuthOauth2Clients = {
+  __typename?: 'authOauth2Clients';
+  /** An array relationship */
+  authRequests: Array<AuthOauth2AuthRequests>;
+  /** An aggregate relationship */
+  authRequests_aggregate: AuthOauth2AuthRequests_Aggregate;
+  clientId: Scalars['String'];
+  clientSecretHash?: Maybe<Scalars['String']>;
+  createdAt: Scalars['timestamptz'];
+  createdBy?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  createdByUser?: Maybe<Users>;
+  metadata?: Maybe<Scalars['jsonb']>;
+  metadataDocumentFetchedAt?: Maybe<Scalars['timestamptz']>;
+  /** An array relationship */
+  oauth2RefreshTokens: Array<AuthOauth2RefreshTokens>;
+  /** An aggregate relationship */
+  oauth2RefreshTokens_aggregate: AuthOauth2RefreshTokens_Aggregate;
+  redirectUris: Array<Scalars['String']>;
+  scopes: Array<Scalars['String']>;
+  type: Scalars['String'];
+  updatedAt: Scalars['timestamptz'];
+};
+
+
+/** Registered OAuth2 client applications for the identity provider. */
+export type AuthOauth2ClientsAuthRequestsArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+/** Registered OAuth2 client applications for the identity provider. */
+export type AuthOauth2ClientsAuthRequests_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+/** Registered OAuth2 client applications for the identity provider. */
+export type AuthOauth2ClientsMetadataArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** Registered OAuth2 client applications for the identity provider. */
+export type AuthOauth2ClientsOauth2RefreshTokensArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+
+/** Registered OAuth2 client applications for the identity provider. */
+export type AuthOauth2ClientsOauth2RefreshTokens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+/** aggregated selection of "auth.oauth2_clients" */
+export type AuthOauth2Clients_Aggregate = {
+  __typename?: 'authOauth2Clients_aggregate';
+  aggregate?: Maybe<AuthOauth2Clients_Aggregate_Fields>;
+  nodes: Array<AuthOauth2Clients>;
+};
+
+/** aggregate fields of "auth.oauth2_clients" */
+export type AuthOauth2Clients_Aggregate_Fields = {
+  __typename?: 'authOauth2Clients_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<AuthOauth2Clients_Max_Fields>;
+  min?: Maybe<AuthOauth2Clients_Min_Fields>;
+};
+
+
+/** aggregate fields of "auth.oauth2_clients" */
+export type AuthOauth2Clients_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<AuthOauth2Clients_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type AuthOauth2Clients_Append_Input = {
+  metadata?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** Boolean expression to filter rows from the table "auth.oauth2_clients". All fields are combined with a logical 'AND'. */
+export type AuthOauth2Clients_Bool_Exp = {
+  _and?: InputMaybe<Array<AuthOauth2Clients_Bool_Exp>>;
+  _not?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+  _or?: InputMaybe<Array<AuthOauth2Clients_Bool_Exp>>;
+  authRequests?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  authRequests_aggregate?: InputMaybe<AuthOauth2AuthRequests_Aggregate_Bool_Exp>;
+  clientId?: InputMaybe<String_Comparison_Exp>;
+  clientSecretHash?: InputMaybe<String_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  createdBy?: InputMaybe<Uuid_Comparison_Exp>;
+  createdByUser?: InputMaybe<Users_Bool_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
+  metadataDocumentFetchedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  oauth2RefreshTokens?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+  oauth2RefreshTokens_aggregate?: InputMaybe<AuthOauth2RefreshTokens_Aggregate_Bool_Exp>;
+  redirectUris?: InputMaybe<String_Array_Comparison_Exp>;
+  scopes?: InputMaybe<String_Array_Comparison_Exp>;
+  type?: InputMaybe<String_Comparison_Exp>;
+  updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "auth.oauth2_clients" */
+export enum AuthOauth2Clients_Constraint {
+  /** unique or primary key constraint on columns "client_id" */
+  Oauth2ClientsPkey = 'oauth2_clients_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type AuthOauth2Clients_Delete_At_Path_Input = {
+  metadata?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type AuthOauth2Clients_Delete_Elem_Input = {
+  metadata?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type AuthOauth2Clients_Delete_Key_Input = {
+  metadata?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for inserting data into table "auth.oauth2_clients" */
+export type AuthOauth2Clients_Insert_Input = {
+  authRequests?: InputMaybe<AuthOauth2AuthRequests_Arr_Rel_Insert_Input>;
+  clientId?: InputMaybe<Scalars['String']>;
+  clientSecretHash?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdBy?: InputMaybe<Scalars['uuid']>;
+  createdByUser?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  metadata?: InputMaybe<Scalars['jsonb']>;
+  metadataDocumentFetchedAt?: InputMaybe<Scalars['timestamptz']>;
+  oauth2RefreshTokens?: InputMaybe<AuthOauth2RefreshTokens_Arr_Rel_Insert_Input>;
+  redirectUris?: InputMaybe<Array<Scalars['String']>>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  type?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type AuthOauth2Clients_Max_Fields = {
+  __typename?: 'authOauth2Clients_max_fields';
+  clientId?: Maybe<Scalars['String']>;
+  clientSecretHash?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  createdBy?: Maybe<Scalars['uuid']>;
+  metadataDocumentFetchedAt?: Maybe<Scalars['timestamptz']>;
+  redirectUris?: Maybe<Array<Scalars['String']>>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  type?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type AuthOauth2Clients_Min_Fields = {
+  __typename?: 'authOauth2Clients_min_fields';
+  clientId?: Maybe<Scalars['String']>;
+  clientSecretHash?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  createdBy?: Maybe<Scalars['uuid']>;
+  metadataDocumentFetchedAt?: Maybe<Scalars['timestamptz']>;
+  redirectUris?: Maybe<Array<Scalars['String']>>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  type?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "auth.oauth2_clients" */
+export type AuthOauth2Clients_Mutation_Response = {
+  __typename?: 'authOauth2Clients_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<AuthOauth2Clients>;
+};
+
+/** input type for inserting object relation for remote table "auth.oauth2_clients" */
+export type AuthOauth2Clients_Obj_Rel_Insert_Input = {
+  data: AuthOauth2Clients_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<AuthOauth2Clients_On_Conflict>;
+};
+
+/** on_conflict condition type for table "auth.oauth2_clients" */
+export type AuthOauth2Clients_On_Conflict = {
+  constraint: AuthOauth2Clients_Constraint;
+  update_columns?: Array<AuthOauth2Clients_Update_Column>;
+  where?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "auth.oauth2_clients". */
+export type AuthOauth2Clients_Order_By = {
+  authRequests_aggregate?: InputMaybe<AuthOauth2AuthRequests_Aggregate_Order_By>;
+  clientId?: InputMaybe<Order_By>;
+  clientSecretHash?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  createdBy?: InputMaybe<Order_By>;
+  createdByUser?: InputMaybe<Users_Order_By>;
+  metadata?: InputMaybe<Order_By>;
+  metadataDocumentFetchedAt?: InputMaybe<Order_By>;
+  oauth2RefreshTokens_aggregate?: InputMaybe<AuthOauth2RefreshTokens_Aggregate_Order_By>;
+  redirectUris?: InputMaybe<Order_By>;
+  scopes?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: auth.oauth2_clients */
+export type AuthOauth2Clients_Pk_Columns_Input = {
+  clientId: Scalars['String'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type AuthOauth2Clients_Prepend_Input = {
+  metadata?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "auth.oauth2_clients" */
+export enum AuthOauth2Clients_Select_Column {
+  /** column name */
+  ClientId = 'clientId',
+  /** column name */
+  ClientSecretHash = 'clientSecretHash',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  CreatedBy = 'createdBy',
+  /** column name */
+  Metadata = 'metadata',
+  /** column name */
+  MetadataDocumentFetchedAt = 'metadataDocumentFetchedAt',
+  /** column name */
+  RedirectUris = 'redirectUris',
+  /** column name */
+  Scopes = 'scopes',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UpdatedAt = 'updatedAt'
+}
+
+/** input type for updating data in table "auth.oauth2_clients" */
+export type AuthOauth2Clients_Set_Input = {
+  clientId?: InputMaybe<Scalars['String']>;
+  clientSecretHash?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdBy?: InputMaybe<Scalars['uuid']>;
+  metadata?: InputMaybe<Scalars['jsonb']>;
+  metadataDocumentFetchedAt?: InputMaybe<Scalars['timestamptz']>;
+  redirectUris?: InputMaybe<Array<Scalars['String']>>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  type?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "authOauth2Clients" */
+export type AuthOauth2Clients_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AuthOauth2Clients_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AuthOauth2Clients_Stream_Cursor_Value_Input = {
+  clientId?: InputMaybe<Scalars['String']>;
+  clientSecretHash?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdBy?: InputMaybe<Scalars['uuid']>;
+  metadata?: InputMaybe<Scalars['jsonb']>;
+  metadataDocumentFetchedAt?: InputMaybe<Scalars['timestamptz']>;
+  redirectUris?: InputMaybe<Array<Scalars['String']>>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  type?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "auth.oauth2_clients" */
+export enum AuthOauth2Clients_Update_Column {
+  /** column name */
+  ClientId = 'clientId',
+  /** column name */
+  ClientSecretHash = 'clientSecretHash',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  CreatedBy = 'createdBy',
+  /** column name */
+  Metadata = 'metadata',
+  /** column name */
+  MetadataDocumentFetchedAt = 'metadataDocumentFetchedAt',
+  /** column name */
+  RedirectUris = 'redirectUris',
+  /** column name */
+  Scopes = 'scopes',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UpdatedAt = 'updatedAt'
+}
+
+export type AuthOauth2Clients_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<AuthOauth2Clients_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<AuthOauth2Clients_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<AuthOauth2Clients_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<AuthOauth2Clients_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<AuthOauth2Clients_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<AuthOauth2Clients_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: AuthOauth2Clients_Bool_Exp;
+};
+
+/** OAuth2 refresh tokens with client and scope binding. */
+export type AuthOauth2RefreshTokens = {
+  __typename?: 'authOauth2RefreshTokens';
+  /** An object relationship */
+  authRequest?: Maybe<AuthOauth2AuthRequests>;
+  authRequestId?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  client: AuthOauth2Clients;
+  clientId: Scalars['String'];
+  createdAt: Scalars['timestamptz'];
+  expiresAt: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  scopes: Array<Scalars['String']>;
+  tokenHash: Scalars['String'];
+  /** An object relationship */
+  user: Users;
+  userId: Scalars['uuid'];
+};
+
+/** aggregated selection of "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Aggregate = {
+  __typename?: 'authOauth2RefreshTokens_aggregate';
+  aggregate?: Maybe<AuthOauth2RefreshTokens_Aggregate_Fields>;
+  nodes: Array<AuthOauth2RefreshTokens>;
+};
+
+export type AuthOauth2RefreshTokens_Aggregate_Bool_Exp = {
+  count?: InputMaybe<AuthOauth2RefreshTokens_Aggregate_Bool_Exp_Count>;
+};
+
+export type AuthOauth2RefreshTokens_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Aggregate_Fields = {
+  __typename?: 'authOauth2RefreshTokens_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<AuthOauth2RefreshTokens_Max_Fields>;
+  min?: Maybe<AuthOauth2RefreshTokens_Min_Fields>;
+};
+
+
+/** aggregate fields of "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<AuthOauth2RefreshTokens_Max_Order_By>;
+  min?: InputMaybe<AuthOauth2RefreshTokens_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Arr_Rel_Insert_Input = {
+  data: Array<AuthOauth2RefreshTokens_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<AuthOauth2RefreshTokens_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "auth.oauth2_refresh_tokens". All fields are combined with a logical 'AND'. */
+export type AuthOauth2RefreshTokens_Bool_Exp = {
+  _and?: InputMaybe<Array<AuthOauth2RefreshTokens_Bool_Exp>>;
+  _not?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+  _or?: InputMaybe<Array<AuthOauth2RefreshTokens_Bool_Exp>>;
+  authRequest?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  authRequestId?: InputMaybe<Uuid_Comparison_Exp>;
+  client?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+  clientId?: InputMaybe<String_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  expiresAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  scopes?: InputMaybe<String_Array_Comparison_Exp>;
+  tokenHash?: InputMaybe<String_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  userId?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "auth.oauth2_refresh_tokens" */
+export enum AuthOauth2RefreshTokens_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  Oauth2RefreshTokensPkey = 'oauth2_refresh_tokens_pkey',
+  /** unique or primary key constraint on columns "token_hash" */
+  Oauth2RefreshTokensTokenHashKey = 'oauth2_refresh_tokens_token_hash_key'
+}
+
+/** input type for inserting data into table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Insert_Input = {
+  authRequest?: InputMaybe<AuthOauth2AuthRequests_Obj_Rel_Insert_Input>;
+  authRequestId?: InputMaybe<Scalars['uuid']>;
+  client?: InputMaybe<AuthOauth2Clients_Obj_Rel_Insert_Input>;
+  clientId?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  tokenHash?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  userId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type AuthOauth2RefreshTokens_Max_Fields = {
+  __typename?: 'authOauth2RefreshTokens_max_fields';
+  authRequestId?: Maybe<Scalars['uuid']>;
+  clientId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  expiresAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  tokenHash?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Max_Order_By = {
+  authRequestId?: InputMaybe<Order_By>;
+  clientId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  scopes?: InputMaybe<Order_By>;
+  tokenHash?: InputMaybe<Order_By>;
+  userId?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type AuthOauth2RefreshTokens_Min_Fields = {
+  __typename?: 'authOauth2RefreshTokens_min_fields';
+  authRequestId?: Maybe<Scalars['uuid']>;
+  clientId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  expiresAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  tokenHash?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Min_Order_By = {
+  authRequestId?: InputMaybe<Order_By>;
+  clientId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  scopes?: InputMaybe<Order_By>;
+  tokenHash?: InputMaybe<Order_By>;
+  userId?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Mutation_Response = {
+  __typename?: 'authOauth2RefreshTokens_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<AuthOauth2RefreshTokens>;
+};
+
+/** on_conflict condition type for table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_On_Conflict = {
+  constraint: AuthOauth2RefreshTokens_Constraint;
+  update_columns?: Array<AuthOauth2RefreshTokens_Update_Column>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "auth.oauth2_refresh_tokens". */
+export type AuthOauth2RefreshTokens_Order_By = {
+  authRequest?: InputMaybe<AuthOauth2AuthRequests_Order_By>;
+  authRequestId?: InputMaybe<Order_By>;
+  client?: InputMaybe<AuthOauth2Clients_Order_By>;
+  clientId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  scopes?: InputMaybe<Order_By>;
+  tokenHash?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  userId?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: auth.oauth2_refresh_tokens */
+export type AuthOauth2RefreshTokens_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "auth.oauth2_refresh_tokens" */
+export enum AuthOauth2RefreshTokens_Select_Column {
+  /** column name */
+  AuthRequestId = 'authRequestId',
+  /** column name */
+  ClientId = 'clientId',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  ExpiresAt = 'expiresAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Scopes = 'scopes',
+  /** column name */
+  TokenHash = 'tokenHash',
+  /** column name */
+  UserId = 'userId'
+}
+
+/** input type for updating data in table "auth.oauth2_refresh_tokens" */
+export type AuthOauth2RefreshTokens_Set_Input = {
+  authRequestId?: InputMaybe<Scalars['uuid']>;
+  clientId?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  tokenHash?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "authOauth2RefreshTokens" */
+export type AuthOauth2RefreshTokens_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AuthOauth2RefreshTokens_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AuthOauth2RefreshTokens_Stream_Cursor_Value_Input = {
+  authRequestId?: InputMaybe<Scalars['uuid']>;
+  clientId?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  expiresAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  tokenHash?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "auth.oauth2_refresh_tokens" */
+export enum AuthOauth2RefreshTokens_Update_Column {
+  /** column name */
+  AuthRequestId = 'authRequestId',
+  /** column name */
+  ClientId = 'clientId',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  ExpiresAt = 'expiresAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Scopes = 'scopes',
+  /** column name */
+  TokenHash = 'tokenHash',
+  /** column name */
+  UserId = 'userId'
+}
+
+export type AuthOauth2RefreshTokens_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<AuthOauth2RefreshTokens_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: AuthOauth2RefreshTokens_Bool_Exp;
 };
 
 /** Oauth requests, inserted before redirecting to the provider's site. Don't modify its structure as Hasura Auth relies on it to function properly. */
@@ -3763,6 +5059,375 @@ export type Citext_Comparison_Exp = {
   _similar?: InputMaybe<Scalars['citext']>;
 };
 
+/** columns and relationships of "communication_opt_in" */
+export type Communication_Opt_In = {
+  __typename?: 'communication_opt_in';
+  comm_type: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['Int'];
+  opt_in: Scalars['Boolean'];
+  updated_at: Scalars['timestamptz'];
+  /** An object relationship */
+  user: Users;
+  user_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "communication_opt_in" */
+export type Communication_Opt_In_Aggregate = {
+  __typename?: 'communication_opt_in_aggregate';
+  aggregate?: Maybe<Communication_Opt_In_Aggregate_Fields>;
+  nodes: Array<Communication_Opt_In>;
+};
+
+export type Communication_Opt_In_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Communication_Opt_In_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Communication_Opt_In_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Communication_Opt_In_Aggregate_Bool_Exp_Count>;
+};
+
+export type Communication_Opt_In_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Communication_Opt_In_Select_Column_Communication_Opt_In_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Communication_Opt_In_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Communication_Opt_In_Select_Column_Communication_Opt_In_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Communication_Opt_In_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "communication_opt_in" */
+export type Communication_Opt_In_Aggregate_Fields = {
+  __typename?: 'communication_opt_in_aggregate_fields';
+  avg?: Maybe<Communication_Opt_In_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Communication_Opt_In_Max_Fields>;
+  min?: Maybe<Communication_Opt_In_Min_Fields>;
+  stddev?: Maybe<Communication_Opt_In_Stddev_Fields>;
+  stddev_pop?: Maybe<Communication_Opt_In_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Communication_Opt_In_Stddev_Samp_Fields>;
+  sum?: Maybe<Communication_Opt_In_Sum_Fields>;
+  var_pop?: Maybe<Communication_Opt_In_Var_Pop_Fields>;
+  var_samp?: Maybe<Communication_Opt_In_Var_Samp_Fields>;
+  variance?: Maybe<Communication_Opt_In_Variance_Fields>;
+};
+
+
+/** aggregate fields of "communication_opt_in" */
+export type Communication_Opt_In_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "communication_opt_in" */
+export type Communication_Opt_In_Aggregate_Order_By = {
+  avg?: InputMaybe<Communication_Opt_In_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Communication_Opt_In_Max_Order_By>;
+  min?: InputMaybe<Communication_Opt_In_Min_Order_By>;
+  stddev?: InputMaybe<Communication_Opt_In_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Communication_Opt_In_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Communication_Opt_In_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Communication_Opt_In_Sum_Order_By>;
+  var_pop?: InputMaybe<Communication_Opt_In_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Communication_Opt_In_Var_Samp_Order_By>;
+  variance?: InputMaybe<Communication_Opt_In_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "communication_opt_in" */
+export type Communication_Opt_In_Arr_Rel_Insert_Input = {
+  data: Array<Communication_Opt_In_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Communication_Opt_In_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Communication_Opt_In_Avg_Fields = {
+  __typename?: 'communication_opt_in_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Avg_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "communication_opt_in". All fields are combined with a logical 'AND'. */
+export type Communication_Opt_In_Bool_Exp = {
+  _and?: InputMaybe<Array<Communication_Opt_In_Bool_Exp>>;
+  _not?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+  _or?: InputMaybe<Array<Communication_Opt_In_Bool_Exp>>;
+  comm_type?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  opt_in?: InputMaybe<Boolean_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "communication_opt_in" */
+export enum Communication_Opt_In_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  CommunicationOptInPkey = 'communication_opt_in_pkey',
+  /** unique or primary key constraint on columns "user_id", "comm_type" */
+  CommunicationOptInUserIdCommTypeKey = 'communication_opt_in_user_id_comm_type_key'
+}
+
+/** input type for incrementing numeric columns in table "communication_opt_in" */
+export type Communication_Opt_In_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "communication_opt_in" */
+export type Communication_Opt_In_Insert_Input = {
+  comm_type?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  opt_in?: InputMaybe<Scalars['Boolean']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  user_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Communication_Opt_In_Max_Fields = {
+  __typename?: 'communication_opt_in_max_fields';
+  comm_type?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Max_Order_By = {
+  comm_type?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Communication_Opt_In_Min_Fields = {
+  __typename?: 'communication_opt_in_min_fields';
+  comm_type?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Min_Order_By = {
+  comm_type?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "communication_opt_in" */
+export type Communication_Opt_In_Mutation_Response = {
+  __typename?: 'communication_opt_in_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Communication_Opt_In>;
+};
+
+/** on_conflict condition type for table "communication_opt_in" */
+export type Communication_Opt_In_On_Conflict = {
+  constraint: Communication_Opt_In_Constraint;
+  update_columns?: Array<Communication_Opt_In_Update_Column>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "communication_opt_in". */
+export type Communication_Opt_In_Order_By = {
+  comm_type?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  opt_in?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: communication_opt_in */
+export type Communication_Opt_In_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "communication_opt_in" */
+export enum Communication_Opt_In_Select_Column {
+  /** column name */
+  CommType = 'comm_type',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OptIn = 'opt_in',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** select "communication_opt_in_aggregate_bool_exp_bool_and_arguments_columns" columns of table "communication_opt_in" */
+export enum Communication_Opt_In_Select_Column_Communication_Opt_In_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  OptIn = 'opt_in'
+}
+
+/** select "communication_opt_in_aggregate_bool_exp_bool_or_arguments_columns" columns of table "communication_opt_in" */
+export enum Communication_Opt_In_Select_Column_Communication_Opt_In_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  OptIn = 'opt_in'
+}
+
+/** input type for updating data in table "communication_opt_in" */
+export type Communication_Opt_In_Set_Input = {
+  comm_type?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  opt_in?: InputMaybe<Scalars['Boolean']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Communication_Opt_In_Stddev_Fields = {
+  __typename?: 'communication_opt_in_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Stddev_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Communication_Opt_In_Stddev_Pop_Fields = {
+  __typename?: 'communication_opt_in_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Stddev_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Communication_Opt_In_Stddev_Samp_Fields = {
+  __typename?: 'communication_opt_in_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Stddev_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "communication_opt_in" */
+export type Communication_Opt_In_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Communication_Opt_In_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Communication_Opt_In_Stream_Cursor_Value_Input = {
+  comm_type?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  opt_in?: InputMaybe<Scalars['Boolean']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate sum on columns */
+export type Communication_Opt_In_Sum_Fields = {
+  __typename?: 'communication_opt_in_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Sum_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "communication_opt_in" */
+export enum Communication_Opt_In_Update_Column {
+  /** column name */
+  CommType = 'comm_type',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OptIn = 'opt_in',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
+export type Communication_Opt_In_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Communication_Opt_In_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Communication_Opt_In_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Communication_Opt_In_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Communication_Opt_In_Var_Pop_Fields = {
+  __typename?: 'communication_opt_in_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Var_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Communication_Opt_In_Var_Samp_Fields = {
+  __typename?: 'communication_opt_in_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Var_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Communication_Opt_In_Variance_Fields = {
+  __typename?: 'communication_opt_in_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "communication_opt_in" */
+export type Communication_Opt_In_Variance_Order_By = {
+  id?: InputMaybe<Order_By>;
+};
+
 /** ordering argument of a cursor */
 export enum Cursor_Ordering {
   /** ascending ordering of the cursor */
@@ -4669,6 +6334,13 @@ export type Listing = {
   primary_email?: Maybe<Scalars['String']>;
   primary_phone?: Maybe<Scalars['String']>;
   primary_web_url?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
+  promo_code_visitor_hook?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  promo_codes: Array<Promo_Code>;
+  /** An aggregate relationship */
+  promo_codes_aggregate: Promo_Code_Aggregate;
   promoted: Scalars['Boolean'];
   rich_description?: Maybe<Scalars['String']>;
   slogan?: Maybe<Scalars['String']>;
@@ -4733,6 +6405,26 @@ export type ListingListing_Category_Tags_AggregateArgs = {
 
 
 /** individual business's details */
+export type ListingPromo_CodesArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+/** individual business's details */
+export type ListingPromo_Codes_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+/** individual business's details */
 export type ListingSocial_MediaArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
@@ -4789,6 +6481,8 @@ export type Listing_Avg_Fields = {
   __typename?: 'listing_avg_fields';
   id?: Maybe<Scalars['Float']>;
   main_category_id?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** Boolean expression to filter rows from the table "listing". All fields are combined with a logical 'AND'. */
@@ -4819,6 +6513,10 @@ export type Listing_Bool_Exp = {
   primary_email?: InputMaybe<String_Comparison_Exp>;
   primary_phone?: InputMaybe<String_Comparison_Exp>;
   primary_web_url?: InputMaybe<String_Comparison_Exp>;
+  promo_code_count?: InputMaybe<Int_Comparison_Exp>;
+  promo_code_visitor_hook?: InputMaybe<String_Comparison_Exp>;
+  promo_codes?: InputMaybe<Promo_Code_Bool_Exp>;
+  promo_codes_aggregate?: InputMaybe<Promo_Code_Aggregate_Bool_Exp>;
   promoted?: InputMaybe<Boolean_Comparison_Exp>;
   rich_description?: InputMaybe<String_Comparison_Exp>;
   slogan?: InputMaybe<String_Comparison_Exp>;
@@ -5271,6 +6969,8 @@ export type Listing_Insert_Input = {
   primary_email?: InputMaybe<Scalars['String']>;
   primary_phone?: InputMaybe<Scalars['String']>;
   primary_web_url?: InputMaybe<Scalars['String']>;
+  promo_code_visitor_hook?: InputMaybe<Scalars['String']>;
+  promo_codes?: InputMaybe<Promo_Code_Arr_Rel_Insert_Input>;
   promoted?: InputMaybe<Scalars['Boolean']>;
   rich_description?: InputMaybe<Scalars['String']>;
   slogan?: InputMaybe<Scalars['String']>;
@@ -5300,6 +7000,9 @@ export type Listing_Max_Fields = {
   primary_email?: Maybe<Scalars['String']>;
   primary_phone?: Maybe<Scalars['String']>;
   primary_web_url?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
+  promo_code_visitor_hook?: Maybe<Scalars['String']>;
   rich_description?: Maybe<Scalars['String']>;
   slogan?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -5324,6 +7027,9 @@ export type Listing_Min_Fields = {
   primary_email?: Maybe<Scalars['String']>;
   primary_phone?: Maybe<Scalars['String']>;
   primary_web_url?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
+  promo_code_visitor_hook?: Maybe<Scalars['String']>;
   rich_description?: Maybe<Scalars['String']>;
   slogan?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -5378,6 +7084,9 @@ export type Listing_Order_By = {
   primary_email?: InputMaybe<Order_By>;
   primary_phone?: InputMaybe<Order_By>;
   primary_web_url?: InputMaybe<Order_By>;
+  promo_code_count?: InputMaybe<Order_By>;
+  promo_code_visitor_hook?: InputMaybe<Order_By>;
+  promo_codes_aggregate?: InputMaybe<Promo_Code_Aggregate_Order_By>;
   promoted?: InputMaybe<Order_By>;
   rich_description?: InputMaybe<Order_By>;
   slogan?: InputMaybe<Order_By>;
@@ -5449,6 +7158,8 @@ export enum Listing_Select_Column {
   /** column name */
   PrimaryWebUrl = 'primary_web_url',
   /** column name */
+  PromoCodeVisitorHook = 'promo_code_visitor_hook',
+  /** column name */
   Promoted = 'promoted',
   /** column name */
   RichDescription = 'rich_description',
@@ -5492,6 +7203,7 @@ export type Listing_Set_Input = {
   primary_email?: InputMaybe<Scalars['String']>;
   primary_phone?: InputMaybe<Scalars['String']>;
   primary_web_url?: InputMaybe<Scalars['String']>;
+  promo_code_visitor_hook?: InputMaybe<Scalars['String']>;
   promoted?: InputMaybe<Scalars['Boolean']>;
   rich_description?: InputMaybe<Scalars['String']>;
   slogan?: InputMaybe<Scalars['String']>;
@@ -5509,6 +7221,8 @@ export type Listing_Stddev_Fields = {
   __typename?: 'listing_stddev_fields';
   id?: Maybe<Scalars['Float']>;
   main_category_id?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -5516,6 +7230,8 @@ export type Listing_Stddev_Pop_Fields = {
   __typename?: 'listing_stddev_pop_fields';
   id?: Maybe<Scalars['Float']>;
   main_category_id?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -5523,6 +7239,8 @@ export type Listing_Stddev_Samp_Fields = {
   __typename?: 'listing_stddev_samp_fields';
   id?: Maybe<Scalars['Float']>;
   main_category_id?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** Streaming cursor of the table "listing" */
@@ -5555,6 +7273,7 @@ export type Listing_Stream_Cursor_Value_Input = {
   primary_email?: InputMaybe<Scalars['String']>;
   primary_phone?: InputMaybe<Scalars['String']>;
   primary_web_url?: InputMaybe<Scalars['String']>;
+  promo_code_visitor_hook?: InputMaybe<Scalars['String']>;
   promoted?: InputMaybe<Scalars['Boolean']>;
   rich_description?: InputMaybe<Scalars['String']>;
   slogan?: InputMaybe<Scalars['String']>;
@@ -5572,6 +7291,8 @@ export type Listing_Sum_Fields = {
   __typename?: 'listing_sum_fields';
   id?: Maybe<Scalars['Int']>;
   main_category_id?: Maybe<Scalars['Int']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "listing" */
@@ -5616,6 +7337,8 @@ export enum Listing_Update_Column {
   PrimaryPhone = 'primary_phone',
   /** column name */
   PrimaryWebUrl = 'primary_web_url',
+  /** column name */
+  PromoCodeVisitorHook = 'promo_code_visitor_hook',
   /** column name */
   Promoted = 'promoted',
   /** column name */
@@ -5662,6 +7385,8 @@ export type Listing_Var_Pop_Fields = {
   __typename?: 'listing_var_pop_fields';
   id?: Maybe<Scalars['Float']>;
   main_category_id?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate var_samp on columns */
@@ -5669,6 +7394,8 @@ export type Listing_Var_Samp_Fields = {
   __typename?: 'listing_var_samp_fields';
   id?: Maybe<Scalars['Float']>;
   main_category_id?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate variance on columns */
@@ -5676,11 +7403,29 @@ export type Listing_Variance_Fields = {
   __typename?: 'listing_variance_fields';
   id?: Maybe<Scalars['Float']>;
   main_category_id?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "promo_code_count_for_listing" */
+  promo_code_count?: Maybe<Scalars['Int']>;
 };
 
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
+  /** delete single row from the table: "auth.oauth2_auth_requests" */
+  deleteAuthOauth2AuthRequest?: Maybe<AuthOauth2AuthRequests>;
+  /** delete data from the table: "auth.oauth2_auth_requests" */
+  deleteAuthOauth2AuthRequests?: Maybe<AuthOauth2AuthRequests_Mutation_Response>;
+  /** delete single row from the table: "auth.oauth2_authorization_codes" */
+  deleteAuthOauth2AuthorizationCode?: Maybe<AuthOauth2AuthorizationCodes>;
+  /** delete data from the table: "auth.oauth2_authorization_codes" */
+  deleteAuthOauth2AuthorizationCodes?: Maybe<AuthOauth2AuthorizationCodes_Mutation_Response>;
+  /** delete single row from the table: "auth.oauth2_clients" */
+  deleteAuthOauth2Client?: Maybe<AuthOauth2Clients>;
+  /** delete data from the table: "auth.oauth2_clients" */
+  deleteAuthOauth2Clients?: Maybe<AuthOauth2Clients_Mutation_Response>;
+  /** delete single row from the table: "auth.oauth2_refresh_tokens" */
+  deleteAuthOauth2RefreshToken?: Maybe<AuthOauth2RefreshTokens>;
+  /** delete data from the table: "auth.oauth2_refresh_tokens" */
+  deleteAuthOauth2RefreshTokens?: Maybe<AuthOauth2RefreshTokens_Mutation_Response>;
   /** delete single row from the table: "auth.providers" */
   deleteAuthProvider?: Maybe<AuthProviders>;
   /** delete single row from the table: "auth.provider_requests" */
@@ -5745,6 +7490,10 @@ export type Mutation_Root = {
   delete_category_tag?: Maybe<Category_Tag_Mutation_Response>;
   /** delete single row from the table: "category_tag" */
   delete_category_tag_by_pk?: Maybe<Category_Tag>;
+  /** delete data from the table: "communication_opt_in" */
+  delete_communication_opt_in?: Maybe<Communication_Opt_In_Mutation_Response>;
+  /** delete single row from the table: "communication_opt_in" */
+  delete_communication_opt_in_by_pk?: Maybe<Communication_Opt_In>;
   /** delete data from the table: "image" */
   delete_image?: Maybe<Image_Mutation_Response>;
   /** delete single row from the table: "image" */
@@ -5757,6 +7506,34 @@ export type Mutation_Root = {
   delete_listing_category_tag?: Maybe<Listing_Category_Tag_Mutation_Response>;
   /** delete single row from the table: "listing_category_tag" */
   delete_listing_category_tag_by_pk?: Maybe<Listing_Category_Tag>;
+  /** delete data from the table: "promo_code" */
+  delete_promo_code?: Maybe<Promo_Code_Mutation_Response>;
+  /** delete single row from the table: "promo_code" */
+  delete_promo_code_by_pk?: Maybe<Promo_Code>;
+  /** delete data from the table: "visitor_answer" */
+  delete_visitor_answer?: Maybe<Visitor_Answer_Mutation_Response>;
+  /** delete single row from the table: "visitor_answer" */
+  delete_visitor_answer_by_pk?: Maybe<Visitor_Answer>;
+  /** delete data from the table: "visitor_question" */
+  delete_visitor_question?: Maybe<Visitor_Question_Mutation_Response>;
+  /** delete single row from the table: "visitor_question" */
+  delete_visitor_question_by_pk?: Maybe<Visitor_Question>;
+  /** insert a single row into the table: "auth.oauth2_auth_requests" */
+  insertAuthOauth2AuthRequest?: Maybe<AuthOauth2AuthRequests>;
+  /** insert data into the table: "auth.oauth2_auth_requests" */
+  insertAuthOauth2AuthRequests?: Maybe<AuthOauth2AuthRequests_Mutation_Response>;
+  /** insert a single row into the table: "auth.oauth2_authorization_codes" */
+  insertAuthOauth2AuthorizationCode?: Maybe<AuthOauth2AuthorizationCodes>;
+  /** insert data into the table: "auth.oauth2_authorization_codes" */
+  insertAuthOauth2AuthorizationCodes?: Maybe<AuthOauth2AuthorizationCodes_Mutation_Response>;
+  /** insert a single row into the table: "auth.oauth2_clients" */
+  insertAuthOauth2Client?: Maybe<AuthOauth2Clients>;
+  /** insert data into the table: "auth.oauth2_clients" */
+  insertAuthOauth2Clients?: Maybe<AuthOauth2Clients_Mutation_Response>;
+  /** insert a single row into the table: "auth.oauth2_refresh_tokens" */
+  insertAuthOauth2RefreshToken?: Maybe<AuthOauth2RefreshTokens>;
+  /** insert data into the table: "auth.oauth2_refresh_tokens" */
+  insertAuthOauth2RefreshTokens?: Maybe<AuthOauth2RefreshTokens_Mutation_Response>;
   /** insert a single row into the table: "auth.providers" */
   insertAuthProvider?: Maybe<AuthProviders>;
   /** insert a single row into the table: "auth.provider_requests" */
@@ -5821,6 +7598,10 @@ export type Mutation_Root = {
   insert_category_tag?: Maybe<Category_Tag_Mutation_Response>;
   /** insert a single row into the table: "category_tag" */
   insert_category_tag_one?: Maybe<Category_Tag>;
+  /** insert data into the table: "communication_opt_in" */
+  insert_communication_opt_in?: Maybe<Communication_Opt_In_Mutation_Response>;
+  /** insert a single row into the table: "communication_opt_in" */
+  insert_communication_opt_in_one?: Maybe<Communication_Opt_In>;
   /** insert data into the table: "image" */
   insert_image?: Maybe<Image_Mutation_Response>;
   /** insert a single row into the table: "image" */
@@ -5833,6 +7614,34 @@ export type Mutation_Root = {
   insert_listing_category_tag_one?: Maybe<Listing_Category_Tag>;
   /** insert a single row into the table: "listing" */
   insert_listing_one?: Maybe<Listing>;
+  /** insert data into the table: "promo_code" */
+  insert_promo_code?: Maybe<Promo_Code_Mutation_Response>;
+  /** insert a single row into the table: "promo_code" */
+  insert_promo_code_one?: Maybe<Promo_Code>;
+  /** insert data into the table: "visitor_answer" */
+  insert_visitor_answer?: Maybe<Visitor_Answer_Mutation_Response>;
+  /** insert a single row into the table: "visitor_answer" */
+  insert_visitor_answer_one?: Maybe<Visitor_Answer>;
+  /** insert data into the table: "visitor_question" */
+  insert_visitor_question?: Maybe<Visitor_Question_Mutation_Response>;
+  /** insert a single row into the table: "visitor_question" */
+  insert_visitor_question_one?: Maybe<Visitor_Question>;
+  /** update single row of the table: "auth.oauth2_auth_requests" */
+  updateAuthOauth2AuthRequest?: Maybe<AuthOauth2AuthRequests>;
+  /** update data of the table: "auth.oauth2_auth_requests" */
+  updateAuthOauth2AuthRequests?: Maybe<AuthOauth2AuthRequests_Mutation_Response>;
+  /** update single row of the table: "auth.oauth2_authorization_codes" */
+  updateAuthOauth2AuthorizationCode?: Maybe<AuthOauth2AuthorizationCodes>;
+  /** update data of the table: "auth.oauth2_authorization_codes" */
+  updateAuthOauth2AuthorizationCodes?: Maybe<AuthOauth2AuthorizationCodes_Mutation_Response>;
+  /** update single row of the table: "auth.oauth2_clients" */
+  updateAuthOauth2Client?: Maybe<AuthOauth2Clients>;
+  /** update data of the table: "auth.oauth2_clients" */
+  updateAuthOauth2Clients?: Maybe<AuthOauth2Clients_Mutation_Response>;
+  /** update single row of the table: "auth.oauth2_refresh_tokens" */
+  updateAuthOauth2RefreshToken?: Maybe<AuthOauth2RefreshTokens>;
+  /** update data of the table: "auth.oauth2_refresh_tokens" */
+  updateAuthOauth2RefreshTokens?: Maybe<AuthOauth2RefreshTokens_Mutation_Response>;
   /** update single row of the table: "auth.providers" */
   updateAuthProvider?: Maybe<AuthProviders>;
   /** update single row of the table: "auth.provider_requests" */
@@ -5899,6 +7708,14 @@ export type Mutation_Root = {
   update_ad_event_many?: Maybe<Array<Maybe<Ad_Event_Mutation_Response>>>;
   /** update multiples rows of table: "ad" */
   update_ad_many?: Maybe<Array<Maybe<Ad_Mutation_Response>>>;
+  /** update multiples rows of table: "auth.oauth2_auth_requests" */
+  update_authOauth2AuthRequests_many?: Maybe<Array<Maybe<AuthOauth2AuthRequests_Mutation_Response>>>;
+  /** update multiples rows of table: "auth.oauth2_authorization_codes" */
+  update_authOauth2AuthorizationCodes_many?: Maybe<Array<Maybe<AuthOauth2AuthorizationCodes_Mutation_Response>>>;
+  /** update multiples rows of table: "auth.oauth2_clients" */
+  update_authOauth2Clients_many?: Maybe<Array<Maybe<AuthOauth2Clients_Mutation_Response>>>;
+  /** update multiples rows of table: "auth.oauth2_refresh_tokens" */
+  update_authOauth2RefreshTokens_many?: Maybe<Array<Maybe<AuthOauth2RefreshTokens_Mutation_Response>>>;
   /** update multiples rows of table: "auth.provider_requests" */
   update_authProviderRequests_many?: Maybe<Array<Maybe<AuthProviderRequests_Mutation_Response>>>;
   /** update multiples rows of table: "auth.providers" */
@@ -5923,6 +7740,12 @@ export type Mutation_Root = {
   update_category_tag_by_pk?: Maybe<Category_Tag>;
   /** update multiples rows of table: "category_tag" */
   update_category_tag_many?: Maybe<Array<Maybe<Category_Tag_Mutation_Response>>>;
+  /** update data of the table: "communication_opt_in" */
+  update_communication_opt_in?: Maybe<Communication_Opt_In_Mutation_Response>;
+  /** update single row of the table: "communication_opt_in" */
+  update_communication_opt_in_by_pk?: Maybe<Communication_Opt_In>;
+  /** update multiples rows of table: "communication_opt_in" */
+  update_communication_opt_in_many?: Maybe<Array<Maybe<Communication_Opt_In_Mutation_Response>>>;
   /** update multiples rows of table: "storage.files" */
   update_files_many?: Maybe<Array<Maybe<Files_Mutation_Response>>>;
   /** update data of the table: "image" */
@@ -5943,12 +7766,78 @@ export type Mutation_Root = {
   update_listing_category_tag_many?: Maybe<Array<Maybe<Listing_Category_Tag_Mutation_Response>>>;
   /** update multiples rows of table: "listing" */
   update_listing_many?: Maybe<Array<Maybe<Listing_Mutation_Response>>>;
+  /** update data of the table: "promo_code" */
+  update_promo_code?: Maybe<Promo_Code_Mutation_Response>;
+  /** update single row of the table: "promo_code" */
+  update_promo_code_by_pk?: Maybe<Promo_Code>;
+  /** update multiples rows of table: "promo_code" */
+  update_promo_code_many?: Maybe<Array<Maybe<Promo_Code_Mutation_Response>>>;
   /** update multiples rows of table: "auth.users" */
   update_users_many?: Maybe<Array<Maybe<Users_Mutation_Response>>>;
   /** update multiples rows of table: "storage.virus" */
   update_virus_many?: Maybe<Array<Maybe<Virus_Mutation_Response>>>;
+  /** update data of the table: "visitor_answer" */
+  update_visitor_answer?: Maybe<Visitor_Answer_Mutation_Response>;
+  /** update single row of the table: "visitor_answer" */
+  update_visitor_answer_by_pk?: Maybe<Visitor_Answer>;
+  /** update multiples rows of table: "visitor_answer" */
+  update_visitor_answer_many?: Maybe<Array<Maybe<Visitor_Answer_Mutation_Response>>>;
+  /** update data of the table: "visitor_question" */
+  update_visitor_question?: Maybe<Visitor_Question_Mutation_Response>;
+  /** update single row of the table: "visitor_question" */
+  update_visitor_question_by_pk?: Maybe<Visitor_Question>;
+  /** update multiples rows of table: "visitor_question" */
+  update_visitor_question_many?: Maybe<Array<Maybe<Visitor_Question_Mutation_Response>>>;
   /** Upload Image To Listing */
   uploadImage: UploadImagePayload;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2AuthRequestArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2AuthRequestsArgs = {
+  where: AuthOauth2AuthRequests_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2AuthorizationCodeArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2AuthorizationCodesArgs = {
+  where: AuthOauth2AuthorizationCodes_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2ClientArgs = {
+  clientId: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2ClientsArgs = {
+  where: AuthOauth2Clients_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2RefreshTokenArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteAuthOauth2RefreshTokensArgs = {
+  where: AuthOauth2RefreshTokens_Bool_Exp;
 };
 
 
@@ -6145,6 +8034,18 @@ export type Mutation_RootDelete_Category_Tag_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Communication_Opt_InArgs = {
+  where: Communication_Opt_In_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Communication_Opt_In_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_ImageArgs = {
   where: Image_Bool_Exp;
 };
@@ -6177,6 +8078,98 @@ export type Mutation_RootDelete_Listing_Category_TagArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Listing_Category_Tag_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Promo_CodeArgs = {
+  where: Promo_Code_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Promo_Code_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Visitor_AnswerArgs = {
+  where: Visitor_Answer_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Visitor_Answer_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Visitor_QuestionArgs = {
+  where: Visitor_Question_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Visitor_Question_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2AuthRequestArgs = {
+  object: AuthOauth2AuthRequests_Insert_Input;
+  on_conflict?: InputMaybe<AuthOauth2AuthRequests_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2AuthRequestsArgs = {
+  objects: Array<AuthOauth2AuthRequests_Insert_Input>;
+  on_conflict?: InputMaybe<AuthOauth2AuthRequests_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2AuthorizationCodeArgs = {
+  object: AuthOauth2AuthorizationCodes_Insert_Input;
+  on_conflict?: InputMaybe<AuthOauth2AuthorizationCodes_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2AuthorizationCodesArgs = {
+  objects: Array<AuthOauth2AuthorizationCodes_Insert_Input>;
+  on_conflict?: InputMaybe<AuthOauth2AuthorizationCodes_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2ClientArgs = {
+  object: AuthOauth2Clients_Insert_Input;
+  on_conflict?: InputMaybe<AuthOauth2Clients_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2ClientsArgs = {
+  objects: Array<AuthOauth2Clients_Insert_Input>;
+  on_conflict?: InputMaybe<AuthOauth2Clients_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2RefreshTokenArgs = {
+  object: AuthOauth2RefreshTokens_Insert_Input;
+  on_conflict?: InputMaybe<AuthOauth2RefreshTokens_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertAuthOauth2RefreshTokensArgs = {
+  objects: Array<AuthOauth2RefreshTokens_Insert_Input>;
+  on_conflict?: InputMaybe<AuthOauth2RefreshTokens_On_Conflict>;
 };
 
 
@@ -6405,6 +8398,20 @@ export type Mutation_RootInsert_Category_Tag_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Communication_Opt_InArgs = {
+  objects: Array<Communication_Opt_In_Insert_Input>;
+  on_conflict?: InputMaybe<Communication_Opt_In_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Communication_Opt_In_OneArgs = {
+  object: Communication_Opt_In_Insert_Input;
+  on_conflict?: InputMaybe<Communication_Opt_In_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_ImageArgs = {
   objects: Array<Image_Insert_Input>;
   on_conflict?: InputMaybe<Image_On_Conflict>;
@@ -6443,6 +8450,114 @@ export type Mutation_RootInsert_Listing_Category_Tag_OneArgs = {
 export type Mutation_RootInsert_Listing_OneArgs = {
   object: Listing_Insert_Input;
   on_conflict?: InputMaybe<Listing_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Promo_CodeArgs = {
+  objects: Array<Promo_Code_Insert_Input>;
+  on_conflict?: InputMaybe<Promo_Code_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Promo_Code_OneArgs = {
+  object: Promo_Code_Insert_Input;
+  on_conflict?: InputMaybe<Promo_Code_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Visitor_AnswerArgs = {
+  objects: Array<Visitor_Answer_Insert_Input>;
+  on_conflict?: InputMaybe<Visitor_Answer_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Visitor_Answer_OneArgs = {
+  object: Visitor_Answer_Insert_Input;
+  on_conflict?: InputMaybe<Visitor_Answer_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Visitor_QuestionArgs = {
+  objects: Array<Visitor_Question_Insert_Input>;
+  on_conflict?: InputMaybe<Visitor_Question_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Visitor_Question_OneArgs = {
+  object: Visitor_Question_Insert_Input;
+  on_conflict?: InputMaybe<Visitor_Question_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2AuthRequestArgs = {
+  _set?: InputMaybe<AuthOauth2AuthRequests_Set_Input>;
+  pk_columns: AuthOauth2AuthRequests_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2AuthRequestsArgs = {
+  _set?: InputMaybe<AuthOauth2AuthRequests_Set_Input>;
+  where: AuthOauth2AuthRequests_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2AuthorizationCodeArgs = {
+  _set?: InputMaybe<AuthOauth2AuthorizationCodes_Set_Input>;
+  pk_columns: AuthOauth2AuthorizationCodes_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2AuthorizationCodesArgs = {
+  _set?: InputMaybe<AuthOauth2AuthorizationCodes_Set_Input>;
+  where: AuthOauth2AuthorizationCodes_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2ClientArgs = {
+  _append?: InputMaybe<AuthOauth2Clients_Append_Input>;
+  _delete_at_path?: InputMaybe<AuthOauth2Clients_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<AuthOauth2Clients_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<AuthOauth2Clients_Delete_Key_Input>;
+  _prepend?: InputMaybe<AuthOauth2Clients_Prepend_Input>;
+  _set?: InputMaybe<AuthOauth2Clients_Set_Input>;
+  pk_columns: AuthOauth2Clients_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2ClientsArgs = {
+  _append?: InputMaybe<AuthOauth2Clients_Append_Input>;
+  _delete_at_path?: InputMaybe<AuthOauth2Clients_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<AuthOauth2Clients_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<AuthOauth2Clients_Delete_Key_Input>;
+  _prepend?: InputMaybe<AuthOauth2Clients_Prepend_Input>;
+  _set?: InputMaybe<AuthOauth2Clients_Set_Input>;
+  where: AuthOauth2Clients_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2RefreshTokenArgs = {
+  _set?: InputMaybe<AuthOauth2RefreshTokens_Set_Input>;
+  pk_columns: AuthOauth2RefreshTokens_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAuthOauth2RefreshTokensArgs = {
+  _set?: InputMaybe<AuthOauth2RefreshTokens_Set_Input>;
+  where: AuthOauth2RefreshTokens_Bool_Exp;
 };
 
 
@@ -6737,6 +8852,30 @@ export type Mutation_RootUpdate_Ad_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_AuthOauth2AuthRequests_ManyArgs = {
+  updates: Array<AuthOauth2AuthRequests_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_AuthOauth2AuthorizationCodes_ManyArgs = {
+  updates: Array<AuthOauth2AuthorizationCodes_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_AuthOauth2Clients_ManyArgs = {
+  updates: Array<AuthOauth2Clients_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_AuthOauth2RefreshTokens_ManyArgs = {
+  updates: Array<AuthOauth2RefreshTokens_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_AuthProviderRequests_ManyArgs = {
   updates: Array<AuthProviderRequests_Updates>;
 };
@@ -6809,6 +8948,28 @@ export type Mutation_RootUpdate_Category_Tag_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Category_Tag_ManyArgs = {
   updates: Array<Category_Tag_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Communication_Opt_InArgs = {
+  _inc?: InputMaybe<Communication_Opt_In_Inc_Input>;
+  _set?: InputMaybe<Communication_Opt_In_Set_Input>;
+  where: Communication_Opt_In_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Communication_Opt_In_By_PkArgs = {
+  _inc?: InputMaybe<Communication_Opt_In_Inc_Input>;
+  _set?: InputMaybe<Communication_Opt_In_Set_Input>;
+  pk_columns: Communication_Opt_In_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Communication_Opt_In_ManyArgs = {
+  updates: Array<Communication_Opt_In_Updates>;
 };
 
 
@@ -6895,6 +9056,28 @@ export type Mutation_RootUpdate_Listing_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Promo_CodeArgs = {
+  _inc?: InputMaybe<Promo_Code_Inc_Input>;
+  _set?: InputMaybe<Promo_Code_Set_Input>;
+  where: Promo_Code_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Promo_Code_By_PkArgs = {
+  _inc?: InputMaybe<Promo_Code_Inc_Input>;
+  _set?: InputMaybe<Promo_Code_Set_Input>;
+  pk_columns: Promo_Code_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Promo_Code_ManyArgs = {
+  updates: Array<Promo_Code_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Users_ManyArgs = {
   updates: Array<Users_Updates>;
 };
@@ -6903,6 +9086,70 @@ export type Mutation_RootUpdate_Users_ManyArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Virus_ManyArgs = {
   updates: Array<Virus_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Visitor_AnswerArgs = {
+  _append?: InputMaybe<Visitor_Answer_Append_Input>;
+  _delete_at_path?: InputMaybe<Visitor_Answer_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Visitor_Answer_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Visitor_Answer_Delete_Key_Input>;
+  _inc?: InputMaybe<Visitor_Answer_Inc_Input>;
+  _prepend?: InputMaybe<Visitor_Answer_Prepend_Input>;
+  _set?: InputMaybe<Visitor_Answer_Set_Input>;
+  where: Visitor_Answer_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Visitor_Answer_By_PkArgs = {
+  _append?: InputMaybe<Visitor_Answer_Append_Input>;
+  _delete_at_path?: InputMaybe<Visitor_Answer_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Visitor_Answer_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Visitor_Answer_Delete_Key_Input>;
+  _inc?: InputMaybe<Visitor_Answer_Inc_Input>;
+  _prepend?: InputMaybe<Visitor_Answer_Prepend_Input>;
+  _set?: InputMaybe<Visitor_Answer_Set_Input>;
+  pk_columns: Visitor_Answer_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Visitor_Answer_ManyArgs = {
+  updates: Array<Visitor_Answer_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Visitor_QuestionArgs = {
+  _append?: InputMaybe<Visitor_Question_Append_Input>;
+  _delete_at_path?: InputMaybe<Visitor_Question_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Visitor_Question_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Visitor_Question_Delete_Key_Input>;
+  _inc?: InputMaybe<Visitor_Question_Inc_Input>;
+  _prepend?: InputMaybe<Visitor_Question_Prepend_Input>;
+  _set?: InputMaybe<Visitor_Question_Set_Input>;
+  where: Visitor_Question_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Visitor_Question_By_PkArgs = {
+  _append?: InputMaybe<Visitor_Question_Append_Input>;
+  _delete_at_path?: InputMaybe<Visitor_Question_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Visitor_Question_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Visitor_Question_Delete_Key_Input>;
+  _inc?: InputMaybe<Visitor_Question_Inc_Input>;
+  _prepend?: InputMaybe<Visitor_Question_Prepend_Input>;
+  _set?: InputMaybe<Visitor_Question_Set_Input>;
+  pk_columns: Visitor_Question_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Visitor_Question_ManyArgs = {
+  updates: Array<Visitor_Question_Updates>;
 };
 
 
@@ -6943,6 +9190,380 @@ export type Point_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['point']>>;
 };
 
+/** simple promo codes for business listing partners */
+export type Promo_Code = {
+  __typename?: 'promo_code';
+  code: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  expiration?: Maybe<Scalars['timestamptz']>;
+  id: Scalars['Int'];
+  label?: Maybe<Scalars['String']>;
+  /** An object relationship */
+  listing: Listing;
+  listing_id: Scalars['Int'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "promo_code" */
+export type Promo_Code_Aggregate = {
+  __typename?: 'promo_code_aggregate';
+  aggregate?: Maybe<Promo_Code_Aggregate_Fields>;
+  nodes: Array<Promo_Code>;
+};
+
+export type Promo_Code_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Promo_Code_Aggregate_Bool_Exp_Count>;
+};
+
+export type Promo_Code_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Promo_Code_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "promo_code" */
+export type Promo_Code_Aggregate_Fields = {
+  __typename?: 'promo_code_aggregate_fields';
+  avg?: Maybe<Promo_Code_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Promo_Code_Max_Fields>;
+  min?: Maybe<Promo_Code_Min_Fields>;
+  stddev?: Maybe<Promo_Code_Stddev_Fields>;
+  stddev_pop?: Maybe<Promo_Code_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Promo_Code_Stddev_Samp_Fields>;
+  sum?: Maybe<Promo_Code_Sum_Fields>;
+  var_pop?: Maybe<Promo_Code_Var_Pop_Fields>;
+  var_samp?: Maybe<Promo_Code_Var_Samp_Fields>;
+  variance?: Maybe<Promo_Code_Variance_Fields>;
+};
+
+
+/** aggregate fields of "promo_code" */
+export type Promo_Code_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "promo_code" */
+export type Promo_Code_Aggregate_Order_By = {
+  avg?: InputMaybe<Promo_Code_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Promo_Code_Max_Order_By>;
+  min?: InputMaybe<Promo_Code_Min_Order_By>;
+  stddev?: InputMaybe<Promo_Code_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Promo_Code_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Promo_Code_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Promo_Code_Sum_Order_By>;
+  var_pop?: InputMaybe<Promo_Code_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Promo_Code_Var_Samp_Order_By>;
+  variance?: InputMaybe<Promo_Code_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "promo_code" */
+export type Promo_Code_Arr_Rel_Insert_Input = {
+  data: Array<Promo_Code_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Promo_Code_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Promo_Code_Avg_Fields = {
+  __typename?: 'promo_code_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+  listing_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "promo_code" */
+export type Promo_Code_Avg_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "promo_code". All fields are combined with a logical 'AND'. */
+export type Promo_Code_Bool_Exp = {
+  _and?: InputMaybe<Array<Promo_Code_Bool_Exp>>;
+  _not?: InputMaybe<Promo_Code_Bool_Exp>;
+  _or?: InputMaybe<Array<Promo_Code_Bool_Exp>>;
+  code?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  expiration?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  label?: InputMaybe<String_Comparison_Exp>;
+  listing?: InputMaybe<Listing_Bool_Exp>;
+  listing_id?: InputMaybe<Int_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "promo_code" */
+export enum Promo_Code_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  PromoCodePkey = 'promo_code_pkey'
+}
+
+/** input type for incrementing numeric columns in table "promo_code" */
+export type Promo_Code_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+  listing_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "promo_code" */
+export type Promo_Code_Insert_Input = {
+  code?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  expiration?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  label?: InputMaybe<Scalars['String']>;
+  listing?: InputMaybe<Listing_Obj_Rel_Insert_Input>;
+  listing_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Promo_Code_Max_Fields = {
+  __typename?: 'promo_code_max_fields';
+  code?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  expiration?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  label?: Maybe<Scalars['String']>;
+  listing_id?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "promo_code" */
+export type Promo_Code_Max_Order_By = {
+  code?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  expiration?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Promo_Code_Min_Fields = {
+  __typename?: 'promo_code_min_fields';
+  code?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  expiration?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  label?: Maybe<Scalars['String']>;
+  listing_id?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "promo_code" */
+export type Promo_Code_Min_Order_By = {
+  code?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  expiration?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "promo_code" */
+export type Promo_Code_Mutation_Response = {
+  __typename?: 'promo_code_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Promo_Code>;
+};
+
+/** on_conflict condition type for table "promo_code" */
+export type Promo_Code_On_Conflict = {
+  constraint: Promo_Code_Constraint;
+  update_columns?: Array<Promo_Code_Update_Column>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "promo_code". */
+export type Promo_Code_Order_By = {
+  code?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  expiration?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
+  listing?: InputMaybe<Listing_Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: promo_code */
+export type Promo_Code_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "promo_code" */
+export enum Promo_Code_Select_Column {
+  /** column name */
+  Code = 'code',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Expiration = 'expiration',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Label = 'label',
+  /** column name */
+  ListingId = 'listing_id',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "promo_code" */
+export type Promo_Code_Set_Input = {
+  code?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  expiration?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  label?: InputMaybe<Scalars['String']>;
+  listing_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Promo_Code_Stddev_Fields = {
+  __typename?: 'promo_code_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+  listing_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "promo_code" */
+export type Promo_Code_Stddev_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Promo_Code_Stddev_Pop_Fields = {
+  __typename?: 'promo_code_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  listing_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "promo_code" */
+export type Promo_Code_Stddev_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Promo_Code_Stddev_Samp_Fields = {
+  __typename?: 'promo_code_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  listing_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "promo_code" */
+export type Promo_Code_Stddev_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "promo_code" */
+export type Promo_Code_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Promo_Code_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Promo_Code_Stream_Cursor_Value_Input = {
+  code?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  expiration?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  label?: InputMaybe<Scalars['String']>;
+  listing_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate sum on columns */
+export type Promo_Code_Sum_Fields = {
+  __typename?: 'promo_code_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+  listing_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "promo_code" */
+export type Promo_Code_Sum_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "promo_code" */
+export enum Promo_Code_Update_Column {
+  /** column name */
+  Code = 'code',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Expiration = 'expiration',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Label = 'label',
+  /** column name */
+  ListingId = 'listing_id',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Promo_Code_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Promo_Code_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Promo_Code_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Promo_Code_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Promo_Code_Var_Pop_Fields = {
+  __typename?: 'promo_code_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  listing_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "promo_code" */
+export type Promo_Code_Var_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Promo_Code_Var_Samp_Fields = {
+  __typename?: 'promo_code_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  listing_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "promo_code" */
+export type Promo_Code_Var_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Promo_Code_Variance_Fields = {
+  __typename?: 'promo_code_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+  listing_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "promo_code" */
+export type Promo_Code_Variance_Order_By = {
+  id?: InputMaybe<Order_By>;
+  listing_id?: InputMaybe<Order_By>;
+};
+
 export type Query_Root = {
   __typename?: 'query_root';
   /** fetch data from the table: "ad" */
@@ -6963,6 +9584,30 @@ export type Query_Root = {
   ad_event_aggregate: Ad_Event_Aggregate;
   /** fetch data from the table: "ad_event" using primary key columns */
   ad_event_by_pk?: Maybe<Ad_Event>;
+  /** fetch data from the table: "auth.oauth2_auth_requests" using primary key columns */
+  authOauth2AuthRequest?: Maybe<AuthOauth2AuthRequests>;
+  /** fetch data from the table: "auth.oauth2_auth_requests" */
+  authOauth2AuthRequests: Array<AuthOauth2AuthRequests>;
+  /** fetch aggregated fields from the table: "auth.oauth2_auth_requests" */
+  authOauth2AuthRequestsAggregate: AuthOauth2AuthRequests_Aggregate;
+  /** fetch data from the table: "auth.oauth2_authorization_codes" using primary key columns */
+  authOauth2AuthorizationCode?: Maybe<AuthOauth2AuthorizationCodes>;
+  /** fetch data from the table: "auth.oauth2_authorization_codes" */
+  authOauth2AuthorizationCodes: Array<AuthOauth2AuthorizationCodes>;
+  /** fetch aggregated fields from the table: "auth.oauth2_authorization_codes" */
+  authOauth2AuthorizationCodesAggregate: AuthOauth2AuthorizationCodes_Aggregate;
+  /** fetch data from the table: "auth.oauth2_clients" using primary key columns */
+  authOauth2Client?: Maybe<AuthOauth2Clients>;
+  /** fetch data from the table: "auth.oauth2_clients" */
+  authOauth2Clients: Array<AuthOauth2Clients>;
+  /** fetch aggregated fields from the table: "auth.oauth2_clients" */
+  authOauth2ClientsAggregate: AuthOauth2Clients_Aggregate;
+  /** fetch data from the table: "auth.oauth2_refresh_tokens" using primary key columns */
+  authOauth2RefreshToken?: Maybe<AuthOauth2RefreshTokens>;
+  /** fetch data from the table: "auth.oauth2_refresh_tokens" */
+  authOauth2RefreshTokens: Array<AuthOauth2RefreshTokens>;
+  /** fetch aggregated fields from the table: "auth.oauth2_refresh_tokens" */
+  authOauth2RefreshTokensAggregate: AuthOauth2RefreshTokens_Aggregate;
   /** fetch data from the table: "auth.providers" using primary key columns */
   authProvider?: Maybe<AuthProviders>;
   /** fetch data from the table: "auth.provider_requests" using primary key columns */
@@ -7025,6 +9670,12 @@ export type Query_Root = {
   category_tag_by_pk?: Maybe<Category_Tag>;
   /** check if an image exists in duda (theoretically) */
   checkImage: CheckImagePayload;
+  /** fetch data from the table: "communication_opt_in" */
+  communication_opt_in: Array<Communication_Opt_In>;
+  /** fetch aggregated fields from the table: "communication_opt_in" */
+  communication_opt_in_aggregate: Communication_Opt_In_Aggregate;
+  /** fetch data from the table: "communication_opt_in" using primary key columns */
+  communication_opt_in_by_pk?: Maybe<Communication_Opt_In>;
   /** fetch data from the table: "storage.files" using primary key columns */
   file?: Maybe<Files>;
   /** An array relationship */
@@ -7051,6 +9702,12 @@ export type Query_Root = {
   listing_category_tag_aggregate: Listing_Category_Tag_Aggregate;
   /** fetch data from the table: "listing_category_tag" using primary key columns */
   listing_category_tag_by_pk?: Maybe<Listing_Category_Tag>;
+  /** fetch data from the table: "promo_code" */
+  promo_code: Array<Promo_Code>;
+  /** fetch aggregated fields from the table: "promo_code" */
+  promo_code_aggregate: Promo_Code_Aggregate;
+  /** fetch data from the table: "promo_code" using primary key columns */
+  promo_code_by_pk?: Maybe<Promo_Code>;
   /** execute function "search_listings" which returns "listing" */
   search_listings: Array<Listing>;
   /** execute function "search_listings" and query aggregates on result of table type "listing" */
@@ -7067,6 +9724,18 @@ export type Query_Root = {
   viruses: Array<Virus>;
   /** fetch aggregated fields from the table: "storage.virus" */
   virusesAggregate: Virus_Aggregate;
+  /** fetch data from the table: "visitor_answer" */
+  visitor_answer: Array<Visitor_Answer>;
+  /** fetch aggregated fields from the table: "visitor_answer" */
+  visitor_answer_aggregate: Visitor_Answer_Aggregate;
+  /** fetch data from the table: "visitor_answer" using primary key columns */
+  visitor_answer_by_pk?: Maybe<Visitor_Answer>;
+  /** fetch data from the table: "visitor_question" */
+  visitor_question: Array<Visitor_Question>;
+  /** fetch aggregated fields from the table: "visitor_question" */
+  visitor_question_aggregate: Visitor_Question_Aggregate;
+  /** fetch data from the table: "visitor_question" using primary key columns */
+  visitor_question_by_pk?: Maybe<Visitor_Question>;
 };
 
 
@@ -7136,6 +9805,98 @@ export type Query_RootAd_Event_AggregateArgs = {
 
 export type Query_RootAd_Event_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Query_RootAuthOauth2AuthRequestArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootAuthOauth2AuthRequestsArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+export type Query_RootAuthOauth2AuthRequestsAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+export type Query_RootAuthOauth2AuthorizationCodeArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootAuthOauth2AuthorizationCodesArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+
+export type Query_RootAuthOauth2AuthorizationCodesAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+
+export type Query_RootAuthOauth2ClientArgs = {
+  clientId: Scalars['String'];
+};
+
+
+export type Query_RootAuthOauth2ClientsArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2Clients_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2Clients_Order_By>>;
+  where?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+};
+
+
+export type Query_RootAuthOauth2ClientsAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2Clients_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2Clients_Order_By>>;
+  where?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+};
+
+
+export type Query_RootAuthOauth2RefreshTokenArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootAuthOauth2RefreshTokensArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+
+export type Query_RootAuthOauth2RefreshTokensAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
 };
 
 
@@ -7374,6 +10135,29 @@ export type Query_RootCheckImageArgs = {
 };
 
 
+export type Query_RootCommunication_Opt_InArgs = {
+  distinct_on?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Communication_Opt_In_Order_By>>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+};
+
+
+export type Query_RootCommunication_Opt_In_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Communication_Opt_In_Order_By>>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+};
+
+
+export type Query_RootCommunication_Opt_In_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type Query_RootFileArgs = {
   id: Scalars['uuid'];
 };
@@ -7486,6 +10270,29 @@ export type Query_RootListing_Category_Tag_By_PkArgs = {
 };
 
 
+export type Query_RootPromo_CodeArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Query_RootPromo_Code_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Query_RootPromo_Code_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type Query_RootSearch_ListingsArgs = {
   args: Search_Listings_Args;
   distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
@@ -7551,6 +10358,52 @@ export type Query_RootVirusesAggregateArgs = {
   where?: InputMaybe<Virus_Bool_Exp>;
 };
 
+
+export type Query_RootVisitor_AnswerArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+
+export type Query_RootVisitor_Answer_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+
+export type Query_RootVisitor_Answer_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Query_RootVisitor_QuestionArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Question_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Question_Order_By>>;
+  where?: InputMaybe<Visitor_Question_Bool_Exp>;
+};
+
+
+export type Query_RootVisitor_Question_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Question_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Question_Order_By>>;
+  where?: InputMaybe<Visitor_Question_Bool_Exp>;
+};
+
+
+export type Query_RootVisitor_Question_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
 export type Search_Listings_Args = {
   search?: InputMaybe<Scalars['String']>;
   search_island?: InputMaybe<Scalars['String']>;
@@ -7582,6 +10435,38 @@ export type Subscription_Root = {
   ad_event_stream: Array<Ad_Event>;
   /** fetch data from the table in a streaming manner: "ad" */
   ad_stream: Array<Ad>;
+  /** fetch data from the table: "auth.oauth2_auth_requests" using primary key columns */
+  authOauth2AuthRequest?: Maybe<AuthOauth2AuthRequests>;
+  /** fetch data from the table: "auth.oauth2_auth_requests" */
+  authOauth2AuthRequests: Array<AuthOauth2AuthRequests>;
+  /** fetch aggregated fields from the table: "auth.oauth2_auth_requests" */
+  authOauth2AuthRequestsAggregate: AuthOauth2AuthRequests_Aggregate;
+  /** fetch data from the table in a streaming manner: "auth.oauth2_auth_requests" */
+  authOauth2AuthRequests_stream: Array<AuthOauth2AuthRequests>;
+  /** fetch data from the table: "auth.oauth2_authorization_codes" using primary key columns */
+  authOauth2AuthorizationCode?: Maybe<AuthOauth2AuthorizationCodes>;
+  /** fetch data from the table: "auth.oauth2_authorization_codes" */
+  authOauth2AuthorizationCodes: Array<AuthOauth2AuthorizationCodes>;
+  /** fetch aggregated fields from the table: "auth.oauth2_authorization_codes" */
+  authOauth2AuthorizationCodesAggregate: AuthOauth2AuthorizationCodes_Aggregate;
+  /** fetch data from the table in a streaming manner: "auth.oauth2_authorization_codes" */
+  authOauth2AuthorizationCodes_stream: Array<AuthOauth2AuthorizationCodes>;
+  /** fetch data from the table: "auth.oauth2_clients" using primary key columns */
+  authOauth2Client?: Maybe<AuthOauth2Clients>;
+  /** fetch data from the table: "auth.oauth2_clients" */
+  authOauth2Clients: Array<AuthOauth2Clients>;
+  /** fetch aggregated fields from the table: "auth.oauth2_clients" */
+  authOauth2ClientsAggregate: AuthOauth2Clients_Aggregate;
+  /** fetch data from the table in a streaming manner: "auth.oauth2_clients" */
+  authOauth2Clients_stream: Array<AuthOauth2Clients>;
+  /** fetch data from the table: "auth.oauth2_refresh_tokens" using primary key columns */
+  authOauth2RefreshToken?: Maybe<AuthOauth2RefreshTokens>;
+  /** fetch data from the table: "auth.oauth2_refresh_tokens" */
+  authOauth2RefreshTokens: Array<AuthOauth2RefreshTokens>;
+  /** fetch aggregated fields from the table: "auth.oauth2_refresh_tokens" */
+  authOauth2RefreshTokensAggregate: AuthOauth2RefreshTokens_Aggregate;
+  /** fetch data from the table in a streaming manner: "auth.oauth2_refresh_tokens" */
+  authOauth2RefreshTokens_stream: Array<AuthOauth2RefreshTokens>;
   /** fetch data from the table: "auth.providers" using primary key columns */
   authProvider?: Maybe<AuthProviders>;
   /** fetch data from the table: "auth.provider_requests" using primary key columns */
@@ -7662,6 +10547,14 @@ export type Subscription_Root = {
   category_tag_by_pk?: Maybe<Category_Tag>;
   /** fetch data from the table in a streaming manner: "category_tag" */
   category_tag_stream: Array<Category_Tag>;
+  /** fetch data from the table: "communication_opt_in" */
+  communication_opt_in: Array<Communication_Opt_In>;
+  /** fetch aggregated fields from the table: "communication_opt_in" */
+  communication_opt_in_aggregate: Communication_Opt_In_Aggregate;
+  /** fetch data from the table: "communication_opt_in" using primary key columns */
+  communication_opt_in_by_pk?: Maybe<Communication_Opt_In>;
+  /** fetch data from the table in a streaming manner: "communication_opt_in" */
+  communication_opt_in_stream: Array<Communication_Opt_In>;
   /** fetch data from the table: "storage.files" using primary key columns */
   file?: Maybe<Files>;
   /** An array relationship */
@@ -7696,6 +10589,14 @@ export type Subscription_Root = {
   listing_category_tag_stream: Array<Listing_Category_Tag>;
   /** fetch data from the table in a streaming manner: "listing" */
   listing_stream: Array<Listing>;
+  /** fetch data from the table: "promo_code" */
+  promo_code: Array<Promo_Code>;
+  /** fetch aggregated fields from the table: "promo_code" */
+  promo_code_aggregate: Promo_Code_Aggregate;
+  /** fetch data from the table: "promo_code" using primary key columns */
+  promo_code_by_pk?: Maybe<Promo_Code>;
+  /** fetch data from the table in a streaming manner: "promo_code" */
+  promo_code_stream: Array<Promo_Code>;
   /** execute function "search_listings" which returns "listing" */
   search_listings: Array<Listing>;
   /** execute function "search_listings" and query aggregates on result of table type "listing" */
@@ -7716,6 +10617,22 @@ export type Subscription_Root = {
   viruses: Array<Virus>;
   /** fetch aggregated fields from the table: "storage.virus" */
   virusesAggregate: Virus_Aggregate;
+  /** fetch data from the table: "visitor_answer" */
+  visitor_answer: Array<Visitor_Answer>;
+  /** fetch aggregated fields from the table: "visitor_answer" */
+  visitor_answer_aggregate: Visitor_Answer_Aggregate;
+  /** fetch data from the table: "visitor_answer" using primary key columns */
+  visitor_answer_by_pk?: Maybe<Visitor_Answer>;
+  /** fetch data from the table in a streaming manner: "visitor_answer" */
+  visitor_answer_stream: Array<Visitor_Answer>;
+  /** fetch data from the table: "visitor_question" */
+  visitor_question: Array<Visitor_Question>;
+  /** fetch aggregated fields from the table: "visitor_question" */
+  visitor_question_aggregate: Visitor_Question_Aggregate;
+  /** fetch data from the table: "visitor_question" using primary key columns */
+  visitor_question_by_pk?: Maybe<Visitor_Question>;
+  /** fetch data from the table in a streaming manner: "visitor_question" */
+  visitor_question_stream: Array<Visitor_Question>;
 };
 
 
@@ -7806,6 +10723,126 @@ export type Subscription_RootAd_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Ad_Stream_Cursor_Input>>;
   where?: InputMaybe<Ad_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2AuthRequestArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootAuthOauth2AuthRequestsArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2AuthRequestsAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2AuthRequests_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<AuthOauth2AuthRequests_Stream_Cursor_Input>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2AuthorizationCodeArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootAuthOauth2AuthorizationCodesArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2AuthorizationCodesAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthorizationCodes_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2AuthorizationCodes_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<AuthOauth2AuthorizationCodes_Stream_Cursor_Input>>;
+  where?: InputMaybe<AuthOauth2AuthorizationCodes_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2ClientArgs = {
+  clientId: Scalars['String'];
+};
+
+
+export type Subscription_RootAuthOauth2ClientsArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2Clients_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2Clients_Order_By>>;
+  where?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2ClientsAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2Clients_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2Clients_Order_By>>;
+  where?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2Clients_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<AuthOauth2Clients_Stream_Cursor_Input>>;
+  where?: InputMaybe<AuthOauth2Clients_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2RefreshTokenArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootAuthOauth2RefreshTokensArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2RefreshTokensAggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+
+export type Subscription_RootAuthOauth2RefreshTokens_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<AuthOauth2RefreshTokens_Stream_Cursor_Input>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
 };
 
 
@@ -8109,6 +11146,36 @@ export type Subscription_RootCategory_Tag_StreamArgs = {
 };
 
 
+export type Subscription_RootCommunication_Opt_InArgs = {
+  distinct_on?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Communication_Opt_In_Order_By>>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+};
+
+
+export type Subscription_RootCommunication_Opt_In_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Communication_Opt_In_Order_By>>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+};
+
+
+export type Subscription_RootCommunication_Opt_In_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootCommunication_Opt_In_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Communication_Opt_In_Stream_Cursor_Input>>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+};
+
+
 export type Subscription_RootFileArgs = {
   id: Scalars['uuid'];
 };
@@ -8249,6 +11316,36 @@ export type Subscription_RootListing_StreamArgs = {
 };
 
 
+export type Subscription_RootPromo_CodeArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Subscription_RootPromo_Code_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Subscription_RootPromo_Code_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootPromo_Code_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Promo_Code_Stream_Cursor_Input>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
 export type Subscription_RootSearch_ListingsArgs = {
   args: Search_Listings_Args;
   distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
@@ -8328,6 +11425,66 @@ export type Subscription_RootVirusesAggregateArgs = {
   where?: InputMaybe<Virus_Bool_Exp>;
 };
 
+
+export type Subscription_RootVisitor_AnswerArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+
+export type Subscription_RootVisitor_Answer_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+
+export type Subscription_RootVisitor_Answer_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootVisitor_Answer_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Visitor_Answer_Stream_Cursor_Input>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+
+export type Subscription_RootVisitor_QuestionArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Question_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Question_Order_By>>;
+  where?: InputMaybe<Visitor_Question_Bool_Exp>;
+};
+
+
+export type Subscription_RootVisitor_Question_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Question_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Question_Order_By>>;
+  where?: InputMaybe<Visitor_Question_Bool_Exp>;
+};
+
+
+export type Subscription_RootVisitor_Question_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootVisitor_Question_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Visitor_Question_Stream_Cursor_Input>>;
+  where?: InputMaybe<Visitor_Question_Bool_Exp>;
+};
+
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
 export type Timestamptz_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['timestamptz']>;
@@ -8359,6 +11516,10 @@ export type Users = {
   __typename?: 'users';
   activeMfaType?: Maybe<Scalars['String']>;
   avatarUrl: Scalars['String'];
+  /** An array relationship */
+  communication_opt_ins: Array<Communication_Opt_In>;
+  /** An aggregate relationship */
+  communication_opt_ins_aggregate: Communication_Opt_In_Aggregate;
   createdAt: Scalars['timestamptz'];
   currentChallenge?: Maybe<Scalars['String']>;
   defaultRole: Scalars['String'];
@@ -8374,6 +11535,14 @@ export type Users = {
   locale: Scalars['String'];
   metadata?: Maybe<Scalars['jsonb']>;
   newEmail?: Maybe<Scalars['citext']>;
+  /** An array relationship */
+  oauth2AuthRequests: Array<AuthOauth2AuthRequests>;
+  /** An aggregate relationship */
+  oauth2AuthRequests_aggregate: AuthOauth2AuthRequests_Aggregate;
+  /** An array relationship */
+  oauth2RefreshTokens: Array<AuthOauth2RefreshTokens>;
+  /** An aggregate relationship */
+  oauth2RefreshTokens_aggregate: AuthOauth2RefreshTokens_Aggregate;
   otpHash?: Maybe<Scalars['String']>;
   otpHashExpiresAt: Scalars['timestamptz'];
   otpMethodLastUsed?: Maybe<Scalars['String']>;
@@ -8400,12 +11569,76 @@ export type Users = {
   userProviders: Array<AuthUserProviders>;
   /** An aggregate relationship */
   userProviders_aggregate: AuthUserProviders_Aggregate;
+  /** An array relationship */
+  visitor_answers: Array<Visitor_Answer>;
+  /** An aggregate relationship */
+  visitor_answers_aggregate: Visitor_Answer_Aggregate;
+};
+
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersCommunication_Opt_InsArgs = {
+  distinct_on?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Communication_Opt_In_Order_By>>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+};
+
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersCommunication_Opt_Ins_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Communication_Opt_In_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Communication_Opt_In_Order_By>>;
+  where?: InputMaybe<Communication_Opt_In_Bool_Exp>;
 };
 
 
 /** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
 export type UsersMetadataArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersOauth2AuthRequestsArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersOauth2AuthRequests_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2AuthRequests_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2AuthRequests_Order_By>>;
+  where?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+};
+
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersOauth2RefreshTokensArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+};
+
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersOauth2RefreshTokens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AuthOauth2RefreshTokens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<AuthOauth2RefreshTokens_Order_By>>;
+  where?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
 };
 
 
@@ -8488,6 +11721,26 @@ export type UsersUserProviders_AggregateArgs = {
   where?: InputMaybe<AuthUserProviders_Bool_Exp>;
 };
 
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersVisitor_AnswersArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+
+/** User account information. Don't modify its structure as Hasura Auth relies on it to function properly. */
+export type UsersVisitor_Answers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
 /** aggregated selection of "auth.users" */
 export type Users_Aggregate = {
   __typename?: 'users_aggregate';
@@ -8563,6 +11816,8 @@ export type Users_Bool_Exp = {
   _or?: InputMaybe<Array<Users_Bool_Exp>>;
   activeMfaType?: InputMaybe<String_Comparison_Exp>;
   avatarUrl?: InputMaybe<String_Comparison_Exp>;
+  communication_opt_ins?: InputMaybe<Communication_Opt_In_Bool_Exp>;
+  communication_opt_ins_aggregate?: InputMaybe<Communication_Opt_In_Aggregate_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   currentChallenge?: InputMaybe<String_Comparison_Exp>;
   defaultRole?: InputMaybe<String_Comparison_Exp>;
@@ -8577,6 +11832,10 @@ export type Users_Bool_Exp = {
   locale?: InputMaybe<String_Comparison_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   newEmail?: InputMaybe<Citext_Comparison_Exp>;
+  oauth2AuthRequests?: InputMaybe<AuthOauth2AuthRequests_Bool_Exp>;
+  oauth2AuthRequests_aggregate?: InputMaybe<AuthOauth2AuthRequests_Aggregate_Bool_Exp>;
+  oauth2RefreshTokens?: InputMaybe<AuthOauth2RefreshTokens_Bool_Exp>;
+  oauth2RefreshTokens_aggregate?: InputMaybe<AuthOauth2RefreshTokens_Aggregate_Bool_Exp>;
   otpHash?: InputMaybe<String_Comparison_Exp>;
   otpHashExpiresAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   otpMethodLastUsed?: InputMaybe<String_Comparison_Exp>;
@@ -8595,6 +11854,8 @@ export type Users_Bool_Exp = {
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   userProviders?: InputMaybe<AuthUserProviders_Bool_Exp>;
   userProviders_aggregate?: InputMaybe<AuthUserProviders_Aggregate_Bool_Exp>;
+  visitor_answers?: InputMaybe<Visitor_Answer_Bool_Exp>;
+  visitor_answers_aggregate?: InputMaybe<Visitor_Answer_Aggregate_Bool_Exp>;
 };
 
 /** unique or primary key constraints on table "auth.users" */
@@ -8626,6 +11887,7 @@ export type Users_Delete_Key_Input = {
 export type Users_Insert_Input = {
   activeMfaType?: InputMaybe<Scalars['String']>;
   avatarUrl?: InputMaybe<Scalars['String']>;
+  communication_opt_ins?: InputMaybe<Communication_Opt_In_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currentChallenge?: InputMaybe<Scalars['String']>;
   defaultRole?: InputMaybe<Scalars['String']>;
@@ -8640,6 +11902,8 @@ export type Users_Insert_Input = {
   locale?: InputMaybe<Scalars['String']>;
   metadata?: InputMaybe<Scalars['jsonb']>;
   newEmail?: InputMaybe<Scalars['citext']>;
+  oauth2AuthRequests?: InputMaybe<AuthOauth2AuthRequests_Arr_Rel_Insert_Input>;
+  oauth2RefreshTokens?: InputMaybe<AuthOauth2RefreshTokens_Arr_Rel_Insert_Input>;
   otpHash?: InputMaybe<Scalars['String']>;
   otpHashExpiresAt?: InputMaybe<Scalars['timestamptz']>;
   otpMethodLastUsed?: InputMaybe<Scalars['String']>;
@@ -8654,6 +11918,7 @@ export type Users_Insert_Input = {
   totpSecret?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   userProviders?: InputMaybe<AuthUserProviders_Arr_Rel_Insert_Input>;
+  visitor_answers?: InputMaybe<Visitor_Answer_Arr_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
@@ -8781,6 +12046,7 @@ export type Users_On_Conflict = {
 export type Users_Order_By = {
   activeMfaType?: InputMaybe<Order_By>;
   avatarUrl?: InputMaybe<Order_By>;
+  communication_opt_ins_aggregate?: InputMaybe<Communication_Opt_In_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   currentChallenge?: InputMaybe<Order_By>;
   defaultRole?: InputMaybe<Order_By>;
@@ -8795,6 +12061,8 @@ export type Users_Order_By = {
   locale?: InputMaybe<Order_By>;
   metadata?: InputMaybe<Order_By>;
   newEmail?: InputMaybe<Order_By>;
+  oauth2AuthRequests_aggregate?: InputMaybe<AuthOauth2AuthRequests_Aggregate_Order_By>;
+  oauth2RefreshTokens_aggregate?: InputMaybe<AuthOauth2RefreshTokens_Aggregate_Order_By>;
   otpHash?: InputMaybe<Order_By>;
   otpHashExpiresAt?: InputMaybe<Order_By>;
   otpMethodLastUsed?: InputMaybe<Order_By>;
@@ -8809,6 +12077,7 @@ export type Users_Order_By = {
   totpSecret?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   userProviders_aggregate?: InputMaybe<AuthUserProviders_Aggregate_Order_By>;
+  visitor_answers_aggregate?: InputMaybe<Visitor_Answer_Aggregate_Order_By>;
 };
 
 /** primary key columns input for table: auth.users */
@@ -9287,6 +12556,774 @@ export type Virus_Updates = {
   where: Virus_Bool_Exp;
 };
 
+/** visitor's answer to a user poll question */
+export type Visitor_Answer = {
+  __typename?: 'visitor_answer';
+  answer: Scalars['jsonb'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['Int'];
+  question_id: Scalars['Int'];
+  updated_at: Scalars['timestamptz'];
+  /** An object relationship */
+  user?: Maybe<Users>;
+  user_email?: Maybe<Scalars['String']>;
+  user_id?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  visitor_question: Visitor_Question;
+};
+
+
+/** visitor's answer to a user poll question */
+export type Visitor_AnswerAnswerArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "visitor_answer" */
+export type Visitor_Answer_Aggregate = {
+  __typename?: 'visitor_answer_aggregate';
+  aggregate?: Maybe<Visitor_Answer_Aggregate_Fields>;
+  nodes: Array<Visitor_Answer>;
+};
+
+export type Visitor_Answer_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Visitor_Answer_Aggregate_Bool_Exp_Count>;
+};
+
+export type Visitor_Answer_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Visitor_Answer_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "visitor_answer" */
+export type Visitor_Answer_Aggregate_Fields = {
+  __typename?: 'visitor_answer_aggregate_fields';
+  avg?: Maybe<Visitor_Answer_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Visitor_Answer_Max_Fields>;
+  min?: Maybe<Visitor_Answer_Min_Fields>;
+  stddev?: Maybe<Visitor_Answer_Stddev_Fields>;
+  stddev_pop?: Maybe<Visitor_Answer_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Visitor_Answer_Stddev_Samp_Fields>;
+  sum?: Maybe<Visitor_Answer_Sum_Fields>;
+  var_pop?: Maybe<Visitor_Answer_Var_Pop_Fields>;
+  var_samp?: Maybe<Visitor_Answer_Var_Samp_Fields>;
+  variance?: Maybe<Visitor_Answer_Variance_Fields>;
+};
+
+
+/** aggregate fields of "visitor_answer" */
+export type Visitor_Answer_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "visitor_answer" */
+export type Visitor_Answer_Aggregate_Order_By = {
+  avg?: InputMaybe<Visitor_Answer_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Visitor_Answer_Max_Order_By>;
+  min?: InputMaybe<Visitor_Answer_Min_Order_By>;
+  stddev?: InputMaybe<Visitor_Answer_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Visitor_Answer_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Visitor_Answer_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Visitor_Answer_Sum_Order_By>;
+  var_pop?: InputMaybe<Visitor_Answer_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Visitor_Answer_Var_Samp_Order_By>;
+  variance?: InputMaybe<Visitor_Answer_Variance_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Visitor_Answer_Append_Input = {
+  answer?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "visitor_answer" */
+export type Visitor_Answer_Arr_Rel_Insert_Input = {
+  data: Array<Visitor_Answer_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Visitor_Answer_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Visitor_Answer_Avg_Fields = {
+  __typename?: 'visitor_answer_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+  question_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "visitor_answer" */
+export type Visitor_Answer_Avg_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "visitor_answer". All fields are combined with a logical 'AND'. */
+export type Visitor_Answer_Bool_Exp = {
+  _and?: InputMaybe<Array<Visitor_Answer_Bool_Exp>>;
+  _not?: InputMaybe<Visitor_Answer_Bool_Exp>;
+  _or?: InputMaybe<Array<Visitor_Answer_Bool_Exp>>;
+  answer?: InputMaybe<Jsonb_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  question_id?: InputMaybe<Int_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_email?: InputMaybe<String_Comparison_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
+  visitor_question?: InputMaybe<Visitor_Question_Bool_Exp>;
+};
+
+/** unique or primary key constraints on table "visitor_answer" */
+export enum Visitor_Answer_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  VisitorAnswerPkey = 'visitor_answer_pkey',
+  /** unique or primary key constraint on columns "user_id", "question_id" */
+  VisitorAnswerQuestionIdUserIdKey = 'visitor_answer_question_id_user_id_key'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Visitor_Answer_Delete_At_Path_Input = {
+  answer?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Visitor_Answer_Delete_Elem_Input = {
+  answer?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Visitor_Answer_Delete_Key_Input = {
+  answer?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "visitor_answer" */
+export type Visitor_Answer_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+  question_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "visitor_answer" */
+export type Visitor_Answer_Insert_Input = {
+  answer?: InputMaybe<Scalars['jsonb']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  user_email?: InputMaybe<Scalars['String']>;
+  user_id?: InputMaybe<Scalars['uuid']>;
+  visitor_question?: InputMaybe<Visitor_Question_Obj_Rel_Insert_Input>;
+};
+
+/** aggregate max on columns */
+export type Visitor_Answer_Max_Fields = {
+  __typename?: 'visitor_answer_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  question_id?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_email?: Maybe<Scalars['String']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "visitor_answer" */
+export type Visitor_Answer_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_email?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Visitor_Answer_Min_Fields = {
+  __typename?: 'visitor_answer_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  question_id?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_email?: Maybe<Scalars['String']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "visitor_answer" */
+export type Visitor_Answer_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_email?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "visitor_answer" */
+export type Visitor_Answer_Mutation_Response = {
+  __typename?: 'visitor_answer_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Visitor_Answer>;
+};
+
+/** on_conflict condition type for table "visitor_answer" */
+export type Visitor_Answer_On_Conflict = {
+  constraint: Visitor_Answer_Constraint;
+  update_columns?: Array<Visitor_Answer_Update_Column>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "visitor_answer". */
+export type Visitor_Answer_Order_By = {
+  answer?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_email?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+  visitor_question?: InputMaybe<Visitor_Question_Order_By>;
+};
+
+/** primary key columns input for table: visitor_answer */
+export type Visitor_Answer_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Visitor_Answer_Prepend_Input = {
+  answer?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "visitor_answer" */
+export enum Visitor_Answer_Select_Column {
+  /** column name */
+  Answer = 'answer',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  QuestionId = 'question_id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserEmail = 'user_email',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** input type for updating data in table "visitor_answer" */
+export type Visitor_Answer_Set_Input = {
+  answer?: InputMaybe<Scalars['jsonb']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_email?: InputMaybe<Scalars['String']>;
+  user_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Visitor_Answer_Stddev_Fields = {
+  __typename?: 'visitor_answer_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+  question_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "visitor_answer" */
+export type Visitor_Answer_Stddev_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Visitor_Answer_Stddev_Pop_Fields = {
+  __typename?: 'visitor_answer_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  question_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "visitor_answer" */
+export type Visitor_Answer_Stddev_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Visitor_Answer_Stddev_Samp_Fields = {
+  __typename?: 'visitor_answer_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  question_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "visitor_answer" */
+export type Visitor_Answer_Stddev_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "visitor_answer" */
+export type Visitor_Answer_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Visitor_Answer_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Visitor_Answer_Stream_Cursor_Value_Input = {
+  answer?: InputMaybe<Scalars['jsonb']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  question_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_email?: InputMaybe<Scalars['String']>;
+  user_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate sum on columns */
+export type Visitor_Answer_Sum_Fields = {
+  __typename?: 'visitor_answer_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+  question_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "visitor_answer" */
+export type Visitor_Answer_Sum_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "visitor_answer" */
+export enum Visitor_Answer_Update_Column {
+  /** column name */
+  Answer = 'answer',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  QuestionId = 'question_id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserEmail = 'user_email',
+  /** column name */
+  UserId = 'user_id'
+}
+
+export type Visitor_Answer_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Visitor_Answer_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Visitor_Answer_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Visitor_Answer_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Visitor_Answer_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Visitor_Answer_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Visitor_Answer_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Visitor_Answer_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Visitor_Answer_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Visitor_Answer_Var_Pop_Fields = {
+  __typename?: 'visitor_answer_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  question_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "visitor_answer" */
+export type Visitor_Answer_Var_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Visitor_Answer_Var_Samp_Fields = {
+  __typename?: 'visitor_answer_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  question_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "visitor_answer" */
+export type Visitor_Answer_Var_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Visitor_Answer_Variance_Fields = {
+  __typename?: 'visitor_answer_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+  question_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "visitor_answer" */
+export type Visitor_Answer_Variance_Order_By = {
+  id?: InputMaybe<Order_By>;
+  question_id?: InputMaybe<Order_By>;
+};
+
+/** admin-configurable questions for polling users */
+export type Visitor_Question = {
+  __typename?: 'visitor_question';
+  active: Scalars['Boolean'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['Int'];
+  label: Scalars['String'];
+  metadata?: Maybe<Scalars['jsonb']>;
+  order: Scalars['Int'];
+  question_type: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+  /** An array relationship */
+  visitor_answers: Array<Visitor_Answer>;
+  /** An aggregate relationship */
+  visitor_answers_aggregate: Visitor_Answer_Aggregate;
+};
+
+
+/** admin-configurable questions for polling users */
+export type Visitor_QuestionMetadataArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** admin-configurable questions for polling users */
+export type Visitor_QuestionVisitor_AnswersArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+
+/** admin-configurable questions for polling users */
+export type Visitor_QuestionVisitor_Answers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Visitor_Answer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Visitor_Answer_Order_By>>;
+  where?: InputMaybe<Visitor_Answer_Bool_Exp>;
+};
+
+/** aggregated selection of "visitor_question" */
+export type Visitor_Question_Aggregate = {
+  __typename?: 'visitor_question_aggregate';
+  aggregate?: Maybe<Visitor_Question_Aggregate_Fields>;
+  nodes: Array<Visitor_Question>;
+};
+
+/** aggregate fields of "visitor_question" */
+export type Visitor_Question_Aggregate_Fields = {
+  __typename?: 'visitor_question_aggregate_fields';
+  avg?: Maybe<Visitor_Question_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Visitor_Question_Max_Fields>;
+  min?: Maybe<Visitor_Question_Min_Fields>;
+  stddev?: Maybe<Visitor_Question_Stddev_Fields>;
+  stddev_pop?: Maybe<Visitor_Question_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Visitor_Question_Stddev_Samp_Fields>;
+  sum?: Maybe<Visitor_Question_Sum_Fields>;
+  var_pop?: Maybe<Visitor_Question_Var_Pop_Fields>;
+  var_samp?: Maybe<Visitor_Question_Var_Samp_Fields>;
+  variance?: Maybe<Visitor_Question_Variance_Fields>;
+};
+
+
+/** aggregate fields of "visitor_question" */
+export type Visitor_Question_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Visitor_Question_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Visitor_Question_Append_Input = {
+  metadata?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate avg on columns */
+export type Visitor_Question_Avg_Fields = {
+  __typename?: 'visitor_question_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+  order?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "visitor_question". All fields are combined with a logical 'AND'. */
+export type Visitor_Question_Bool_Exp = {
+  _and?: InputMaybe<Array<Visitor_Question_Bool_Exp>>;
+  _not?: InputMaybe<Visitor_Question_Bool_Exp>;
+  _or?: InputMaybe<Array<Visitor_Question_Bool_Exp>>;
+  active?: InputMaybe<Boolean_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  label?: InputMaybe<String_Comparison_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
+  order?: InputMaybe<Int_Comparison_Exp>;
+  question_type?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  visitor_answers?: InputMaybe<Visitor_Answer_Bool_Exp>;
+  visitor_answers_aggregate?: InputMaybe<Visitor_Answer_Aggregate_Bool_Exp>;
+};
+
+/** unique or primary key constraints on table "visitor_question" */
+export enum Visitor_Question_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  VisitorQuestionPkey = 'visitor_question_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Visitor_Question_Delete_At_Path_Input = {
+  metadata?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Visitor_Question_Delete_Elem_Input = {
+  metadata?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Visitor_Question_Delete_Key_Input = {
+  metadata?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "visitor_question" */
+export type Visitor_Question_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "visitor_question" */
+export type Visitor_Question_Insert_Input = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  label?: InputMaybe<Scalars['String']>;
+  metadata?: InputMaybe<Scalars['jsonb']>;
+  order?: InputMaybe<Scalars['Int']>;
+  question_type?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  visitor_answers?: InputMaybe<Visitor_Answer_Arr_Rel_Insert_Input>;
+};
+
+/** aggregate max on columns */
+export type Visitor_Question_Max_Fields = {
+  __typename?: 'visitor_question_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  label?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['Int']>;
+  question_type?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Visitor_Question_Min_Fields = {
+  __typename?: 'visitor_question_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  label?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['Int']>;
+  question_type?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "visitor_question" */
+export type Visitor_Question_Mutation_Response = {
+  __typename?: 'visitor_question_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Visitor_Question>;
+};
+
+/** input type for inserting object relation for remote table "visitor_question" */
+export type Visitor_Question_Obj_Rel_Insert_Input = {
+  data: Visitor_Question_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Visitor_Question_On_Conflict>;
+};
+
+/** on_conflict condition type for table "visitor_question" */
+export type Visitor_Question_On_Conflict = {
+  constraint: Visitor_Question_Constraint;
+  update_columns?: Array<Visitor_Question_Update_Column>;
+  where?: InputMaybe<Visitor_Question_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "visitor_question". */
+export type Visitor_Question_Order_By = {
+  active?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
+  order?: InputMaybe<Order_By>;
+  question_type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  visitor_answers_aggregate?: InputMaybe<Visitor_Answer_Aggregate_Order_By>;
+};
+
+/** primary key columns input for table: visitor_question */
+export type Visitor_Question_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Visitor_Question_Prepend_Input = {
+  metadata?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "visitor_question" */
+export enum Visitor_Question_Select_Column {
+  /** column name */
+  Active = 'active',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Label = 'label',
+  /** column name */
+  Metadata = 'metadata',
+  /** column name */
+  Order = 'order',
+  /** column name */
+  QuestionType = 'question_type',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "visitor_question" */
+export type Visitor_Question_Set_Input = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  label?: InputMaybe<Scalars['String']>;
+  metadata?: InputMaybe<Scalars['jsonb']>;
+  order?: InputMaybe<Scalars['Int']>;
+  question_type?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Visitor_Question_Stddev_Fields = {
+  __typename?: 'visitor_question_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+  order?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Visitor_Question_Stddev_Pop_Fields = {
+  __typename?: 'visitor_question_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  order?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Visitor_Question_Stddev_Samp_Fields = {
+  __typename?: 'visitor_question_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  order?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "visitor_question" */
+export type Visitor_Question_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Visitor_Question_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Visitor_Question_Stream_Cursor_Value_Input = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['Int']>;
+  label?: InputMaybe<Scalars['String']>;
+  metadata?: InputMaybe<Scalars['jsonb']>;
+  order?: InputMaybe<Scalars['Int']>;
+  question_type?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate sum on columns */
+export type Visitor_Question_Sum_Fields = {
+  __typename?: 'visitor_question_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+  order?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "visitor_question" */
+export enum Visitor_Question_Update_Column {
+  /** column name */
+  Active = 'active',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Label = 'label',
+  /** column name */
+  Metadata = 'metadata',
+  /** column name */
+  Order = 'order',
+  /** column name */
+  QuestionType = 'question_type',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Visitor_Question_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Visitor_Question_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Visitor_Question_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Visitor_Question_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Visitor_Question_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Visitor_Question_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Visitor_Question_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Visitor_Question_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Visitor_Question_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Visitor_Question_Var_Pop_Fields = {
+  __typename?: 'visitor_question_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  order?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Visitor_Question_Var_Samp_Fields = {
+  __typename?: 'visitor_question_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  order?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Visitor_Question_Variance_Fields = {
+  __typename?: 'visitor_question_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+  order?: Maybe<Scalars['Float']>;
+};
+
 export type CheckImageQueryVariables = Exact<{
   url: Scalars['String'];
 }>;
@@ -9350,6 +13387,28 @@ export type UpdateListingMutationVariables = Exact<{
 
 
 export type UpdateListingMutation = { __typename?: 'mutation_root', update_listing_by_pk?: { __typename?: 'listing', id: number } | null };
+
+export type CreatePromoCodeMutationVariables = Exact<{
+  pc: Promo_Code_Insert_Input;
+}>;
+
+
+export type CreatePromoCodeMutation = { __typename?: 'mutation_root', insert_promo_code_one?: { __typename?: 'promo_code', id: number } | null };
+
+export type UpdatePromoCodeMutationVariables = Exact<{
+  id: Scalars['Int'];
+  set: Promo_Code_Set_Input;
+}>;
+
+
+export type UpdatePromoCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: number } | null };
+
+export type DeletePromoCodeMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeletePromoCodeMutation = { __typename?: 'mutation_root', delete_promo_code_by_pk?: { __typename?: 'promo_code', id: number } | null };
 
 export type CreateCategoryMutationVariables = Exact<{
   label: Scalars['String'];
@@ -9439,6 +13498,35 @@ export type DeleteAdMutationVariables = Exact<{
 
 export type DeleteAdMutation = { __typename?: 'mutation_root', delete_ad_by_pk?: { __typename?: 'ad', id: number } | null };
 
+export type CreateVisitorQuestionMutationVariables = Exact<{
+  input: Visitor_Question_Insert_Input;
+}>;
+
+
+export type CreateVisitorQuestionMutation = { __typename?: 'mutation_root', insert_visitor_question_one?: { __typename?: 'visitor_question', id: number } | null };
+
+export type UpdateVisitorQuestionMutationVariables = Exact<{
+  id: Scalars['Int'];
+  set?: InputMaybe<Visitor_Question_Set_Input>;
+}>;
+
+
+export type UpdateVisitorQuestionMutation = { __typename?: 'mutation_root', update_visitor_question_by_pk?: { __typename?: 'visitor_question', id: number } | null };
+
+export type UpdateVisitorQuestionsMutationVariables = Exact<{
+  updates: Array<Visitor_Question_Updates> | Visitor_Question_Updates;
+}>;
+
+
+export type UpdateVisitorQuestionsMutation = { __typename?: 'mutation_root', update_visitor_question_many?: Array<{ __typename?: 'visitor_question_mutation_response', affected_rows: number } | null> | null };
+
+export type DeleteVisitorQuestionMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteVisitorQuestionMutation = { __typename?: 'mutation_root', delete_visitor_question_by_pk?: { __typename?: 'visitor_question', id: number } | null };
+
 export type AllListingsSubscriptionVariables = Exact<{
   orderBy?: InputMaybe<Array<Listing_Order_By> | Listing_Order_By>;
   where?: InputMaybe<Listing_Bool_Exp>;
@@ -9467,7 +13555,7 @@ export type ListingByIdQueryVariables = Exact<{
 }>;
 
 
-export type ListingByIdQuery = { __typename?: 'query_root', listing_by_pk?: { __typename?: 'listing', id: number, slug: string, business_name: string, slogan?: string | null, description?: string | null, rich_description?: string | null, island?: string | null, created_at: any, updated_at: any, tier: string, promoted: boolean, live: boolean, primary_address?: string | null, primary_phone?: string | null, primary_email?: string | null, primary_web_url?: string | null, this_week_recommended: boolean, is_island_original: boolean, booking_links: any, business_hours: any, breadcrumbs?: any | null, social_media: any, images: any, videos: any, layout_data: any, lat_lng?: any | null, listing_category_tags: Array<{ __typename?: 'listing_category_tag', id: number, category_tag_id: number }> } | null };
+export type ListingByIdQuery = { __typename?: 'query_root', listing_by_pk?: { __typename?: 'listing', id: number, slug: string, business_name: string, slogan?: string | null, description?: string | null, rich_description?: string | null, island?: string | null, created_at: any, updated_at: any, tier: string, promoted: boolean, live: boolean, primary_address?: string | null, primary_phone?: string | null, primary_email?: string | null, primary_web_url?: string | null, this_week_recommended: boolean, is_island_original: boolean, booking_links: any, business_hours: any, breadcrumbs?: any | null, social_media: any, promo_code_visitor_hook?: string | null, promo_code_count?: number | null, images: any, videos: any, layout_data: any, lat_lng?: any | null, listing_category_tags: Array<{ __typename?: 'listing_category_tag', id: number, category_tag_id: number }>, promo_codes: Array<{ __typename?: 'promo_code', id: number, code: string, label?: string | null, expiration?: any | null }> } | null };
 
 export type ListingsByCategoryQueryVariables = Exact<{
   categoryId: Scalars['Int'];
@@ -9519,6 +13607,40 @@ export type BreadcrumbsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type BreadcrumbsQuery = { __typename?: 'query_root', listing: Array<{ __typename?: 'listing', breadcrumbs?: any | null }> };
 
+export type GetRegistrationQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRegistrationQuestionsQuery = { __typename?: 'query_root', visitor_question: Array<{ __typename?: 'visitor_question', id: number, label: string, question_type: string, active: boolean, metadata?: any | null, order: number, visitor_answers_aggregate: { __typename?: 'visitor_answer_aggregate', aggregate?: { __typename?: 'visitor_answer_aggregate_fields', count: number } | null } }> };
+
+export type VisitorsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VisitorsQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'users', id: any, email?: any | null, displayName: string, lastSeen?: any | null, defaultRole: string }> };
+
+export type AllAnswersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllAnswersQuery = { __typename?: 'query_root', visitor_answer: Array<{ __typename?: 'visitor_answer', id: number, question_id: number, user_id?: any | null, answer: any, created_at: any }> };
+
+export type VisitorAnswersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VisitorAnswersQuery = { __typename?: 'query_root', visitor_answer: Array<{ __typename?: 'visitor_answer', id: number, question_id: number, answer: any, created_at: any, updated_at: any, user_id?: any | null }> };
+
+export type VisitorAnswersByUserIdQueryVariables = Exact<{
+  userId: Scalars['uuid'];
+}>;
+
+
+export type VisitorAnswersByUserIdQuery = { __typename?: 'query_root', visitor_answer: Array<{ __typename?: 'visitor_answer', id: number, question_id: number, answer: any, created_at: any, updated_at: any, user_id?: any | null }> };
+
+export type VisitorQuestionWithAnswersQueryVariables = Exact<{
+  questionId: Scalars['Int'];
+}>;
+
+
+export type VisitorQuestionWithAnswersQuery = { __typename?: 'query_root', visitor_question_by_pk?: { __typename?: 'visitor_question', id: number, label: string, question_type: string, active: boolean, metadata?: any | null, order: number, visitor_answers: Array<{ __typename?: 'visitor_answer', id: number, user_id?: any | null, answer: any, created_at: any }> } | null };
+
 
 export const CheckImageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"checkImage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"url"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"checkImage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"url"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"existing_url"}}]}}]}}]} as unknown as DocumentNode<CheckImageQuery, CheckImageQueryVariables>;
 export const UploadImageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"uploadImage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"src"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"destination"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadImage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"entityId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"entityId"}}},{"kind":"Argument","name":{"kind":"Name","value":"src"},"value":{"kind":"Variable","name":{"kind":"Name","value":"src"}}},{"kind":"Argument","name":{"kind":"Name","value":"destination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"destination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"new_url"}}]}}]}}]} as unknown as DocumentNode<UploadImageMutation, UploadImageMutationVariables>;
@@ -9528,6 +13650,9 @@ export const UpdateUserProfileDocument = {"kind":"Document","definitions":[{"kin
 export const CreateListingShellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateListingShell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"businessName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_listing_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"business_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"businessName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateListingShellMutation, CreateListingShellMutationVariables>;
 export const DeleteListingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteListing"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteListingMutation, DeleteListingMutationVariables>;
 export const UpdateListingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateListing"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"listing_set_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateListingMutation, UpdateListingMutationVariables>;
+export const CreatePromoCodeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePromoCode"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pc"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"promo_code_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_promo_code_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pc"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreatePromoCodeMutation, CreatePromoCodeMutationVariables>;
+export const UpdatePromoCodeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdatePromoCode"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"promo_code_set_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_promo_code_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdatePromoCodeMutation, UpdatePromoCodeMutationVariables>;
+export const DeletePromoCodeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePromoCode"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_promo_code_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeletePromoCodeMutation, DeletePromoCodeMutationVariables>;
 export const CreateCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"label"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isPrimary"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_category_tag_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"label"},"value":{"kind":"Variable","name":{"kind":"Name","value":"label"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"is_primary"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isPrimary"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const UpdateCategoryByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCategoryById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"category_tag_set_input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_category_tag_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateCategoryByIdMutation, UpdateCategoryByIdMutationVariables>;
 export const DeleteCategoryByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCategoryById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_category_tag_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteCategoryByIdMutation, DeleteCategoryByIdMutationVariables>;
@@ -9540,10 +13665,14 @@ export const CreateAdCycleDocument = {"kind":"Document","definitions":[{"kind":"
 export const UpdateAdCycleByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAdCycleById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_cycle_set_input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_ad_cycle_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateAdCycleByIdMutation, UpdateAdCycleByIdMutationVariables>;
 export const DeleteAdCycleByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAdCycleById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ad_cycle_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteAdCycleByIdMutation, DeleteAdCycleByIdMutationVariables>;
 export const DeleteAdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAd"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteAdMutation, DeleteAdMutationVariables>;
+export const CreateVisitorQuestionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateVisitorQuestion"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"visitor_question_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_visitor_question_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateVisitorQuestionMutation, CreateVisitorQuestionMutationVariables>;
+export const UpdateVisitorQuestionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateVisitorQuestion"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"set"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"visitor_question_set_input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_visitor_question_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"set"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateVisitorQuestionMutation, UpdateVisitorQuestionMutationVariables>;
+export const UpdateVisitorQuestionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateVisitorQuestions"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updates"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"visitor_question_updates"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_visitor_question_many"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updates"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updates"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}}]}}]} as unknown as DocumentNode<UpdateVisitorQuestionsMutation, UpdateVisitorQuestionsMutationVariables>;
+export const DeleteVisitorQuestionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteVisitorQuestion"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_visitor_question_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteVisitorQuestionMutation, DeleteVisitorQuestionMutationVariables>;
 export const AllListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"AllListings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"listing_order_by"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"listing_bool_exp"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"this_week_recommended"}},{"kind":"Field","name":{"kind":"Name","value":"is_island_original"}},{"kind":"Field","name":{"kind":"Name","value":"promoted"}}]}}]}}]} as unknown as DocumentNode<AllListingsSubscription, AllListingsSubscriptionVariables>;
 export const AllListingsWithCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllListingsWithCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"business_name"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag_id"}}]}}]}}]}}]} as unknown as DocumentNode<AllListingsWithCategoriesQuery, AllListingsWithCategoriesQueryVariables>;
 export const FuzzySearchListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FuzzySearchListings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"searchTerm"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"includeNonLive"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"fuzzy_listing_order_by"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fuzzy_search_listings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"args"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"searchTerm"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"include_non_live"},"value":{"kind":"Variable","name":{"kind":"Name","value":"includeNonLive"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<FuzzySearchListingsQuery, FuzzySearchListingsQueryVariables>;
-export const ListingByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingByID"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"slogan"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"rich_description"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"promoted"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"primary_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_phone"}},{"kind":"Field","name":{"kind":"Name","value":"primary_email"}},{"kind":"Field","name":{"kind":"Name","value":"primary_web_url"}},{"kind":"Field","name":{"kind":"Name","value":"this_week_recommended"}},{"kind":"Field","name":{"kind":"Name","value":"is_island_original"}},{"kind":"Field","name":{"kind":"Name","value":"booking_links"}},{"kind":"Field","name":{"kind":"Name","value":"business_hours"}},{"kind":"Field","name":{"kind":"Name","value":"breadcrumbs"}},{"kind":"Field","name":{"kind":"Name","value":"social_media"}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"videos"}},{"kind":"Field","name":{"kind":"Name","value":"layout_data"}},{"kind":"Field","name":{"kind":"Name","value":"lat_lng"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag_id"}}]}}]}}]}}]} as unknown as DocumentNode<ListingByIdQuery, ListingByIdQueryVariables>;
+export const ListingByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingByID"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"slogan"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"rich_description"}},{"kind":"Field","name":{"kind":"Name","value":"island"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"promoted"}},{"kind":"Field","name":{"kind":"Name","value":"live"}},{"kind":"Field","name":{"kind":"Name","value":"primary_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_phone"}},{"kind":"Field","name":{"kind":"Name","value":"primary_email"}},{"kind":"Field","name":{"kind":"Name","value":"primary_web_url"}},{"kind":"Field","name":{"kind":"Name","value":"this_week_recommended"}},{"kind":"Field","name":{"kind":"Name","value":"is_island_original"}},{"kind":"Field","name":{"kind":"Name","value":"booking_links"}},{"kind":"Field","name":{"kind":"Name","value":"business_hours"}},{"kind":"Field","name":{"kind":"Name","value":"breadcrumbs"}},{"kind":"Field","name":{"kind":"Name","value":"social_media"}},{"kind":"Field","name":{"kind":"Name","value":"promo_code_visitor_hook"}},{"kind":"Field","name":{"kind":"Name","value":"promo_code_count"}},{"kind":"Field","name":{"kind":"Name","value":"images"}},{"kind":"Field","name":{"kind":"Name","value":"videos"}},{"kind":"Field","name":{"kind":"Name","value":"layout_data"}},{"kind":"Field","name":{"kind":"Name","value":"lat_lng"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"category_tag_id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"promo_codes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"created_at"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"expiration"}}]}}]}}]}}]} as unknown as DocumentNode<ListingByIdQuery, ListingByIdQueryVariables>;
 export const ListingsByCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingsByCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"categoryId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"listing_category_tags"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"category_tag_id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"categoryId"}}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"category_tag_id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"categoryId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<ListingsByCategoryQuery, ListingsByCategoryQueryVariables>;
 export const GetAdByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAdById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]}}]} as unknown as DocumentNode<GetAdByIdQuery, GetAdByIdQueryVariables>;
 export const AllAdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ad_bool_exp"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"whereClause"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"updated_at"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]}}]} as unknown as DocumentNode<AllAdsQuery, AllAdsQueryVariables>;
@@ -9552,3 +13681,9 @@ export const AdCycleStatsByIdDocument = {"kind":"Document","definitions":[{"kind
 export const CycleAnalyticsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"cycleAnalytics"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ad_cycle_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"loads"}},{"kind":"Field","alias":{"kind":"Name","value":"clicks"},"name":{"kind":"Name","value":"ad_events_aggregate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_type"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"StringValue","value":"click","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"unique_clicks"},"name":{"kind":"Name","value":"ad_events_aggregate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"unique"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"BooleanValue","value":true}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"event_type"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"StringValue","value":"click","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"views"},"name":{"kind":"Name","value":"ad_events_aggregate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_type"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"StringValue","value":"view","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"unique_views"},"name":{"kind":"Name","value":"ad_events_aggregate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"unique"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"BooleanValue","value":true}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"event_type"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"StringValue","value":"view","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CycleAnalyticsQuery, CycleAnalyticsQueryVariables>;
 export const GetCategoryTagsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategoryTags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"category_tag"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"is_primary"},"value":{"kind":"EnumValue","value":"desc"}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"label"},"value":{"kind":"EnumValue","value":"asc"}}]}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"is_primary"}},{"kind":"Field","name":{"kind":"Name","value":"listing_category_tags_aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCategoryTagsQuery, GetCategoryTagsQueryVariables>;
 export const BreadcrumbsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Breadcrumbs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"breadcrumbs"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_neq"},"value":{"kind":"ListValue","values":[]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"breadcrumbs"}}]}}]}}]} as unknown as DocumentNode<BreadcrumbsQuery, BreadcrumbsQueryVariables>;
+export const GetRegistrationQuestionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getRegistrationQuestions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"visitor_question"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"order"},"value":{"kind":"EnumValue","value":"asc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"question_type"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"visitor_answers_aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"aggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetRegistrationQuestionsQuery, GetRegistrationQuestionsQueryVariables>;
+export const VisitorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Visitors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"lastSeen"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"lastSeen"}},{"kind":"Field","name":{"kind":"Name","value":"defaultRole"}}]}}]}}]} as unknown as DocumentNode<VisitorsQuery, VisitorsQueryVariables>;
+export const AllAnswersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllAnswers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"visitor_answer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"question_id"}},{"kind":"Field","name":{"kind":"Name","value":"user_id"}},{"kind":"Field","name":{"kind":"Name","value":"answer"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}}]}}]}}]} as unknown as DocumentNode<AllAnswersQuery, AllAnswersQueryVariables>;
+export const VisitorAnswersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"visitorAnswers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"visitor_answer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"question_id"}},{"kind":"Field","name":{"kind":"Name","value":"answer"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"user_id"}}]}}]}}]} as unknown as DocumentNode<VisitorAnswersQuery, VisitorAnswersQueryVariables>;
+export const VisitorAnswersByUserIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"visitorAnswersByUserId"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"visitor_answer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"user_id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"question_id"}},{"kind":"Field","name":{"kind":"Name","value":"answer"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"user_id"}}]}}]}}]} as unknown as DocumentNode<VisitorAnswersByUserIdQuery, VisitorAnswersByUserIdQueryVariables>;
+export const VisitorQuestionWithAnswersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VisitorQuestionWithAnswers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"questionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"visitor_question_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"questionId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"question_type"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"visitor_answers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user_id"}},{"kind":"Field","name":{"kind":"Name","value":"answer"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}}]}}]}}]}}]} as unknown as DocumentNode<VisitorQuestionWithAnswersQuery, VisitorQuestionWithAnswersQueryVariables>;
