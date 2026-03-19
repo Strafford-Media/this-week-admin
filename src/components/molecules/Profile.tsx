@@ -44,7 +44,7 @@ export const Profile = ({ className = '', ...props }: ProfileProps) => {
         >
           {user.displayName}
         </h3>
-        <Badge color="primary" shadow size="large">
+        <Badge color={user.defaultRole === 'user' ? 'secondary' : 'primary'} shadow size="large">
           {displayUserRole(user.defaultRole)}
         </Badge>
         <div className="flex flex-col p-2 sm:p-0">
